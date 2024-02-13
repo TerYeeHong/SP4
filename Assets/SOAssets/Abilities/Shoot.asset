@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df0a0aa5ff570e48bfd74f6416d93b4, type: 3}
+  m_Name: Shoot
+  m_EditorClassIdentifier: 
+  image_ability: {fileID: 0}
+  name_ability: Shoot
+  cooldown_ability: 0.3
+  delay_ability: 0.1
+  activetime_ability: 0.2
+  audio_keypress_sfx: {fileID: 0}
+  audio_keypress_sfx_effect: 0
+  audio_activation_sfx: {fileID: 8300000, guid: fbe835f0ed46b4a4085229873630cd8d,
+    type: 3}
+  audio_activation_sfx_effect: 1
+  animation_keypress_animator_name: []
+  animation_event_name: 
+  base_damage_ability: 130
+  power_percentage_ability: 1
+  projectile_prefab: {fileID: 3978278038665961644, guid: 2cb1ae2e76bff3c4b9151cf417d2fd52,
+    type: 3}

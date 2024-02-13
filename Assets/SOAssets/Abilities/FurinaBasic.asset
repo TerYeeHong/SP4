@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0430afeab7f58b94cbc4004517ce984d, type: 3}
+  m_Name: FurinaBasic
+  m_EditorClassIdentifier: 
+  image_ability: {fileID: 0}
+  name_ability: Furina Basic Ability
+  cooldown_ability: 0.5
+  delay_ability: 0
+  activetime_ability: 0
+  audio_keypress_sfx: {fileID: 0}
+  audio_keypress_sfx_effect: 0
+  audio_activation_sfx: {fileID: 0}
+  audio_activation_sfx_effect: 0
+  animation_keypress_animator_name: []
+  animation_event_name: 
+  ability_combo_list:
+  - ability: {fileID: 11400000, guid: d9d937a97b427244b93982a1edd362f9, type: 2}
+    delay: 0
+  - ability: {fileID: 11400000, guid: f3c31c766bf789c44a0da3b34b339428, type: 2}
+    delay: 0.4
+  - ability: {fileID: 11400000, guid: e2359d7ab0e22424dadba573308d6afb, type: 2}
+    delay: 0.5
+  combo_stop_duration: 1.2
+  animation_keypress_combo_integer_name: AttackCombo

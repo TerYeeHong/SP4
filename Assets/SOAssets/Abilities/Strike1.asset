@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590377b0af65b7448a8c015f68f2438c, type: 3}
+  m_Name: Strike1
+  m_EditorClassIdentifier: 
+  image_ability: {fileID: 0}
+  name_ability: strike_combo_first
+  cooldown_ability: 0
+  delay_ability: 0.2
+  activetime_ability: 1
+  audio_keypress_sfx: {fileID: 8300000, guid: 79b3c244d2d6e784fb8ef65da5801d52, type: 3}
+  audio_keypress_sfx_effect: 1
+  audio_activation_sfx: {fileID: 8300000, guid: 68ed2e1ec5958234a96b7f0ccc1cbc81,
+    type: 3}
+  audio_activation_sfx_effect: 0
+  animation_keypress_animator_name:
+  - anim_event_type: 0
+    anim_name: AttackTrigger
+    expression_duration: 0
+  - anim_event_type: 1
+    anim_name: eAngry
+    expression_duration: 0.3
+  animation_event_name: FirstSlash
+  base_damage_ability: 30
+  power_percentage_ability: 1
+  zone_type_ability: 0
+  zone_size_ability: {x: 3, y: 3, z: 3}
+  move_forward_speed: 0.8
+  knockback_force_ability: 100
+  zone_casting_ability: 0
+  zone_distance_away_ability: 1
+  detection_zone_size_ability: {x: 3, y: 3, z: 3}
+  strike_times: 1
+  interval_to_next_strike: 0

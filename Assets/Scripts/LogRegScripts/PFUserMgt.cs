@@ -1,6 +1,7 @@
 // Made by: Matt Palero
 using System.Collections.Generic;
 using UnityEngine;
+using System.Timers;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
@@ -9,6 +10,9 @@ using Photon.Pun;
 public class PFUserMgt : MonoBehaviour
 {
     [SerializeField] TMP_Text msgBox;
+
+    [Header("LogReg Anim")]
+    [SerializeField] private GameObject startTransition;
 
     [Header("Input Fields")]
     [SerializeField] TMP_InputField if_usernameReg;
@@ -26,10 +30,14 @@ public class PFUserMgt : MonoBehaviour
     [SerializeField] GameObject regCanvas;
     [SerializeField] GameObject resetPassCanvas;
 
+    public SceneMgt sceneMgt;
+
     private int buttonNum;
 
     void Start()
     {
+        startTransition.SetActive(false);
+
         regCanvas.SetActive(false);
         resetPassCanvas.SetActive(false);
         loginEmailCanvas.SetActive(true);
@@ -179,7 +187,15 @@ public class PFUserMgt : MonoBehaviour
         PhotonNetwork.ConnectUsingSettings();
 
         msgBox.color = Color.white;
-        UpdateMsg("Login Success!" + r.PlayFabId + r.InfoResultPayload.PlayerProfile.DisplayName);
+        UpdateMsg("Login Success! " + r.PlayFabId + r.InfoResultPayload.PlayerProfile.DisplayName);
+
+        startTransition.SetActive(true);
+        Invoke("ChangeScene", 1.7f);
+    }
+
+    void ChangeScene()
+    {
+        sceneMgt.ChangeScene("MainMenu");
     }
 
     void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult r)

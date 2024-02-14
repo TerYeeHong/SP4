@@ -14,7 +14,8 @@ public class SkyPlayerMovement : MonoBehaviour
     private bool isGrounded;
     private int jumpCount = 0;
     private int maxJumps = 2;
-
+    public float dashForce = 20f;
+    private bool isDashing;
 
     void Start()
     {
@@ -30,6 +31,7 @@ public class SkyPlayerMovement : MonoBehaviour
         isGrounded = IsGrounded();
         if (isGrounded)
             jumpCount = 0;
+
     }
 
     bool IsGrounded()
@@ -44,12 +46,34 @@ public class SkyPlayerMovement : MonoBehaviour
         Vector3 movementDirection = transform.right * x + transform.forward * z;
         Vector3 force = movementDirection * speed - rb.velocity;
         force.y = 0; // Ignore vertical component of the force to avoid affecting jumps
-
-        // Apply the calculated force to the Rigidbody to move it
-        rb.AddForce(force, ForceMode.VelocityChange);
+        if (!isGrounded && (x != 0 || z != 0))
+        {
+            // Apply a reduced force for air control
+            Vector3 airControlForce = movementDirection * (speed * 0.5f) - rb.velocity;
+            airControlForce.y = 0; // Avoid affecting vertical movement
+            rb.AddForce(airControlForce, ForceMode.VelocityChange);
+        }
+        else
+        {
+            rb.AddForce(force, ForceMode.VelocityChange);
+        }
     }
 
+    public void HandleDash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing)
+        {
+            Vector3 dashDirection = transform.forward; // Dash forward relative to player's facing direction
+            rb.AddForce(dashDirection * dashForce, ForceMode.VelocityChange);
+            isDashing = true;
+            Invoke("ResetDash", 0.5f); // Cooldown before next dash
+        }
+    }
 
+    private void ResetDash()
+    {
+        isDashing = false;
+    }
     public void HandleJump()
     {
         if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps - 1))
@@ -92,7 +116,6 @@ public class SkyPlayerMovement : MonoBehaviour
             {
                 playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_FALL);
             }
-            // Optional: Handle jumping animation if needed when velocity is around 0 but player has not landed yet
         }
     }
 

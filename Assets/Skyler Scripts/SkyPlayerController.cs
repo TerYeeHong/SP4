@@ -21,6 +21,7 @@ public class SkyPlayerController : MonoBehaviour
         {
             playerMovement.ResetJump();
             playerMovement.HandleJump();
+            playerMovement.HandleDash();
             playerMovement.UpdateAnimationState();
         }
     }

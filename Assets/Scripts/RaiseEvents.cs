@@ -17,6 +17,7 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
     public const byte UPDATETEAMSCORE = 6;
 
     public const byte CHATNOTICE = 7;
+    public const byte PLAYER_ANIMATION_CHANGE = 8; 
 
 
     //public delegate void OnExplode(string position);
@@ -81,7 +82,25 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
         {
             OnChatNoticeEvent?.Invoke(photonEvent.CustomData.ToString());
         }
-        
+        if (eventCode == PLAYER_ANIMATION_CHANGE)
+        {
+            print("event raised");
+            object[] data = (object[])photonEvent.CustomData;
+            int viewID = (int)data[0];
+            string newState = (string)data[1];
+
+            PhotonView pv = PhotonView.Find(viewID);
+            if (pv != null)
+            {
+                SkyPlayerAnimation playerAnimation = pv.GetComponent<SkyPlayerAnimation>();
+                if (playerAnimation != null)
+                {
+                    print("Found");
+                    playerAnimation.ChangeAnimationState(newState);
+                }
+            }
+        }
+
     }
 }
 

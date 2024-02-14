@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Unit.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IMouseInput.cs" />
     <Compile Include="Assets\Photon\PhotonLibs\WebSocket\SocketWebTcp.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyCameraController.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChatAppIdCheckerUI.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\AppSettingsExtensions.cs" />
     <Compile Include="Assets\Scripts\UIBillBoarding.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Assets\Scripts\CustomAnimator.cs" />
     <Compile Include="Assets\Scripts\Ability\AbilityCombo.cs" />
     <Compile Include="Assets\Scripts\AbilityHolder.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyPlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerRigging.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextToggleIsOnTransition.cs" />
@@ -85,9 +87,11 @@
     <Compile Include="Assets\Scripts\RaiseEvents.cs" />
     <Compile Include="Assets\Scripts\Manager\GameEvents.cs" />
     <Compile Include="Assets\Scripts\Manager\AudioSfxManager.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyPlayerMovement.cs" />
     <Compile Include="Assets\Scripts\StrikeSlash.cs" />
     <Compile Include="Assets\Photon\PhotonLibs\WebSocket\WebSocket.cs" />
     <Compile Include="Assets\Scripts\Ability\AbilityStrikeSlash.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyPlayerAnimation.cs" />
     <Compile Include="Assets\Scripts\UnitType.cs" />
     <Compile Include="Assets\Scripts\TextPopupAnimation.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\IgnoreUiRaycastWhenInactive.cs" />
@@ -99,10 +103,6 @@
     <Compile Include="Assets\Scripts\JLGame.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyPlayerController.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyPlayerMovement.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyPlayerAnimation.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyCameraController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

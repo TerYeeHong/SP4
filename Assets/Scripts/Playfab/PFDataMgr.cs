@@ -29,7 +29,7 @@ public class PFDataMgr : MonoBehaviour
     {
         PlayFabClientAPI.GetUserData(new GetUserDataRequest()
         {
-            // PlayFabId = myPlayFabId,
+            //PlayFabId = myPlayFabId,
             // Keys = null
         }, result =>
         {
@@ -41,6 +41,9 @@ public class PFDataMgr : MonoBehaviour
                 //gets data to print out the saved data during the game scene
                 int.TryParse(result.Data["XP"].Value, out PFGlobalData.xp); //convert string to int
                 int.TryParse(result.Data["Level"].Value, out PFGlobalData.level); //convert string to int
+
+                Debug.Log("XP: " + PFGlobalData.xp);
+                Debug.Log("Level: " + PFGlobalData.level);
             }
         }, (error) =>
         {

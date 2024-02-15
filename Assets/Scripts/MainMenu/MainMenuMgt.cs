@@ -33,8 +33,11 @@ public class MainMenuMgt : MonoBehaviour
 
         bg.transform.LeanMoveLocal(new Vector2(48, -50), 1.5f).setEaseOutSine().setLoopPingPong();
 
-        dataMgr.SetUserData();
+        dataMgr.GetUserData();
         dataMgr.GetEPG();
+
+        //Debug.Log(playerName + " XP: " + PFGlobalData.xp);
+        //Debug.Log(playerName + " Level: " + PFGlobalData.level);
     }
 
     private void SceneChange()

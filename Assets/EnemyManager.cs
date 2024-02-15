@@ -42,15 +42,15 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InstantiateEnemy("Fish");
+        //InstantiateEnemy("Fish");
         //Enemies[1].SetActive(false);
         //FetchEnemies();
         //DisableEnemies(string data)
         //InstantiateEnemy("Fish");
-        //string sentData = "" + tag;
-        //RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
-        //PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
-        //photonView = GetComponent<PhotonView>();
+        string sentData = "" + tag;
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
+        photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame

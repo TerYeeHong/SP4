@@ -1,4 +1,5 @@
 // Made by: Matt Palero
+
 using System.Collections.Generic;
 using UnityEngine;
 using System.Timers;
@@ -11,8 +12,9 @@ public class PFUserMgt : MonoBehaviour
 {
     [SerializeField] TMP_Text msgBox;
 
-    [Header("LogReg Anim")]
+    [Header("Transitions")]
     [SerializeField] private GameObject startTransition;
+    [SerializeField] private GameObject endTransition;
 
     [Header("Input Fields")]
     [SerializeField] TMP_InputField if_usernameReg;
@@ -37,6 +39,7 @@ public class PFUserMgt : MonoBehaviour
     void Start()
     {
         startTransition.SetActive(false);
+        endTransition.SetActive(true);
 
         regCanvas.SetActive(false);
         resetPassCanvas.SetActive(false);
@@ -187,13 +190,13 @@ public class PFUserMgt : MonoBehaviour
         PhotonNetwork.ConnectUsingSettings();
 
         msgBox.color = Color.white;
-        UpdateMsg("Login Success! " + r.PlayFabId + r.InfoResultPayload.PlayerProfile.DisplayName);
+        UpdateMsg("Login Success!");
 
         startTransition.SetActive(true);
         Invoke("ChangeScene", 1.7f);
     }
 
-    void ChangeScene()
+    private void ChangeScene()
     {
         sceneMgt.ChangeScene("MainMenu");
     }
@@ -201,7 +204,7 @@ public class PFUserMgt : MonoBehaviour
     void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult r)
     {
         msgBox.color = Color.white;
-        UpdateMsg("Display name updated: " + r.DisplayName);
+        UpdateMsg("Please Login");
     }
 
     void OnError(PlayFabError e) //function to handle error

@@ -6,7 +6,6 @@ using System.Timers;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
-using Photon.Pun;
 
 public class PFUserMgt : MonoBehaviour
 {
@@ -50,7 +49,7 @@ public class PFUserMgt : MonoBehaviour
     void UpdateMsg(string msg)
     {
         Debug.Log(msg);
-        msgBox.text = msg;  
+        msgBox.text = msg;
     }
 
     public void ButtonPressed(int butttonNo)
@@ -183,12 +182,6 @@ public class PFUserMgt : MonoBehaviour
 
     void OnLoginSucc(LoginResult r)
     {
-        // Set Photon player's nickname to the username of the PlayFab user
-        PhotonNetwork.LocalPlayer.NickName = r.InfoResultPayload.PlayerProfile.DisplayName;
-
-        // Connect to Photon server
-        PhotonNetwork.ConnectUsingSettings();
-
         msgBox.color = Color.white;
         UpdateMsg("Login Success!");
 
@@ -209,7 +202,16 @@ public class PFUserMgt : MonoBehaviour
 
     void OnError(PlayFabError e) //function to handle error
     {
+        string errorMessage = "Error: " + e.ErrorMessage;
+
+        // Check if additional error details are available
+        if (e.ErrorDetails != null && e.ErrorDetails.ContainsKey("details"))
+        {
+            errorMessage += "\nDetails: " + e.ErrorDetails["details"];
+        }
+
+        // Display the error message
         msgBox.color = Color.red;
-        UpdateMsg("Something went wrong!");
+        UpdateMsg(errorMessage);
     }
 }

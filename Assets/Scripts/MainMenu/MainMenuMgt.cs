@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
+using Photon.Pun;
 
 public class MainMenuMgt : MonoBehaviour
 {
@@ -18,9 +19,15 @@ public class MainMenuMgt : MonoBehaviour
 
     [SerializeField] private GameObject bg;
 
+    private string scene;
+    private string playerName;
+
     // Start is called before the first frame update
     void Start()
     {
+        GetPlayFabDisplayName();
+
+        scene = "";
         startTransition.SetActive(false);
         endTransition.SetActive(true);
 
@@ -28,20 +35,73 @@ public class MainMenuMgt : MonoBehaviour
 
         dataMgr.SetUserData();
         dataMgr.GetEPG();
-
-        Debug.Log("EPG: " + PFGlobalData.epg);
     }
 
+    private void SceneChange()
+    {
+        switch (scene)
+        {
+            case "LogReg":
+                sceneMgt.ChangeScene("LogRegScene");
+                break;
+
+            case "Play":
+                PhotonNetwork.LocalPlayer.NickName = playerName;
+                PhotonNetwork.ConnectUsingSettings();
+                sceneMgt.ChangeScene("DemoAsteroids-LobbyScene");
+                break;
+
+        }
+    }
     public void OnLogOut()
     {
         startTransition.SetActive(true);
         PlayFabClientAPI.ForgetAllCredentials();
 
-        Invoke("LogoutChangeScene", 1.7f);
+        scene = "LogReg";
+        Invoke("SceneChange", 1.7f);
     }
 
-    private void LogoutChangeScene()
+    public void OnPlay()
     {
-        sceneMgt.ChangeScene("LogRegScene");
+        startTransition.SetActive(true);
+
+        scene = "Play";
+        Invoke("SceneChange", 1.7f);
+    }
+
+    public void GetPlayFabDisplayName()
+    {
+        if (PlayFabClientAPI.IsClientLoggedIn())
+        {
+            var request = new GetAccountInfoRequest();
+            PlayFabClientAPI.GetAccountInfo(request, OnSuccess, OnError);
+        }
+        else
+        {
+            Debug.LogError("Not logged in to PlayFab. Cannot retrieve display name.");
+        }
+    }
+
+    // Callback for successful GetAccountInfo request
+    private void OnSuccess(GetAccountInfoResult result)
+    {
+        var displayName = result.AccountInfo?.TitleInfo?.DisplayName;
+        if (!string.IsNullOrEmpty(displayName))
+        {
+            playerName = displayName;
+            Debug.Log("PlayFab display name: " + displayName);
+            // You can use the displayName here in your game logic
+        }
+        else
+        {
+            Debug.LogWarning("PlayFab display name is null or empty.");
+        }
+    }
+
+    // Callback for failed GetAccountInfo request
+    private void OnError(PlayFabError error)
+    {
+        Debug.LogError("Failed to retrieve PlayFab display name: " + error.ErrorMessage);
     }
 }

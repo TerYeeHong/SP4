@@ -21,6 +21,7 @@ public class SkyPlayerAnimation : MonoBehaviour
     public static string PLAYER_JUMPING = "Jumping";
     public static string PLAYER_FALL = "Falling";
     public static string PLAYER_LANDING = "Landing";
+    public static string PLAYER_DASH = "Dash";
 
     public static string PLAYER_STAND_TO_CROUCH = "StandToCrouch";
     public static string PLAYER_CROUCH_IDLE = "CrouchIdle";

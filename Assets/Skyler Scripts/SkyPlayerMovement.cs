@@ -70,6 +70,7 @@ public class SkyPlayerMovement : MonoBehaviour
             {
                 rb.AddForce(dashDirection.normalized * dashForce, ForceMode.VelocityChange);
                 isDashing = true;
+                playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_DASH); // Trigger dash animation
                 Invoke("ResetDash", 0.5f); // Cooldown before next dash
             }
         }
@@ -89,46 +90,48 @@ public class SkyPlayerMovement : MonoBehaviour
     }
     public void UpdateAnimationState()
     {
-        // Check if the player is grounded
-        if (isGrounded)
+        if (!isDashing) // Ensure dash animation transitions smoothly to other states
         {
-            if (jumpCount > 0)
+            // Check if the player is grounded
+            if (isGrounded)
             {
-                playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_LANDING);
-                jumpCount = 0;
-            }
-            else if (rb.velocity.magnitude > 0.1f && (Mathf.Abs(rb.velocity.x) > 0.1f || Mathf.Abs(rb.velocity.z) > 0.1f))
-            {
-                if (isRunning)
+                if (jumpCount > 0)
                 {
-                    // Transition to running animation if moving and Left Control is pressed
-                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_RUN);
+                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_LANDING);
+                    jumpCount = 0;
+                }
+                else if (rb.velocity.magnitude > 0.1f && (Mathf.Abs(rb.velocity.x) > 0.1f || Mathf.Abs(rb.velocity.z) > 0.1f))
+                {
+                    if (isRunning)
+                    {
+                        // Transition to running animation if moving and Left Control is pressed
+                        playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_RUN);
+                    }
+                    else
+                    {
+                        // Walking animation
+                        playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_WALK);
+                    }
                 }
                 else
                 {
-                    // Walking animation
-                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_WALK);
+                    // Idle animation
+                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_IDLE);
                 }
             }
             else
             {
-                // Idle animation
-                playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_IDLE);
-            }
-        }
-        else
-        {
-            if (rb.velocity.y > 0)
-            {
-                playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_JUMP);
-            }
-            else if (rb.velocity.y < 0)
-            {
-                playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_FALL);
+                if (rb.velocity.y > 0)
+                {
+                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_JUMP);
+                }
+                else if (rb.velocity.y < 0)
+                {
+                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_FALL);
+                }
             }
         }
     }
-
     // Draws a Gizmo in the editor to visualize the ground check
     void OnDrawGizmos()
     {

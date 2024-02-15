@@ -1,90 +1,126 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayFab;
+using PlayFab.ClientModels;
+using TMPro;
 
 public class LeaderboardMgr : MonoBehaviour
 {
-    //[SerializeField] private TMP_Text leaderboardBox;
+    private string userDisplayName;
 
-    //private string userDisplayName;
+    [Header("LB Prefabs")]
+    [SerializeField] GameObject rowPrefab;
+    [SerializeField] Transform rowParent;
 
-    //public GameObject leaderboardCanvas;
+    [Header("Canvas")]
+    [SerializeField] GameObject leaderboardCanvas;
+    [SerializeField] GameObject mainCanvas;
 
-    //private void Awake()
-    //{
-    //    GetPlayerProfile();
-    //}
+    private int score;
+
+    private void Awake()
+    {
+        GetPlayerProfile();
+    }
+
+    void Start()
+    {
+        leaderboardCanvas.SetActive(false);
+        mainCanvas.SetActive(true);
+    }
 
     //void UpdateMsg(string msg)
     //{
     //    leaderboardBox.text = msg;
     //}
 
-    //void GetPlayerProfile()
-    //{
-    //    GetPlayerProfileRequest request = new GetPlayerProfileRequest();
-    //    PlayFabClientAPI.GetPlayerProfile(request, GetProfileSuccess, OnError);
-    //}
+    void GetPlayerProfile()
+    {
+        GetPlayerProfileRequest request = new GetPlayerProfileRequest();
+        PlayFabClientAPI.GetPlayerProfile(request, GetProfileSuccess, OnError);
+    }
 
-    //void GetProfileSuccess(GetPlayerProfileResult r)
-    //{
-    //    userDisplayName = r.PlayerProfile.DisplayName;
-    //}
+    void GetProfileSuccess(GetPlayerProfileResult r)
+    {
+        userDisplayName = r.PlayerProfile.DisplayName;
+    }
 
-    //void OnError(PlayFabError e) //function to handle error
-    //{
-    //    UpdateMsg("Error!" + e.ErrorMessage());
-    //}
+    public void OnAddScore()
+    {
+        score += 10;
+        SendLeaderboard();
+        Invoke("OnGetGlobalTimerLeaderboard", 1.0f);
+    }
 
-    //public void OnGetGlobalTimerLeaderboard()
-    //{
-    //    var lbreq = new GetLeaderboardRequest
-    //    {
-    //        StatisticName = "Best Time", //playfab leaderboard stat name
-    //        StartPosition = 0,
-    //        MaxResultsCount = 100
-    //    };
-    //    PlayFabClientAPI.GetLeaderboard(lbreq, OnGlobalTimerLeaderboardGet, OnError);
-    //    leaderboardCanvas.SetActive(true);
-    //}
+    public void OnBack()
+    {
+        leaderboardCanvas.SetActive(false);
+        mainCanvas.SetActive(true);
+    }
 
-    //void OnGlobalTimerLeaderboardGet(GetLeaderboardResult r)
-    //{
-    //    string LeaderboardStr = "Global Leaderboard \n \n Position | Name | Score\n";
-    //    foreach (var item in r.Leaderboard)
-    //    {
-    //        string onerow;
-    //        if (item.DisplayName == userDisplayName) // highlight current user's name
-    //        {
-    //            onerow = ">> " + (item.Position + 1) + " | " + item.DisplayName + " | " + item.StatValue + " <<\n";
+    void OnError(PlayFabError e) //function to handle error
+    {
+        Debug.Log("Error: " + e.ErrorMessage);
+    }
 
-    //        }
-    //        else
-    //            onerow = (item.Position + 1) + " | " + item.DisplayName + " | " + item.StatValue + "\n";
-    //        LeaderboardStr += onerow; // combine all display into one string
-    //    }
-    //    UpdateMsg(LeaderboardStr);
-    //}
+    public void OnGetGlobalTimerLeaderboard()
+    {
+        leaderboardCanvas.SetActive(true);
+        mainCanvas.SetActive(false);
 
-    ////public void SendLeaderboard()
-    ////{
-    ////    var req = new UpdatePlayerStatisticsRequest
-    ////    {
-    ////        Statistics = new List<StatisticUpdate>
-    ////        {
-    ////            new StatisticUpdate
-    ////            {
-    ////                StatisticName = "High Score",
-    ////                Value = gameController.score
-    ////            }
-    ////        }
-    ////    };
-    ////    UpdateMsg("Submitting score: " + gameController.score);
-    ////    PlayFabClientAPI.UpdatePlayerStatistics(req, OnLeaderboardUpdate, OnError);
-    ////}
+        var lbreq = new GetLeaderboardRequest
+        {
+            StatisticName = "Best Time", //playfab leaderboard stat name
+            StartPosition = 0,
+            MaxResultsCount = 100
+        };
+        PlayFabClientAPI.GetLeaderboard(lbreq, OnGetGlobalTimerLeaderboard, OnError);
+        leaderboardCanvas.SetActive(true);
+    }
 
-    //void OnLeaderboardUpdate(UpdatePlayerStatisticsResult r)
-    //{
-    //    UpdateMsg("Successful leaderboard sent: " + r.ToString());
-    //}
+    void OnGetGlobalTimerLeaderboard(GetLeaderboardResult r)
+    {
+        int min, sec;
+        // Destroy Exisiting prefabs
+        foreach(Transform item in rowParent)
+        {
+            Destroy(item.gameObject);
+        }
+
+        foreach (var item in r.Leaderboard)
+        {
+            GameObject newGO = Instantiate(rowPrefab, rowParent);
+            TMP_Text[] texts = newGO.GetComponentsInChildren<TMP_Text>();
+
+            texts[0].text = (item.Position + 1).ToString();
+            texts[1].text = item.DisplayName.ToString();
+
+            min = Mathf.FloorToInt(item.StatValue / 60);
+            sec = Mathf.FloorToInt(item.StatValue % 60);
+            texts[2].text = string.Format("{0:00}:{1:00}", min, sec);
+        }
+    }
+
+    public void SendLeaderboard()
+    {
+        var req = new UpdatePlayerStatisticsRequest
+        {
+            Statistics = new List<StatisticUpdate>
+            {
+                new StatisticUpdate
+                {
+                    StatisticName = "Best Time",
+                    Value = score
+                }
+            }
+        };
+        Debug.Log("Submitting score: " + score);
+        PlayFabClientAPI.UpdatePlayerStatistics(req, OnLeaderboardUpdate, OnError);
+    }
+
+    void OnLeaderboardUpdate(UpdatePlayerStatisticsResult r)
+    {
+        Debug.Log("Successful leaderboard sent: " + r.ToString());
+    }
 }

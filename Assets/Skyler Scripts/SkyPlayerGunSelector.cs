@@ -1,3 +1,6 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +25,14 @@ public class SkyPlayerGunSelector : MonoBehaviour
 
     public void Update()
     {
+        if (GetComponent<PhotonView>().IsMine)
+        {
+            SwitchGun();
+        }
+    }
+
+    public void SwitchGun()
+    {
         // Example input handling for switching guns using number keys 1-9
         for (int i = 0; i < gunPrefabs.Count; i++)
         {
@@ -33,7 +44,7 @@ public class SkyPlayerGunSelector : MonoBehaviour
         }
     }
 
-    private void SwitchGunByIndex(int index)
+    public void SwitchGunByIndex(int index)
     {
         if (index < 0 || index >= gunPrefabs.Count)
         {
@@ -55,7 +66,20 @@ public class SkyPlayerGunSelector : MonoBehaviour
         instantiatedGun.transform.localPosition = activeGun.SpawnPoint;
         instantiatedGun.transform.localRotation = Quaternion.Euler(activeGun.SpawnRotation);
 
+        RaiseGunSwitchEvent(index);
+
         // Log for debugging
         Debug.Log($"Switched to gun: {activeGun.Name}");
+    }
+
+    private void RaiseGunSwitchEvent(int gunIndex)
+    {
+
+        int viewID = GetComponent<PhotonView>().ViewID;
+        object[] content = { viewID, gunIndex }; // You can include more information as needed
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+
+        PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_SWITCH_GUN, content, raiseEventOptions, sendOptions);
     }
 }

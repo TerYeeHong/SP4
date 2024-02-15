@@ -16,7 +16,6 @@ public class SkyGun : MonoBehaviour
     public bool IsAutomatic;
 
     private Transform ShootPoint;
-    private GameObject Model;
     private float LastShootTime;
     private ParticleSystem ShootSystem;
     private ObjectPool<TrailRenderer> TrailPool;

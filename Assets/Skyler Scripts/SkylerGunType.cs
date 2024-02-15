@@ -2,5 +2,7 @@
 public enum SkylerGunType
 {
     Glock,
-    M4A1
+    AK,
+    Sniper,
+    Shotgun
 }

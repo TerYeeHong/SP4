@@ -1136,6 +1136,7 @@ MonoBehaviour:
   gunParent: {fileID: 3787938341306619101}
   gunPrefabs:
   - {fileID: 8016613405039040811, guid: dc68e5099ff22494eba21e7288540796, type: 3}
+  - {fileID: 8430349403613037704, guid: 10e78af00035bd3419b4951f83653c74, type: 3}
   activeGunGameObject: {fileID: 0}
   activeGun: {fileID: 0}
 --- !u!1 &3787938341617956075

@@ -80,16 +80,13 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         Init();
-        //if (TryGetComponent(out Animator animator))
-        //    this.animator = animator;
-        //sprite_renderer = GetComponent<SpriteRenderer>();
     }
     public virtual void Init()
     {
         SetDefaultStat();
         rigidbody_unit = GetComponent<Rigidbody>();
     }
-    public void SetDefaultStat()
+    public virtual void SetDefaultStat()
     {
         //Get default data from unit_type
         if (inherit_from_unitType
@@ -246,7 +243,7 @@ public class Unit : MonoBehaviour
             dissolve.OnDeath(1.0f);
         }
 
-        GameEvents.m_instance.unitDied.Invoke(unit_type.name);
+       // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         Destroy(gameObject, 1.0f);
     }
 

@@ -17,7 +17,11 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
     public const byte UPDATETEAMSCORE = 6;
 
     public const byte CHATNOTICE = 7;
+    public const byte ENEMYDIEEVENT = 8;
 
+    public const byte ENEMYSPAWNEVENT = 9;
+    public const byte SETINACTIVEEVENT = 10; 
+    public const byte SETACTIVEEVENT = 11;
 
     //public delegate void OnExplode(string position);
     //public static event OnExplode ExplodeEvent;
@@ -39,6 +43,18 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
 
     public delegate void OnChatNotice(string data);
     public static event OnChatNotice OnChatNoticeEvent;
+
+    public delegate void OnEnemyDie(string data);
+    public static event OnEnemyDie OnEnemyDieEvent;
+
+    public delegate void OnEnemySpawn(string data);
+    public static event OnEnemySpawn OnEnemySpawnEvent;
+
+    public delegate void OnSetInactive(string data);
+    public static event OnSetInactive SetInactiveEvent;
+
+    public delegate void OnSetActive(string data);
+    public static event OnSetActive SetActiveEvent;
 
     private void OnEnable()
     {
@@ -81,7 +97,23 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
         {
             OnChatNoticeEvent?.Invoke(photonEvent.CustomData.ToString());
         }
-        
+        if (eventCode == ENEMYDIEEVENT)
+        {
+            OnEnemyDieEvent?.Invoke(photonEvent.CustomData.ToString());
+        }
+        if (eventCode == ENEMYSPAWNEVENT)
+        {
+            OnEnemySpawnEvent?.Invoke(photonEvent.CustomData.ToString());
+        }  
+        if (eventCode == SETINACTIVEEVENT)
+        {
+            SetInactiveEvent?.Invoke(photonEvent.CustomData.ToString());
+        } 
+        if (eventCode == SETACTIVEEVENT)
+        {
+            SetActiveEvent?.Invoke(photonEvent.CustomData.ToString());
+        }
+
     }
 }
 

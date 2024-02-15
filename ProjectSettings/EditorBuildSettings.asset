@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Ethan.unity
     guid: 1e0683d401f23404e8028d87cadd8435
+  - enabled: 1
+    path: Assets/Scenes/Level Skyl.unity
+    guid: d020334944ed6f24e83f481cc4bb91d7
   m_configObjects: {}

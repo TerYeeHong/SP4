@@ -47,7 +47,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         return start_time - Time.time;
     }
 
-    public void Awake()
+    public void Awake() 
     {
         Instance = this;
         red_score = 0;
@@ -179,66 +179,28 @@ public class JLGameManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("StartGame!");
 
-        //UPDATE TEAM UI
-        red_score_tmp.text = $"0/{score_max}";
-        blue_score_tmp.text = $"0/{score_max}";
 
-
-        Vector3 position = new Vector3(Random.Range(-10, 10.0f), 0.0f, Random.Range(-10, 10.0f));
+        Vector3 position = new Vector3(Random.Range(-3, 3.0f), 0.0f, Random.Range(-3, 3.0f));
         Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
         //PhotonNetwork.InstantiateRoomObject is to create a object that requires sychronisation in all clients
-        GameObject player = PhotonNetwork.Instantiate("PlayerShip", position, rotation, 0);
+        GameObject player = PhotonNetwork.Instantiate("Player", position, rotation, 0);      
 
         //if im the real dude :)
         if (player.GetComponent<PhotonView>().IsMine)
         {
-            virtualCam.Follow = player.transform;
-            //virtualCam.LookAt = player.GetComponent<ShipController>().target_point_transform;
-
-            ////assign ui Health
-            //player.GetComponent<ShipController>().SetHealthUI(health_tmp);
-
-            //uimanager.ship_player = player.GetComponent<ShipController>(); //shld cache it
-
-            ////Set audio listener transform for 3d effect
-            //AudioSfxManager.m_instance.SetListener(player.transform);
+            //virtualCam.Follow = player.transform;
         }
-        //disable rigidbody for other clients
         else
         {
             player.GetComponent<Rigidbody>().isKinematic = true;
         }
-        //player.SetActive(false);
 
 
 
         //Now as the master client, set the teams
         if (!PhotonNetwork.IsMasterClient)
             return;
-
-        SetPlayerTeams();
-
-        //loop through the array position
-        for (int i = 0; i < 5; ++i)
-        {
-            Vector3 randomPos = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
-
-            // Create a ghost prefab
-            int odds = Random.Range(0, 3);
-            switch (odds)
-            {
-                case 0:
-                    PhotonNetwork.InstantiateRoomObject("FireRatePowerUp", randomPos, Quaternion.identity);
-                    break;
-                case 1:
-                    PhotonNetwork.InstantiateRoomObject("HealthPowerUp", randomPos, Quaternion.identity);
-                    break;
-                case 2:
-                    PhotonNetwork.InstantiateRoomObject("SpeedPowerUp", randomPos, Quaternion.identity);
-                    break;
-            }
-        }
     }
 
     public void AddPlayerScore(int playerActorId, int score)
@@ -358,34 +320,6 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void SpawnGhosts()
-    {
-        //Positions taken from the existing ghosts
-        Vector3[] positionArray = new[] { new Vector3(-5.3f, 0f, -3.1f),
-                                            new Vector3(1.5f, 0f, 4f),
-                                            new Vector3(3.2f, 0f, 6.5f),
-                                            new Vector3(7.4f, 0f, -3f)};
-
-
-        ////loop through the array position
-        //for (int i = 0; i < positionArray.Length; ++i)
-        //{
-        //    // Create a ghost prefab
-        //    GameObject obj = PhotonNetwork.InstantiateRoomObject("Ghost", positionArray[i], Quaternion.identity);
-        //    obj.transform.parent = enemies.transform;
-
-        //    // get the waypoint component
-        //    WaypointPatrol patrolPoints = obj.GetComponent<WaypointPatrol>();
-
-        //    //assign the values
-        //    patrolPoints.waypoints.Add(wayPoints.transform.GetChild(i * 2));
-        //    patrolPoints.waypoints.Add(wayPoints.transform.GetChild(i * 2 + 1));
-
-        //    patrolPoints.StartAI();
-
-        //    obj.GetComponentInChildren<Observer>().gameEnding = endingScript;
-        //}
-    }
     private void CheckEndOfGame()
     {
     }

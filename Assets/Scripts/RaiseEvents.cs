@@ -5,6 +5,7 @@ using UnityEngine;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
+using System;
 
 public class RaiseEvents : MonoBehaviour, IOnEventCallback
 {
@@ -17,7 +18,9 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
     public const byte UPDATETEAMSCORE = 6;
 
     public const byte CHATNOTICE = 7;
-    public const byte PLAYER_ANIMATION_CHANGE = 8; 
+    public const byte PLAYER_ANIMATION_CHANGE = 8;
+
+    public const byte PLAYER_SHOOT = 9;
 
 
     //public delegate void OnExplode(string position);
@@ -97,6 +100,30 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 {
                     print("Found");
                     playerAnimation.ChangeAnimationState(newState);
+                }
+            }
+        }
+
+        if (eventCode == PLAYER_SHOOT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int viewID = (int)data[0];
+            Vector3 startPoint = (Vector3)data[1];
+            Vector3 endPoint = (Vector3)data[2];
+
+            PhotonView photonView = PhotonView.Find(viewID);
+
+            // Assuming you have a method to find the PhotonView by ActorNumber
+            if (photonView != null)
+            {
+                print("View found");
+                // Assuming the shooter's SkyPlayerGunSelector component can give us the active gun
+                SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
+                if (gunSelector != null && gunSelector.ActiveGun != null)
+                {
+                    print("Gun Active");
+                    // Now, use the active gun to play the trail
+                    gunSelector.ActiveGun.ActiveMonoBehaviour.StartCoroutine(gunSelector.ActiveGun.PlayTrail(startPoint, endPoint, new RaycastHit()));
                 }
             }
         }

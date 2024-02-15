@@ -39,6 +39,9 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - ChangeActiveGun
+  - SwitchGunRPC
+  - RPC_SelectGun
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

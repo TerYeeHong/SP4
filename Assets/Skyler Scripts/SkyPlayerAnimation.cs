@@ -43,23 +43,22 @@ public class SkyPlayerAnimation : MonoBehaviour
     {
         return animator.GetCurrentAnimatorStateInfo(0).length;
     }
-
-    public void ChangeAnimationState(string newState)
+    public void ChangeAnimationState(string newState, float transitionDuration = 0.1f)
     {
         if (currentState == newState) return;
 
-        animator.Play(newState);
+        animator.CrossFade(newState, transitionDuration);
         currentState = newState;
 
-        // Check if we are connected and this GameObject is controlled by the local player
+        // Network synchronization code remains the same
         if (photonView.IsMine)
         {
-            print("Animation my photon view");
             object[] content = new object[] { GetComponent<PhotonView>().ViewID, newState };
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
             PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_ANIMATION_CHANGE, content, raiseEventOptions, SendOptions.SendReliable);
         }
     }
+
 
     private void OnAnimatorMove()
     {

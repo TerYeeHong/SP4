@@ -897,6 +897,8 @@ GameObject:
   - component: {fileID: 3787938341435706193}
   - component: {fileID: 3787938341435706194}
   - component: {fileID: -1108130852846734559}
+  - component: {fileID: 959703558}
+  - component: {fileID: 959703559}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1046,6 +1048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   jumpForce: 5
+  runMultiplier: 1.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -1105,6 +1108,36 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &959703558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787938341435706200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f71c899bf4653a4cb0384fcfc746bdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GunSelector: {fileID: 959703559}
+--- !u!114 &959703559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787938341435706200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b7e7dcffbd9a5439b4838aa2e2b16c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gun: 0
+  GunParent: {fileID: 3787938341435706206}
+  Guns:
+  - {fileID: 11400000, guid: b6fd9702d235a104fbc4af22788aa98c, type: 2}
+  ActiveGun: {fileID: 0}
 --- !u!1 &3787938341617956075
 GameObject:
   m_ObjectHideFlags: 0
@@ -2056,6 +2089,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnfieldRifleMusket
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d8457c51da71c204e82656ea7400aac5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4436805663696350335, guid: d8457c51da71c204e82656ea7400aac5,
         type: 3}

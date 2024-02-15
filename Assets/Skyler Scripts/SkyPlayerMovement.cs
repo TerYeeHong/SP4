@@ -6,6 +6,7 @@ public class SkyPlayerMovement : MonoBehaviour
     private Rigidbody rb;
     public float speed = 10f;
     public float jumpForce = 5f;
+    public float runMultiplier = 1.5f;
     public LayerMask groundLayer;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -16,7 +17,7 @@ public class SkyPlayerMovement : MonoBehaviour
     private int maxJumps = 2;
     public float dashForce = 20f;
     private bool isDashing;
-
+    private bool isRunning;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -38,35 +39,39 @@ public class SkyPlayerMovement : MonoBehaviour
     {
         return Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundLayer);
     }
-
     public void HandleMovement()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         Vector3 movementDirection = transform.right * x + transform.forward * z;
-        Vector3 force = movementDirection * speed - rb.velocity;
-        force.y = 0; // Ignore vertical component of the force to avoid affecting jumps
-        if (!isGrounded && (x != 0 || z != 0))
+        float currentSpeed = speed;
+
+        // Check for running
+        isRunning = Input.GetKey(KeyCode.LeftControl);
+        if (isRunning)
         {
-            // Apply a reduced force for air control
-            Vector3 airControlForce = movementDirection * (speed * 0.5f) - rb.velocity;
-            airControlForce.y = 0; // Avoid affecting vertical movement
-            rb.AddForce(airControlForce, ForceMode.VelocityChange);
+            currentSpeed *= runMultiplier;
         }
-        else
-        {
-            rb.AddForce(force, ForceMode.VelocityChange);
-        }
+
+        Vector3 force = movementDirection.normalized * currentSpeed - rb.velocity;
+        force.y = 0;
+        rb.AddForce(force, ForceMode.VelocityChange);
     }
 
     public void HandleDash()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing)
         {
-            Vector3 dashDirection = transform.forward; // Dash forward relative to player's facing direction
-            rb.AddForce(dashDirection * dashForce, ForceMode.VelocityChange);
-            isDashing = true;
-            Invoke("ResetDash", 0.5f); // Cooldown before next dash
+            float x = Input.GetAxis("Horizontal");
+            float z = Input.GetAxis("Vertical");
+            Vector3 dashDirection = transform.right * x + transform.forward * z;
+
+            if (dashDirection.magnitude > 0) // Ensure there's some direction for the dash
+            {
+                rb.AddForce(dashDirection.normalized * dashForce, ForceMode.VelocityChange);
+                isDashing = true;
+                Invoke("ResetDash", 0.5f); // Cooldown before next dash
+            }
         }
     }
 
@@ -87,27 +92,32 @@ public class SkyPlayerMovement : MonoBehaviour
         // Check if the player is grounded
         if (isGrounded)
         {
-            // Reset jump count when landing
             if (jumpCount > 0)
             {
                 playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_LANDING);
                 jumpCount = 0;
             }
-            // Determine walking or idle based on horizontal movement
             else if (rb.velocity.magnitude > 0.1f && (Mathf.Abs(rb.velocity.x) > 0.1f || Mathf.Abs(rb.velocity.z) > 0.1f))
             {
-                print("walking");
-                playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_WALK);
+                if (isRunning)
+                {
+                    // Transition to running animation if moving and Left Control is pressed
+                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_RUN);
+                }
+                else
+                {
+                    // Walking animation
+                    playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_WALK);
+                }
             }
-
             else
             {
+                // Idle animation
                 playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_IDLE);
             }
         }
         else
         {
-            // When not grounded, determine if the player is jumping or falling
             if (rb.velocity.y > 0)
             {
                 playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_JUMP);
@@ -118,7 +128,6 @@ public class SkyPlayerMovement : MonoBehaviour
             }
         }
     }
-
 
     // Draws a Gizmo in the editor to visualize the ground check
     void OnDrawGizmos()

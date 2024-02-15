@@ -1133,11 +1133,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b7e7dcffbd9a5439b4838aa2e2b16c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gun: 0
-  GunParent: {fileID: 3787938341435706206}
-  Guns:
-  - {fileID: 11400000, guid: b6fd9702d235a104fbc4af22788aa98c, type: 2}
-  ActiveGun: {fileID: 0}
+  gunParent: {fileID: 3787938341306619101}
+  gunPrefabs:
+  - {fileID: 8016613405039040811, guid: dc68e5099ff22494eba21e7288540796, type: 3}
+  activeGunGameObject: {fileID: 0}
+  activeGun: {fileID: 0}
 --- !u!1 &3787938341617956075
 GameObject:
   m_ObjectHideFlags: 0

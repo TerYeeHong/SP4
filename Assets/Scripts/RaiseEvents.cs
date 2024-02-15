@@ -119,11 +119,11 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 print("View found");
                 // Assuming the shooter's SkyPlayerGunSelector component can give us the active gun
                 SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
-                if (gunSelector != null && gunSelector.ActiveGun != null)
+                if (gunSelector != null && gunSelector.activeGun != null)
                 {
                     print("Gun Active");
                     // Now, use the active gun to play the trail
-                    gunSelector.ActiveGun.ActiveMonoBehaviour.StartCoroutine(gunSelector.ActiveGun.PlayTrail(startPoint, endPoint, new RaycastHit()));
+                    gunSelector.activeGun.StartCoroutine(gunSelector.activeGun.PlayTrail(startPoint, endPoint, new RaycastHit()));
                 }
             }
         }

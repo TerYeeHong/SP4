@@ -47,7 +47,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         return start_time - Time.time;
     }
 
-    public void Awake()
+    public void Awake() 
     {
         Instance = this;
         red_score = 0;

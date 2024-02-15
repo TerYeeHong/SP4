@@ -18,15 +18,15 @@ public class SkyPlayerShooting : MonoBehaviour
 
     public void ShootGun(PhotonView photonView, SkyGun skyGun)
     {
-        if (GunSelector.ActiveGun != null)
+        if (GunSelector.activeGun != null)
         {
             // Check if the gun is automatic
-            if (GunSelector.ActiveGun.IsAutomatic)
+            if (GunSelector.activeGun.IsAutomatic)
             {
                 // For automatic guns, shoot as long as the fire button is held down
                 if (Input.GetButton("Fire1"))
                 {
-                    GunSelector.ActiveGun.Shoot(playerCam, photonView, skyGun);
+                    GunSelector.activeGun.Shoot(playerCam, photonView);
                 }
             }
             else
@@ -34,7 +34,7 @@ public class SkyPlayerShooting : MonoBehaviour
                 // For semi-automatic guns, shoot only on button down (once per click)
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    GunSelector.ActiveGun.Shoot(playerCam, photonView, skyGun);
+                    GunSelector.activeGun.Shoot(playerCam, photonView);
                 }
             }
         }

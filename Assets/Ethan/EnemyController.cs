@@ -16,6 +16,9 @@ public class EnemyController : EnemyUnit
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject player;
     [SerializeField] private PhotonView photonView;
+    [SerializeField] private Rigidbody rigidbody;
+
+    public float m_Thrust = 20f;
 
 
     STATES CURRENT_STATE = STATES.IDLE;
@@ -23,11 +26,14 @@ public class EnemyController : EnemyUnit
     {
         IDLE,
         WALKING,
-        RUNNING
+        RUNNING,
+        HIT
         
     }
-    private void Awake()
+
+    public override void Init()
     {
+        base.Init();
         player = GameObject.Find("Player");
         movePositionTransform = player.transform;
         photonView = GetComponent<PhotonView>();
@@ -48,16 +54,6 @@ public class EnemyController : EnemyUnit
 
     public override void OnDeath()
     {
-       ///Destroy(rigidbody_unit);
-        //if (gameObject.TryGetComponent(out Collider collider))
-        //{
-        //    collider.enabled = false;
-        //}
-        //if (gameObject.TryGetComponent(out Dissolve dissolve))
-        //{
-        //    dissolve.OnDeath(1.0f);
-        //}
-      
 
         if (photonView.IsMine)
         {
@@ -75,12 +71,30 @@ public class EnemyController : EnemyUnit
     {
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
         //Debug.Log("dist "+ range_unit);
+        Debug.Log("current state: " + CURRENT_STATE);
+
         if (range_unit < 4)
         {
-            
-            animator.SetBool("IsMoving", true);
-            navMeshAgent.destination = movePositionTransform.position;
+           
             CURRENT_STATE = STATES.WALKING;
+        }
+        else if (movePositionTransform.position == navMeshAgent.destination)
+        {
+           
+            CURRENT_STATE = STATES.IDLE;
+            //animator.SetBool("IsHit", false);
+        }
+
+
+        if (CURRENT_STATE == STATES.HIT)
+        {
+            animator.SetTrigger("IsHit");
+            //animator.SetBool("IsHit", true);
+            //CURRENT_STATE = STATES.IDLE;
+        }
+        else if (CURRENT_STATE == STATES.IDLE)
+        {
+            animator.SetBool("IsMoving", false);
         }
         else if (CURRENT_STATE == STATES.WALKING)
         {
@@ -88,8 +102,27 @@ public class EnemyController : EnemyUnit
             animator.SetBool("IsMoving", true);
             navMeshAgent.destination = movePositionTransform.position;
         }
+     
+        //animator.SetTrigger("IsHit");
     }
 
+    public override bool TakeDamage(int damage)
+    {
+        //health_unit -= damage;
+        Debug.Log("GETTING MY ASS HIT");
+        //Damage pop up
+        if (damage > 0)
+        {
+            Debug.Log("OUCHH");
+
+            rigidbody.AddForce(transform.forward * m_Thrust);
+            animator.SetTrigger("IsHit");
+            CURRENT_STATE = STATES.HIT;
+        }
+
+
+       return base.TakeDamage(damage);
+    }
 
     public void Inactive(string data)
     {

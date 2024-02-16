@@ -57,8 +57,17 @@ public class AbilityStrike : Ability
                 {
                     foreach (Collider collider in colliders)
                     {
-                        if (collider.TryGetComponent(out Unit unit_target))
+                        //if (collider.TryGetComponent(out Unit unit_target))
+                        //{
+
+
+                        //    //Debug.Log(base_damage_ability + (int)(power_percentage_ability * unit_parent.Power));
+                        //    unit_target.TakeDamage(base_damage_ability + (int)(power_percentage_ability * unit_parent.Power));
+                        //}
+                        if (collider.TryGetComponent(out EnemyController unit_target))
                         {
+
+
                             //Debug.Log(base_damage_ability + (int)(power_percentage_ability * unit_parent.Power));
                             unit_target.TakeDamage(base_damage_ability + (int)(power_percentage_ability * unit_parent.Power));
                         }

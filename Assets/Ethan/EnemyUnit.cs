@@ -82,8 +82,9 @@ public class EnemyUnit : Unit
     }
     public virtual void Init()
     {
+        
         SetDefaultStat();
-        //rigidbody_unit = GetComponent<Rigidbody>();
+        rigidbody_unit = GetComponent<Rigidbody>();
     }
     public override void SetDefaultStat()
     {

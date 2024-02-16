@@ -85,6 +85,22 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4146321500650261720}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &986428357418674621
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3840401418605293961}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0.5
+  m_AngularDrag: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!136 &968977805
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -98,7 +114,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.76, z: 0}
 --- !u!95 &9051413008889532089
 Animator:
   serializedVersion: 5
@@ -162,7 +178,7 @@ MonoBehaviour:
   max_health_unit: 100
   power_unit: 10
   speed_unit: 2
-  health_unit: 100
+  health_unit: 90000
   godmode: 0
   movement_locked: 0
   terrain_layer:
@@ -183,7 +199,9 @@ MonoBehaviour:
   movePositionTransform: {fileID: 0}
   animator: {fileID: 9051413008889532089}
   player: {fileID: 0}
-  photonView: {fileID: 0}
+  photonView: {fileID: -248076469017610990}
+  rigidbody: {fileID: 986428357418674621}
+  m_Thrust: 20
 --- !u!195 &968977804
 NavMeshAgent:
   m_ObjectHideFlags: 0

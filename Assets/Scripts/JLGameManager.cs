@@ -241,6 +241,11 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    void GenerateIsland()
+    {
+
+    }
+
     public void AddPlayerScore(int playerActorId, int score)
     {
         object playerScore;

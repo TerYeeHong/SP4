@@ -82,4 +82,18 @@ public class SkyPlayerGunSelector : MonoBehaviour
 
         PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_SWITCH_GUN, content, raiseEventOptions, sendOptions);
     }
+
+    public void ADSActiveGun()
+    {
+        if (Input.GetButton("Fire2"))
+        {
+            print("BEN");
+            activeGun.PlayerAim(true);
+        }
+        if (Input.GetButtonUp("Fire2"))
+        {
+            print("BNE");
+            activeGun.PlayerAim(false);
+        }
+    }
 }

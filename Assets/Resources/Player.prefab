@@ -899,6 +899,7 @@ GameObject:
   - component: {fileID: -1108130852846734559}
   - component: {fileID: 959703558}
   - component: {fileID: 959703559}
+  - component: {fileID: 556678115}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1047,6 +1048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  deceleration: 5
   jumpForce: 5
   runMultiplier: 1.5
   groundLayer:
@@ -1139,6 +1141,29 @@ MonoBehaviour:
   - {fileID: 8430349403613037704, guid: 10e78af00035bd3419b4951f83653c74, type: 3}
   activeGunGameObject: {fileID: 0}
   activeGun: {fileID: 0}
+--- !u!114 &556678115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787938341435706200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63a9c2e42ed07c248b29745daba34671, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transform_head: {fileID: 0}
+  unit_type: {fileID: 0}
+  inherit_from_unitType: 0
+  team_unit: 0
+  name_unit: 
+  max_health_unit: 0
+  power_unit: 40
+  speed_unit: 0
+  health_unit: 0
+  godmode: 0
+  movement_locked: 0
 --- !u!1 &3787938341617956075
 GameObject:
   m_ObjectHideFlags: 0

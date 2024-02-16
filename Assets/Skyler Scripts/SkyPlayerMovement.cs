@@ -5,6 +5,7 @@ public class SkyPlayerMovement : MonoBehaviour
 {
     private Rigidbody rb;
     public float speed = 10f;
+    public float deceleration = 5f;
     public float jumpForce = 5f;
     public float runMultiplier = 1.5f;
     public LayerMask groundLayer;

@@ -30,6 +30,7 @@ public class SkyPlayerController : MonoBehaviour
             playerMovement.HandleDash();
             playerMovement.UpdateAnimationState();
             playerShooting.ShootGun(photonView, gunSelector.activeGun);
+            gunSelector.ADSActiveGun();
         }
     }
 

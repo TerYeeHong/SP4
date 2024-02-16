@@ -114,6 +114,7 @@
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
     <Compile Include="Assets\Scripts\YeeHong\IslandGenerator.cs" />
+    <Compile Include="Assets\Scripts\LogRegScripts\PFUserMgt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -433,10 +434,10 @@
       <HintPath>C:\Users\yhspi\Dropbox\PC\Desktop\Unity stuff\2021.3.23f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Android.Types">
-      <HintPath>C:\Users\yhspi\Dropbox\PC\Desktop\Unity stuff\2021.3.23f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.23f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Android.Gradle">
-      <HintPath>C:\Users\yhspi\Dropbox\PC\Desktop\Unity stuff\2021.3.23f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Gradle.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.23f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Gradle.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:\Unity\Unity Hub\Editor\2021.3.23f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>

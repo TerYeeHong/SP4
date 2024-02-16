@@ -33,7 +33,6 @@ public class PFDataMgr : MonoBehaviour
             // Keys = null
         }, result =>
         {
-            Debug.Log("Got user data: ");
             if (result.Data == null || !result.Data.ContainsKey("XP"))
                 Debug.Log("No XP");
             else

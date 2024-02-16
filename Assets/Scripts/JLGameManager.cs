@@ -180,7 +180,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         Debug.Log("StartGame!");
 
 
-        Vector3 position = new Vector3(Random.Range(-3, 3.0f), 0.0f, Random.Range(-3, 3.0f));
+        Vector3 position = new Vector3(Random.Range(-3, 3.0f), 5.0f, Random.Range(-3, 3.0f));
         Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
         //PhotonNetwork.InstantiateRoomObject is to create a object that requires sychronisation in all clients
@@ -195,8 +195,6 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         {
             player.GetComponent<Rigidbody>().isKinematic = true;
         }
-
-
 
         //Now as the master client, set the teams
         if (!PhotonNetwork.IsMasterClient)

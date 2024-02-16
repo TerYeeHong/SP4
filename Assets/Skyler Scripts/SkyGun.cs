@@ -55,6 +55,19 @@ public class SkyGun : MonoBehaviour
             {
                 StartCoroutine(PlayTrail(ShootPoint.position, hit.point, hit));
                 RaisePlayerShootEvent(ShootPoint.position, hit.point, photonView);
+
+                Debug.LogWarning("Trying shoot");
+
+                if (hit.collider.TryGetComponent(out EnemyUnit enemyUnit))
+                {
+                    Debug.LogWarning("Got component enemy");
+
+                    if (photonView.TryGetComponent(out Unit unit)){
+                        Debug.LogWarning("Calling RPC Takedamage");
+
+                        enemyUnit.photonView.RPC(nameof(EnemyUnit.TakeDamage), RpcTarget.All, unit.Power);
+                    }
+                }
             }
             else
             {

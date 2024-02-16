@@ -7,6 +7,12 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public static EnemyManager m_instance = null;
+    private void Awake()
+    {
+        if (m_instance = null) m_instance = this;
+    }
+
 
     List<GameObject> Enemies = new List<GameObject>();
     [SerializeField] public PhotonView photonView;
@@ -47,10 +53,16 @@ public class EnemyManager : MonoBehaviour
         //FetchEnemies();
         //DisableEnemies(string data)
         //InstantiateEnemy("Fish");
+
+
+        Invoke(nameof(SpawnEvent), 15);
+        photonView = GetComponent<PhotonView>();
+    }
+    void SpawnEvent()
+    {
         string sentData = "" + tag;
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
-        photonView = GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
@@ -132,47 +144,21 @@ public class EnemyManager : MonoBehaviour
 
     }
 
-    [PunRPC]
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
-        if(!poolDictionary.ContainsKey(tag))
+        Debug.LogWarning("SpawnFromPool");
+
+        if (!poolDictionary.ContainsKey(tag))
         {
             Debug.Log("Pool with tag" + tag + " does not exist");
             return null;
         }
 
-        Debug.Log(objectPool.Count);
-        //if (poolDictionary[tag].Dequeue() == null)
-        //{
-        //    //Debug.Log(poolDictionary[tag].Dequeue());
-        //    SpawnEnemy();
-        //}
-
-        //GameObject objectToSpawn = poolDictionary[tag].Dequeue();
-        //int fishViewID = objectToSpawn.GetComponent<PhotonView>().ViewID;
-
-        //string sentData = "" + fishViewID;
-
-        ////Debug.Log("setactive");
-
-        //Debug.Log("fishViewID" + fishViewID);
-
-        //RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        //PhotonNetwork.RaiseEvent(RaiseEvents.SETACTIVEEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
-
-        ////photonView.RPC("ActivateFish", RpcTarget.All, fishViewID);
-        ////objectToSpawn.SetActive(true);
-        //objectToSpawn.transform.position = position;
-        //objectToSpawn.transform.rotation = rotation;
-
-
-        //return objectToSpawn;
-      
-        //SPOMETHING TO DO WITH THIS
-        //if instantiate is outisde the loop, it can run
 
         if (objectPool.Count == 0)
         {
+            Debug.LogWarning("count 0");
+
             InstantiateEnemy("Fish");
             Vector3 spawnPos = new Vector3(0, 0, 0);
 
@@ -183,7 +169,7 @@ public class EnemyManager : MonoBehaviour
         }
         else
         {
-
+            Debug.LogWarning("have count");
 
             GameObject objectToSpawn = poolDictionary[tag].Dequeue();
             int fishViewID = objectToSpawn.GetComponent<PhotonView>().ViewID;
@@ -214,12 +200,16 @@ public class EnemyManager : MonoBehaviour
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
+        Debug.LogWarning("trying to instantitate");
+
         foreach ( Pool pool in pools)
         {
-           // Queue<GameObject> objectPool = new Queue<GameObject>();
+            // Queue<GameObject> objectPool = new Queue<GameObject>();
+            Debug.LogWarning("each pool");
 
             for (int i = 0; i < pool.size; i++)
             {
+                Debug.LogWarning("each spawnnnn");
 
                 //if (tag == "Fish")
                 {

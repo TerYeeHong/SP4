@@ -52,7 +52,7 @@ public class IslandGenerator : MonoBehaviour
 
     void GenerateIsland()
     {
-        Random.InitState((int)System.DateTime.Now.Ticks);
+        //Random.InitState((int)System.DateTime.Now.Ticks);
 
         //Dont allow size of one
         if (size <= 1) return;

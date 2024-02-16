@@ -43,16 +43,22 @@ public class LevelGenerator : MonoBehaviour
     {
         islands_list = new();
 
-        RemakeIsland();
+        RemakeIsland(1);
     }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            RemakeIsland();
+            RemakeIsland((int)System.DateTime.Now.Ticks);
+
+        if (Input.GetKeyDown(KeyCode.V))
+            RemakeIsland(1);
     }
 
-    void RemakeIsland()
+    void RemakeIsland(int seed)
     {
+        Random.InitState(seed);
+
+
         //Clear any existing ones
         foreach (GameObject island in island_objects)
         {

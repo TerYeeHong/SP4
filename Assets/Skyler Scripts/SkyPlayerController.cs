@@ -12,12 +12,24 @@ public class SkyPlayerController : MonoBehaviour
     SkyPlayerShooting playerShooting;
     SkyPlayerGunSelector gunSelector;
     private PhotonView photonView;
+
+    public PhotonView GetPhotonView { get { return photonView; } }
+
+
     void Start()
     {
         photonView = GetComponent<PhotonView>();
         playerMovement = GetComponent<SkyPlayerMovement>();
         playerShooting = GetComponent<SkyPlayerShooting>();
         gunSelector = GetComponent<SkyPlayerGunSelector>();
+
+        //disable mesh rendering for self
+        if (photonView.IsMine)
+        {
+            SkinnedMeshRenderer[] renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (SkinnedMeshRenderer renderer in renderers)
+                renderer.enabled = false;
+        }
     }
 
     // Update is called once per frame

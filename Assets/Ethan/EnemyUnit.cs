@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class EnemyUnit : Unit
 {
@@ -13,11 +16,15 @@ public class EnemyUnit : Unit
     public LayerMask enemy_layer;
     public GameObject floating_item_prefab;
 
+    public PhotonView photonView;
+
     //[Header("References")]
     //[SerializeField] protected Transform transform_head;
 
     //[Header("EnemeyUnit")]
     [SerializeField] protected EnemyUnitType enemy_type;
+
+    
 
     ////For Testing purposes, you can test this off and set your own unit data
     //[SerializeField] protected bool inherit_from_unitType = true;
@@ -66,24 +73,11 @@ public class EnemyUnit : Unit
     //protected Rigidbody rigidbody_unit;
     //protected float max_speed = 15f; //Max speed a unit can go for collisions to work properly
 
-    private void Update()
-    {
-        //Debug.LogError(gameObject.name + " HPPPP WTFFFoverride" + health_unit);
-        //Debug.LogWarning(gameObject.name + " HPPPP WTFFF" + GetHealth());
-
-    }
-
-    private void Awake()
-    {
-        Init();
-        //if (TryGetComponent(out Animator animator))
-        //    this.animator = animator;
-        //sprite_renderer = GetComponent<SpriteRenderer>();
-    }
-    public virtual void Init()
+    public override void Init()
     {
         SetDefaultStat();
-        //rigidbody_unit = GetComponent<Rigidbody>();
+
+        photonView = GetComponent<PhotonView>();
     }
     public override void SetDefaultStat()
     {
@@ -135,10 +129,6 @@ public class EnemyUnit : Unit
 
     public override void OnDeath()
     {
-      
-        Debug.Log("NIGAAAAAAAAAAAAAA");
-        // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
-        //Destroy(gameObject, 1.0f);
     }
 
     //protected void UpdateDirection()

@@ -15,7 +15,7 @@ public class EnemyController : EnemyUnit
     [SerializeField] private Transform movePositionTransform;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject player;
-    [SerializeField] private PhotonView photonView;
+    //[SerializeField] private PhotonView photonView;
 
 
     STATES CURRENT_STATE = STATES.IDLE;
@@ -26,12 +26,15 @@ public class EnemyController : EnemyUnit
         RUNNING
         
     }
-    private void Awake()
+
+    public override void Init()
     {
-        player = GameObject.Find("Player");
+        base.Init();
+        player = GameObject.Find("Player(Clone)");
         movePositionTransform = player.transform;
-        photonView = GetComponent<PhotonView>();
+
     }
+
 
     private void OnEnable()
     {
@@ -69,6 +72,8 @@ public class EnemyController : EnemyUnit
         // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         //Destroy(gameObject, 1.0f);
     }
+
+
 
 
     private void Update()

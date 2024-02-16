@@ -175,6 +175,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   floating_item_prefab: {fileID: 0}
+  photonView: {fileID: 0}
   enemy_type: {fileID: 0}
   range_unit: 5
   rarity_unit: 1
@@ -183,7 +184,6 @@ MonoBehaviour:
   movePositionTransform: {fileID: 0}
   animator: {fileID: 9051413008889532089}
   player: {fileID: 0}
-  photonView: {fileID: 0}
 --- !u!195 &968977804
 NavMeshAgent:
   m_ObjectHideFlags: 0

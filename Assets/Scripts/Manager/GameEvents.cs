@@ -33,6 +33,9 @@ public class GameEvents : MonoBehaviour
     //Post process/Shaders
     [NonSerialized] public UnityEvent<bool> UnderwaterPostProcessEnable;
 
+    //UI 
+    [NonSerialized] public UnityEvent<bool> updateCanStartSpawnEnable;
+
     //Audio
     [NonSerialized] public UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT> playNewAudioClip;
     [NonSerialized] public UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT, Vector3> playNewAudioClip3D;
@@ -63,6 +66,8 @@ public class GameEvents : MonoBehaviour
         unitDied = new UnityEvent<string>();
 
         UnderwaterPostProcessEnable = new UnityEvent<bool>();
+
+        updateCanStartSpawnEnable = new UnityEvent<bool>();
 
         playNewAudioClip = new UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT>();
         playNewAudioClip3D = new UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT, Vector3>();

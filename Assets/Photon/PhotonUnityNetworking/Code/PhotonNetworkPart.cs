@@ -38,6 +38,11 @@ namespace Photon.Pun
         /// </summary>
         private static NonAllocDictionary<int, PhotonView> photonViewList = new NonAllocDictionary<int, PhotonView>();
 
+        //public static void RaiseEvent(object gHOSTDMGTRIGGER, string sentdata, RaiseEventOptions raiseEventOptions, object sendReliable)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         /// <summary>
         /// Gets the photon views.
         /// </summary>

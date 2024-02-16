@@ -39,6 +39,10 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - DisableEnemies
+  - SpawnFromPool
+  - InstantiateEnemy
+  - ActivateFish
   - ChangeActiveGun
   - SwitchGunRPC
   - RPC_SelectGun

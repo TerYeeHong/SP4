@@ -48,7 +48,7 @@ public class EnemyManager : MonoBehaviour
         //Enemies[1].SetActive(false);
         //FetchEnemies();
         //DisableEnemies(string data)
-        InstantiateEnemy("Fish");
+        //InstantiateEnemy("Fish");
         //string sentData = "" + tag;
         // RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         //PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
@@ -338,25 +338,25 @@ public class EnemyManager : MonoBehaviour
     //    objectPool.Enqueue(obj);
     //}
 
-    public void DestroyEnemy()
-    {
-        poolDictionary = new Dictionary<string, Queue<GameObject>>();
+    //public void DestroyEnemy()
+    //{
+    //    poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        foreach (Pool pool in pools)
-        {
-            //Queue<GameObject> objectPool = new Queue<GameObject>();
+    //    foreach (Pool pool in pools)
+    //    {
+    //        //Queue<GameObject> objectPool = new Queue<GameObject>();
 
-            for (int i = 0; i < pool.size; i++)
-            {
-                Vector3 spawnPos = new Vector3(0, 0, 0);
-                GameObject obj = PhotonNetwork.InstantiateRoomObject("CatFishA", spawnPos, Quaternion.identity);
-                obj.SetActive(false);
-                objectPool.Enqueue(obj);
-            }
+    //        for (int i = 0; i < pool.size; i++)
+    //        {
+    //            Vector3 spawnPos = new Vector3(0, 0, 0);
+    //            GameObject obj = PhotonNetwork.InstantiateRoomObject("CatFishA", spawnPos, Quaternion.identity);
+    //            obj.SetActive(false);
+    //            objectPool.Enqueue(obj);
+    //        }
 
-            poolDictionary.Add(pool.tag, objectPool);
-        }
-    }
+    //        poolDictionary.Add(pool.tag, objectPool);
+    //    }
+    //}
 
     
     public void DisableEnemies(string data)
@@ -373,7 +373,7 @@ public class EnemyManager : MonoBehaviour
                 {
                     Debug.Log("Enemies" + photonViewNo);
 
-                    Enemies[i].SetActive(false);
+                    //Enemies[i].SetActive(false);
                     //poolDictionary.Add(Enemies[i].tag, objectPool);
                     objectPool.Enqueue(Enemies[i]);
 

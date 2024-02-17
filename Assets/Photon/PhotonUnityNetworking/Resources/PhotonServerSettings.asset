@@ -46,6 +46,7 @@ MonoBehaviour:
   - ChangeActiveGun
   - SwitchGunRPC
   - RPC_SelectGun
+  - SetGameobjectInactive
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

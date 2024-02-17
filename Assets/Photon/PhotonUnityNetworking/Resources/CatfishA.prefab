@@ -178,7 +178,7 @@ MonoBehaviour:
   max_health_unit: 100
   power_unit: 10
   speed_unit: 2
-  health_unit: 90000
+  health_unit: 1000
   godmode: 0
   movement_locked: 0
   terrain_layer:

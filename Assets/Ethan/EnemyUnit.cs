@@ -136,7 +136,7 @@ public class EnemyUnit : Unit
 
     public override void OnDeath()
     {
-      
+        base.OnDeath();
         Debug.Log("NIGAAAAAAAAAAAAAA");
         // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         //Destroy(gameObject, 1.0f);
@@ -218,7 +218,7 @@ public class EnemyUnit : Unit
 
         if (health_unit <= 0)
         {
-            enabled = false;
+            //enabled = false;
             //Debug.Log("Unit Dead");
             collide_with_attacks = false;
             OnDeath();

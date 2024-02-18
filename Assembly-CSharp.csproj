@@ -85,6 +85,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextButtonTransition.cs" />
     <Compile Include="Assets\Scripts\MainMenu\MainMenuMgt.cs" />
     <Compile Include="Assets\LeanTween\Examples\Archived\TestingPunch.cs" />
+    <Compile Include="Assets\Scripts\YeeHong\SpawnMonument.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\NamePickGui.cs" />
     <Compile Include="Assets\Ethan\EnemyUnit.cs" />
     <Compile Include="Assets\Scripts\CustomAnimator.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Assets\Skyler Scripts\SkyShootConfig.cs" />
     <Compile Include="Assets\Skyler Scripts\SkyPlayerController.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSpline2d.cs" />
+    <Compile Include="Assets\Scripts\YeeHong\PlayerUnit.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\PlayerRigging.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\TextToggleIsOnTransition.cs" />
@@ -118,8 +120,6 @@
     <Compile Include="Assets\Skyler Scripts\SkyPlayerGunSelector.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplines.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralEventsListeners.cs" />
-    <Compile Include="Assets\Scripts\Ability\Ability.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyPlayerGunSelector.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\EventSystemSpawner.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IKeyInput.cs" />
     <Compile Include="Assets\Scripts\YeeHong\LevelGenerator.cs" />
@@ -132,7 +132,6 @@
     <Compile Include="Assets\Skyler Scripts\SkyPlayerMovement.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralEasingTypes.cs" />
     <Compile Include="Assets\LeanTween\Examples\Archived\OldGUIExamplesCS.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyPlayerMovement.cs" />
     <Compile Include="Assets\Scripts\StrikeSlash.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralCameraShake.cs" />
     <Compile Include="Assets\Photon\PhotonLibs\WebSocket\WebSocket.cs" />
@@ -162,8 +161,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
     <Compile Include="Assets\Scripts\YeeHong\IslandGenerator.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralBasic.cs" />
-    <Compile Include="Assets\Scripts\YeeHong\PlayerUnit.cs" />
-    <Compile Include="Assets\Scripts\YeeHong\SpawnMonument.cs" />
+    <Compile Include="Assets\Ethan\BossController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

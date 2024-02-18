@@ -56,15 +56,27 @@ public class EnemyManager : MonoBehaviour
         //DisableEnemies(string data)
         //InstantiateEnemy("Fish");
 
-
+        if(photonView.IsMine)
         Invoke(nameof(SpawnEvent), 15);
         photonView = GetComponent<PhotonView>();
     }
     void SpawnEvent()
     {
-        string sentData = "" + tag;
-        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
+        foreach (Pool pool in pools)
+        {
+            string tag = pool.tag;
+            // Now you can use the 'tag' variable as needed
+            Debug.Log("Pool tag: " + tag);
+
+            string sentData = "" + tag;
+
+            //Debug.Log("SPWN sentData: " + pools.);
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+            PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
+        }
+        //string sentData2 = "Wolf";
+        //RaiseEventOptions raiseEventOptions2 = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        //PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData2, raiseEventOptions2, SendOptions.SendReliable);
     }
 
     // Update is called once per frame
@@ -89,6 +101,18 @@ public class EnemyManager : MonoBehaviour
             //photonView.RPC("SpawnFromPool", RpcTarget.MasterClient, "Fish", spawnPos , Quaternion.identity);
             // photonView.RPC("InstantiateEnemy", RpcTarget.All, "Fish");
            // photonView.RPC("SetGameobjectInactive", RpcTarget.All, sentData);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            //FetchEnemies();
+            Vector3 spawnPos = new Vector3(0, 0, 0);
+            GameObject obj = PhotonNetwork.InstantiateRoomObject("Wolfboss_A", spawnPos, Quaternion.identity);
+            int fishViewID = obj.GetComponent<PhotonView>().ViewID;
+
+            string sentData = "" + fishViewID;
+
+            Debug.Log("fishViewID" + fishViewID);
+ 
         }
         if (Input.GetKeyDown(KeyCode.N))
         {
@@ -205,7 +229,7 @@ public class EnemyManager : MonoBehaviour
         for (int i = 0; i < 5; ++i)
         {
             Vector3 spawnPos = new Vector3(0, 0, 0);
-            GameObject obj = PhotonNetwork.InstantiateRoomObject("CatfishA", spawnPos, Quaternion.identity);
+            GameObject obj = PhotonNetwork.InstantiateRoomObject(tag, spawnPos, Quaternion.identity);
 
             Enemies.Add(obj);
             if (obj.TryGetComponent(out EnemyUnit enemyUnit))
@@ -265,7 +289,8 @@ public class EnemyManager : MonoBehaviour
             InstantiateEnemy("Fish");
             Vector3 spawnPos = new Vector3(0, 0, 0);
 
-            GameObject fish = PhotonNetwork.InstantiateRoomObject("CatFishA", spawnPos, Quaternion.identity);
+            //GameObject fish = PhotonNetwork.InstantiateRoomObject("CatFishA", spawnPos, Quaternion.identity);
+            GameObject fish = PhotonNetwork.InstantiateRoomObject(tag, spawnPos, Quaternion.identity);
             //Vector3 spawnPos = new Vector3(0, 0, 0);
 
             return null;
@@ -326,7 +351,7 @@ public class EnemyManager : MonoBehaviour
                     //obj.SetActive(false);
 
                     Vector3 spawnPos = new Vector3(0, 0, 0);
-                    GameObject fish = PhotonNetwork.InstantiateRoomObject("CatFishA", spawnPos, Quaternion.identity);
+                    GameObject fish = PhotonNetwork.InstantiateRoomObject(tag, spawnPos, Quaternion.identity);
                     Enemies.Add(fish);
                     int fishViewID = fish.GetComponent<PhotonView>().ViewID;
 

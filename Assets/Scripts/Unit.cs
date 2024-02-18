@@ -244,7 +244,7 @@ public class Unit : MonoBehaviour
         }
 
        // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
-        Destroy(gameObject, 1.0f);
+        Destroy(gameObject, 5.0f);
     }
 
     public Rigidbody GetRigidbody()

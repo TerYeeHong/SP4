@@ -697,7 +697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 3787938341435706206}
-  mouseSensitivity: 300
+  mouseSensitivity: 100
   rotationLimit: 80
 --- !u!1 &3787938341318520024
 GameObject:
@@ -1000,7 +1000,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3787938341435706200}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 473a0ee655657e54bb52e869c7f1813c, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
@@ -1020,9 +1020,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &3787938341435706195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,7 +1047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc8b2866e80dcc4685757a59d5e1886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 50
   deceleration: 5
   jumpForce: 5
   runMultiplier: 1.5
@@ -1057,7 +1057,14 @@ MonoBehaviour:
   groundCheck: {fileID: 3787938341760227179}
   groundDistance: 0.12
   playerAnimation: {fileID: 3787938341435706193}
+  maxSlideTime: 2
+  slideForce: 10
+  slideYScale: 0.4
   dashForce: 20
+  groundDrag: 5
+  airResistance: 2
+  stopDrag: 10
+  maxSpeed: 15
 --- !u!114 &3787938341435706193
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -148,7 +148,7 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 {
                     print("Gun Active");
                     // Now, use the active gun to play the trail
-                    gunSelector.SwitchGunByIndex(index);
+                    gunSelector.SwitchToNewGun(index);
                 }
             }
         }
@@ -168,7 +168,7 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
                 if (gunSelector != null && gunSelector.activeGun != null)
                 {
-                    gunSelector.activeGun.PlayerAim(onAim);
+                    gunSelector.activeGun.PlayerAim(onAim, GetComponent<PhotonView>());
                 }
             }
         }

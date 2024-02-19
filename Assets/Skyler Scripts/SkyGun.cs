@@ -155,18 +155,20 @@ public class SkyGun : MonoBehaviour
     }
 
 
-    public void PlayerAim(bool onAim)
+    public void PlayerAim(bool onAim, PhotonView pv)
     {
         if (onAim && aimingCoroutine == null)
         {
             isAiming = true;
             aimingCoroutine = StartCoroutine(StartAiming());
+            RaisePlayerAimingEvent(true, pv);
         }
         else if (!onAim && aimingCoroutine != null)
         {
             isAiming = false;
             StopCoroutine(aimingCoroutine);
             aimingCoroutine = StartCoroutine(StopAiming());
+            RaisePlayerAimingEvent(false, pv);
         }
     }
 

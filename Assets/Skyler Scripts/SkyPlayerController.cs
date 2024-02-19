@@ -25,12 +25,16 @@ public class SkyPlayerController : MonoBehaviour
     {
         if (photonView.IsMine)
         {
+            playerMovement.HandleInput();
+            playerMovement.SlideCheck();
             playerMovement.ResetJump();
             playerMovement.HandleJump();
             playerMovement.HandleDash();
             playerMovement.UpdateAnimationState();
+            playerMovement.SpeedControl();
             playerShooting.ShootGun(photonView, gunSelector.activeGun);
             gunSelector.ADSActiveGun();
+            
         }
     }
 
@@ -39,6 +43,7 @@ public class SkyPlayerController : MonoBehaviour
         if (photonView.IsMine)
         {
             playerMovement.HandleMovement();
+            playerMovement.SlidingMovement();
         }
     }
 }

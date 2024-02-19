@@ -217,12 +217,54 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 if (enemyUnit != null)
                 {
                     enemyUnit.TakeDamage(damage);
+                    print("Gun Active");
+                    // Now, use the active gun to play the trail
+                    gunSelector.SwitchToNewGun(index);
+                }
+            }
+        }
+        if (eventCode == PLAYER_AIM)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int viewID = (int)data[0];
+            bool onAim = (bool)data[1];
+
+            PhotonView photonView = PhotonView.Find(viewID);
+
+            // Assuming you have a method to find the PhotonView by ActorNumber
+            if (photonView != null)
+            {
+                print("View found");
+                // Assuming the shooter's SkyPlayerGunSelector component can give us the active gun
+                SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
+                if (gunSelector != null && gunSelector.activeGun != null)
+                {
+                    gunSelector.activeGun.PlayerAim(onAim, GetComponent<PhotonView>());
+                }
+            }
+        }
+
+        if (eventCode == UNIT_DAMAGED)
+        {
+            print("TRYING TO DAMAGE UNIT");
+            object[] data = (object[])photonEvent.CustomData;
+            int targetViewID = (int)data[0];
+            int damage = (int)data[1];
+
+            PhotonView targetView = PhotonView.Find(targetViewID);
+            if (targetView != null)
+            {
+                Unit enemyUnit = targetView.GetComponent<Unit>();
+                if (enemyUnit != null)
+                {
+                    enemyUnit.TakeDamage(damage);
                 }
             }
         }
 
 
-        }
+
+        
     }
 }
 

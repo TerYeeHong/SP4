@@ -14,6 +14,7 @@ public class AbilityXRay : MonoBehaviour
     private int enemyLayerIndex;
     private bool isEnemyLayerActive = false;
     private bool isCooldownActive = false;
+    public AudioClip sfx;
 
     void Start()
     {
@@ -49,7 +50,7 @@ public class AbilityXRay : MonoBehaviour
     IEnumerator ActivateEnemyLayerForSeconds(float seconds)
     {
         ActivateEnemyLayer();
-
+        GameEvents.m_instance.playNewAudioClip.Invoke(sfx, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
         // Start dissolve effect
         StartCoroutine(DissolveInEffect());
 

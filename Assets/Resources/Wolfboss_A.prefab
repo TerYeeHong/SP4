@@ -937,6 +937,9 @@ MonoBehaviour:
   camerasOriginalPos: []
   BossHPCanvas: {fileID: 2185892971120094748}
   BossHPBar: {fileID: 2202383592635913659}
+  AttackCD: 0
+  Skill1CD: 0
+  Skill2CD: 0
   circleRadius: 5
   circleSpeed: 1
   m_Thrust: 20

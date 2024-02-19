@@ -900,6 +900,7 @@ GameObject:
   - component: {fileID: 959703558}
   - component: {fileID: 959703559}
   - component: {fileID: 556678115}
+  - component: {fileID: -294581945917112516}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1171,6 +1172,19 @@ MonoBehaviour:
   health_unit: 0
   godmode: 0
   movement_locked: 0
+--- !u!114 &-294581945917112516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787938341435706200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52d1e5345c395641b482217c8804ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Cameras: []
 --- !u!1 &3787938341617956075
 GameObject:
   m_ObjectHideFlags: 0

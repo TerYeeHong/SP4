@@ -199,9 +199,7 @@ MonoBehaviour:
   enemyTransform: {fileID: 4467579706781182771}
   movePositionTransform: {fileID: 0}
   animator: {fileID: 9051413008889532089}
-  player: {fileID: 0}
-  photonView: {fileID: 0}
-  rigidbody: {fileID: 986428357418674621}
+  players: []
   m_Thrust: 20
 --- !u!195 &968977804
 NavMeshAgent:

@@ -1,4 +1,5 @@
 using ExitGames.Client.Photon;
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -6,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class BossController : EnemyUnit
 {
@@ -14,17 +16,29 @@ public class BossController : EnemyUnit
     [SerializeField] private Transform enemyTransform;
     [SerializeField] private Transform movePositionTransform;
     [SerializeField] private Animator animator;
-    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject[] players;   
+    [SerializeField] private GameObject[] cameras;
+    [SerializeField] private GameObject[] camerasOriginalPos;
+    [SerializeField] public Canvas BossHPCanvas;
+    [SerializeField] public Image BossHPBar;
     //[SerializeField] private PhotonView photonView;
-    [SerializeField] private PhotonView photonView;
-    [SerializeField] private Rigidbody rigidbody;
+    //[SerializeField] private PhotonView photonView;
+    //[SerializeField] private Rigidbody rigidbody;
 
+    public float circleRadius = 5f; // Radius of the circular motion
+    public float circleSpeed = 1f; // Speed of the circular motion
+
+    private float angle = 0f; // Angle used to calculate the position
+    float timer;
     public float m_Thrust = 20f;
+    float distance;
+    float nearestDistance = 1000;
 
 
     STATES CURRENT_STATE = STATES.IDLE;
     enum STATES
     {
+        INTRO,
         IDLE,
         WALKING,
         RUNNING,
@@ -36,9 +50,17 @@ public class BossController : EnemyUnit
     public override void Init()
     {
         base.Init();
-        player = GameObject.Find("Player(Clone)");
-       // player = GameObject.Find("Player");
-        movePositionTransform = player.transform;
+    
+        //BossHPCanvas.enabled = false;
+        players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                movePositionTransform = players[i].transform;
+            }
+        }
 
     }
 
@@ -80,14 +102,56 @@ public class BossController : EnemyUnit
 
     private void Update()
     {
+        Debug.Log(health_unit + " / " + max_health_unit);
+        BossHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
         //Debug.Log("dist "+ range_unit);
         Debug.Log("current state: " + CURRENT_STATE);
 
+        angle += circleSpeed * Time.deltaTime;
+
         if (CURRENT_STATE != STATES.DEAD)
         {
+            if (CURRENT_STATE == STATES.INTRO)
+            {
+                cameras = GameObject.FindGameObjectsWithTag("MainCamera");
+                for (int i = 0; i < cameras.Length; i++)
+                {
 
-            if (range_unit < 4)
+                 
+                    camerasOriginalPos = GameObject.FindGameObjectsWithTag("MainCamera");
+                    for (int j = 0; j < camerasOriginalPos.Length; j++)
+                    {
+                        timer++;
+                        //camerasOriginalPos[j].transform.position = cameras[i].transform.position;
+
+
+                        Vector3 offset = new Vector3(Mathf.Cos(angle) * circleRadius, 8, Mathf.Sin(angle) * circleRadius);
+                        Vector3 cameraCirclePos = enemyTransform.position + offset;
+
+                        animator.SetTrigger("IsIntro");
+
+
+                        cameras[i].transform.position = cameraCirclePos;
+
+                        cameras[i].transform.LookAt(enemyTransform);
+
+                        if (timer > 20)
+                        {
+                            CURRENT_STATE = STATES.IDLE;
+                            cameras[i].transform.position = camerasOriginalPos[j].transform.position;
+                            timer = 0;
+                            break;
+
+                        }
+                    }
+                }
+
+
+            
+            }
+          
+            else if (range_unit < 4)
             {
 
                 CURRENT_STATE = STATES.WALKING;
@@ -98,7 +162,6 @@ public class BossController : EnemyUnit
                 CURRENT_STATE = STATES.IDLE;
                 //animator.SetBool("IsHit", false);
             }
-
             if (CURRENT_STATE == STATES.HIT)
             {
                 animator.SetTrigger("IsHit");

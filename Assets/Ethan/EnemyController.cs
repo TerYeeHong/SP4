@@ -14,13 +14,14 @@ public class EnemyController : EnemyUnit
     [SerializeField] private Transform enemyTransform;
     [SerializeField] private Transform movePositionTransform;
     [SerializeField] private Animator animator;
-    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject[] players;
     //[SerializeField] private PhotonView photonView;
-    [SerializeField] private PhotonView photonView;
-    [SerializeField] private Rigidbody rigidbody;
+    //[SerializeField] private PhotonView photonView;
+    //[SerializeField] private Rigidbody rigidbody;
 
     public float m_Thrust = 20f;
-
+    float distance;
+    float nearestDistance = 1000;
 
     STATES CURRENT_STATE = STATES.IDLE;
     enum STATES
@@ -36,9 +37,27 @@ public class EnemyController : EnemyUnit
     public override void Init()
     {
         base.Init();
-        player = GameObject.Find("Player(Clone)");
-       // player = GameObject.Find("Player");
-        movePositionTransform = player.transform;
+        players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
+            if(distance < nearestDistance)
+            {
+                movePositionTransform = players[i].transform;
+            }
+        }
+        
+        //foreach (GameObject playerObj in GameObject.FindGameObjectsWithTag("Player"))
+        //{
+        //    if (playerObj.name == "Player")
+        //    {
+                
+        //        movePositionTransform = playerObj.transform;
+        //    }
+        //}
+
+        // player = GameObject.Find("Player");
+        //movePositionTransform = player.transform;
 
     }
 

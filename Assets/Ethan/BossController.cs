@@ -24,6 +24,9 @@ public class BossController : EnemyUnit
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private Rigidbody rigidbody;
+    [SerializeField] public float AttackCD;
+    [SerializeField] public float Skill1CD;
+    [SerializeField] public float Skill2CD;
 
     public float circleRadius = 5f; // Radius of the circular motion
     public float circleSpeed = 1f; // Speed of the circular motion
@@ -43,7 +46,8 @@ public class BossController : EnemyUnit
         WALKING,
         RUNNING,
         DEAD,
-        HIT
+        HIT,
+        ATTACK
         
     }
 
@@ -150,8 +154,13 @@ public class BossController : EnemyUnit
 
             
             }
+
+            if( range_unit < 5)
+            {
+                CURRENT_STATE = STATES.ATTACK;
+            }
           
-            else if (range_unit < 4)
+            else if (range_unit < 15)
             {
 
                 CURRENT_STATE = STATES.WALKING;
@@ -162,6 +171,15 @@ public class BossController : EnemyUnit
                 CURRENT_STATE = STATES.IDLE;
                 //animator.SetBool("IsHit", false);
             }
+
+
+            if (CURRENT_STATE == STATES.ATTACK)
+            {
+                animator.SetTrigger("IsAttacking");
+                //animator.SetBool("IsHit", true);
+                //CURRENT_STATE = STATES.IDLE;
+            }
+
             if (CURRENT_STATE == STATES.HIT)
             {
                 animator.SetTrigger("IsHit");

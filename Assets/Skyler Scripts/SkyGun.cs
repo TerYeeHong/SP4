@@ -20,8 +20,22 @@ public class SkyGun : MonoBehaviour
     private ParticleSystem ShootSystem;
     private ObjectPool<TrailRenderer> TrailPool;
 
+    public bool isAiming = false;
+    public float normalFOV = 60f;
+    public float adsFOV = 45f;
+    private Camera playerCamera;
+    public Vector3 adsPosition; 
+    public Vector3 adsRotation; 
+    private Vector3 originalPosition; 
+    private Quaternion originalRotation;
+    public float adsSpeed = 10f;
+    private Coroutine aimingCoroutine = null;
+
     void Awake()
     {
+        playerCamera = GetComponentInParent<Camera>();
+        originalPosition = transform.localPosition;
+        originalRotation = transform.localRotation;
         LastShootTime = 0;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail, null, null, null, false, 10, 50);
 
@@ -56,24 +70,31 @@ public class SkyGun : MonoBehaviour
                 StartCoroutine(PlayTrail(ShootPoint.position, hit.point, hit));
                 RaisePlayerShootEvent(ShootPoint.position, hit.point, photonView);
 
-                Debug.LogWarning("Trying shoot");
+                Unit unit = hit.collider.GetComponent<Unit>();
+                Unit playerUnit = photonView.GetComponent<Unit>();
 
-                if (hit.collider.TryGetComponent(out EnemyUnit enemyUnit))
-                {
-                    Debug.LogWarning("Got component enemy");
-
-                    if (photonView.TryGetComponent(out Unit unit)){
-                        Debug.LogWarning("Calling RPC Takedamage");
-
-                        enemyUnit.photonView.RPC(nameof(EnemyUnit.TakeDamage), RpcTarget.All, unit.Power);
-                    }
-                }
+                if (unit != null && playerUnit != null)
+                    RaiseUnitHitEvent(unit, playerUnit.Power);
             }
             else
             {
+                print("MISS");
                 StartCoroutine(PlayTrail(ShootPoint.position, playerCamera.transform.position + (shootDirection * TrailConfig.MissDistance), new RaycastHit()));
                 RaisePlayerShootEvent(ShootPoint.position, playerCamera.transform.position + (shootDirection * TrailConfig.MissDistance), photonView);
             }
+        }
+    }
+    void RaiseUnitHitEvent(Unit target, int damage)
+    {
+        if (target.GetComponent<PhotonView>() != null)
+        {
+            Debug.Log("Hit Unit Event raised");
+            int targetViewID = target.GetComponent<PhotonView>().ViewID;
+            object[] content = new object[] { targetViewID, damage };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            SendOptions sendOptions = new SendOptions { Reliability = true };
+
+            PhotonNetwork.RaiseEvent(RaiseEvents.UNIT_DAMAGED, content, raiseEventOptions, sendOptions);
         }
     }
 
@@ -131,5 +152,57 @@ public class SkyGun : MonoBehaviour
 
         instance.SetActive(false); // Start inactive, will be activated when used.
         return trail;
+    }
+
+
+    public void PlayerAim(bool onAim, PhotonView pv)
+    {
+        if (onAim && aimingCoroutine == null)
+        {
+            isAiming = true;
+            aimingCoroutine = StartCoroutine(StartAiming());
+            RaisePlayerAimingEvent(true, pv);
+        }
+        else if (!onAim && aimingCoroutine != null)
+        {
+            isAiming = false;
+            StopCoroutine(aimingCoroutine);
+            aimingCoroutine = StartCoroutine(StopAiming());
+            RaisePlayerAimingEvent(false, pv);
+        }
+    }
+
+    public IEnumerator StartAiming()
+    {
+        while (isAiming)
+        {
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, adsFOV, adsSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, adsPosition, adsSpeed * Time.deltaTime);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(adsRotation), adsSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    public IEnumerator StopAiming()
+    {
+        while (!isAiming)
+        {
+            playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, normalFOV, adsSpeed * Time.deltaTime);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, SpawnPoint, adsSpeed * Time.deltaTime);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, adsSpeed * Time.deltaTime);
+            aimingCoroutine = null;
+            yield return null;
+        }
+    }
+
+    void RaisePlayerAimingEvent(bool onAim, PhotonView photonView)
+    {
+        Debug.Log("Event raised");
+        int viewID = photonView.ViewID;
+        object[] content = new object[] { viewID, onAim };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+
+        PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_AIM, content, raiseEventOptions, sendOptions);
     }
 }

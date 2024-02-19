@@ -47,6 +47,7 @@ MonoBehaviour:
   - SwitchGunRPC
   - RPC_SelectGun
   - SetGameobjectInactive
+  - AddCameraToPlayerRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

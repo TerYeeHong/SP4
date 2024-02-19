@@ -5,6 +5,7 @@ public class SkyPlayerMovement : MonoBehaviour
 {
     private Rigidbody rb;
     public float speed = 10f;
+    public float deceleration = 5f;
     public float jumpForce = 5f;
     public float runMultiplier = 1.5f;
     public LayerMask groundLayer;
@@ -12,12 +13,25 @@ public class SkyPlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public SkyPlayerAnimation playerAnimation;
 
+    public float maxSlideTime = 2f; // Duration of the slide
+    public float slideForce = 10f; // Force applied during sliding
+    private bool isSliding = false;
+    private float slideTimer;
+    public float slideYScale = 0.4f; // Adjust player height during slide
+    private float startYScale = 0.8f; // Original Y scale of the player
+
     private bool isGrounded;
     private int jumpCount = 0;
     private int maxJumps = 2;
     public float dashForce = 20f;
     private bool isDashing;
     private bool isRunning;
+    public float groundDrag = 5f;
+    public float airResistance = 2f;
+    public float stopDrag = 10f; 
+    public float maxSpeed = 5f;
+    float horizontalInput;
+    float verticalInput;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -34,37 +48,103 @@ public class SkyPlayerMovement : MonoBehaviour
             jumpCount = 0;
 
     }
+    public void SlidingMovement()
+    {
+        if (isSliding)
+        {
+            if (slideTimer > 0)
+            {
+                Vector3 inputDirection = transform.forward * verticalInput + transform.right * horizontalInput;
+                rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force);
+                slideTimer -= Time.fixedDeltaTime;
+            }
+            else
+            {
+                StopSlide();
+            }
+        }
+    }
+    public void SlideCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !isSliding && (horizontalInput != 0 || verticalInput != 0))
+        {
+            StartSlide();
+        }
+        if (Input.GetKeyUp(KeyCode.LeftControl) && isSliding)
+        {
+            StopSlide();
+        }
+    }
+    private void StartSlide()
+    {
+        isSliding = true;
+        transform.localScale = new Vector3(transform.localScale.x, slideYScale, transform.localScale.z);
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // Optional, for enhanced sliding effect
+        slideTimer = maxSlideTime;
+    }
 
+    private void StopSlide()
+    {
+        isSliding = false;
+        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+    }
     bool IsGrounded()
     {
         return Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundLayer);
     }
+    public void HandleInput()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+    }
     public void HandleMovement()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        Vector3 movementDirection = transform.right * x + transform.forward * z;
+        Vector3 movementDirection = transform.right * horizontalInput + transform.forward * verticalInput;
         float currentSpeed = speed;
 
         // Check for running
-        isRunning = Input.GetKey(KeyCode.LeftControl);
+        isRunning = Input.GetKey(KeyCode.LeftShift);
         if (isRunning)
         {
             currentSpeed *= runMultiplier;
         }
 
-        Vector3 force = movementDirection.normalized * currentSpeed - rb.velocity;
+        Vector3 force = movementDirection.normalized * currentSpeed;
         force.y = 0;
-        rb.AddForce(force, ForceMode.VelocityChange);
+        rb.AddForce(force, ForceMode.Force);
     }
+    public void SpeedControl()
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+        // limit velocity if needed
+        if (flatVel.magnitude > maxSpeed)
+        {
+            Vector3 limitedVel = flatVel.normalized * maxSpeed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+        }
+
+       if (isGrounded)
+        {
+            if (horizontalInput != 0 || verticalInput != 0)
+            {
+                rb.drag = groundDrag;
+            }
+            else
+            {
+                rb.drag = stopDrag;
+            }
+        }
+       else
+        {
+            rb.drag = 0;
+        }
+    }
     public void HandleDash()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing)
+        if (Input.GetKeyDown(KeyCode.G) && !isDashing)
         {
-            float x = Input.GetAxis("Horizontal");
-            float z = Input.GetAxis("Vertical");
-            Vector3 dashDirection = transform.right * x + transform.forward * z;
+            Vector3 dashDirection = transform.right * horizontalInput + transform.forward * verticalInput;
 
             if (dashDirection.magnitude > 0) // Ensure there's some direction for the dash
             {
@@ -132,6 +212,8 @@ public class SkyPlayerMovement : MonoBehaviour
             }
         }
     }
+
+
     // Draws a Gizmo in the editor to visualize the ground check
     void OnDrawGizmos()
     {

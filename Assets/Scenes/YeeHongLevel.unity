@@ -2630,9 +2630,11 @@ MonoBehaviour:
     type: 3}
   platform_connector_prefab: {fileID: 2106841054820431133, guid: cd6f9445670a4704dbfc551c38bf4e09,
     type: 3}
-  spawn_percent: 50
+  spawn_percent: 75
   x_length: 1
   z_length: 1
+  island_min_size: 30
+  island_max_size: 42
   gap: 0
   island_depth: 5
   bridge_length_min: 50
@@ -2992,6 +2994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crosshair_main: {fileID: 0}
   replay_status_tmp: {fileID: 0}
+  main_start_spawn_object: {fileID: 0}
 --- !u!4 &1336670211 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8415441440189830950, guid: b0816a80cb2d9264990cc8bdbad2bcc7,

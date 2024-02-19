@@ -11,6 +11,8 @@ public class SkyPlayerController : MonoBehaviour
     SkyPlayerMovement playerMovement;
     SkyPlayerShooting playerShooting;
     SkyPlayerGunSelector gunSelector;
+    SkyCameraSwitch playerCameraSwitch;
+    SkyPlayerHealth playerHealth;
     private PhotonView photonView;
     void Start()
     {
@@ -18,12 +20,14 @@ public class SkyPlayerController : MonoBehaviour
         playerMovement = GetComponent<SkyPlayerMovement>();
         playerShooting = GetComponent<SkyPlayerShooting>();
         gunSelector = GetComponent<SkyPlayerGunSelector>();
-    }
+        playerCameraSwitch = GetComponent<SkyCameraSwitch>();
+        playerHealth = GetComponent<SkyPlayerHealth>();
+    } 
 
     // Update is called once per frame
     void Update()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && !playerHealth.isDead)
         {
             playerMovement.HandleInput();
             playerMovement.SlideCheck();
@@ -32,15 +36,24 @@ public class SkyPlayerController : MonoBehaviour
             playerMovement.HandleDash();
             playerMovement.UpdateAnimationState();
             playerMovement.SpeedControl();
+            playerMovement.HandleStaminaRegen();
+
             playerShooting.ShootGun(photonView, gunSelector.activeGun);
+
             gunSelector.ADSActiveGun();
+
+            playerHealth.AttemptToRevive();
             
+        }
+        else if (photonView.IsMine && playerHealth.isDead)
+        {
+            playerCameraSwitch.CheckForCameraSwitchInput();
         }
     }
 
     private void FixedUpdate()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && !playerHealth.isDead)
         {
             playerMovement.HandleMovement();
             playerMovement.SlidingMovement();

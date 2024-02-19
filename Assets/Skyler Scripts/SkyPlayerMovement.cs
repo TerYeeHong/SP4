@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class SkyPlayerMovement : MonoBehaviour
 {
@@ -32,9 +33,18 @@ public class SkyPlayerMovement : MonoBehaviour
     public float maxSpeed = 5f;
     float horizontalInput;
     float verticalInput;
+
+    public float maxStamina = 100f;
+    private float currentStamina;
+    public float staminaDepletionRate = 10f; // Per second, while running
+    public float jumpStaminaCost = 20f; // Per jump
+    public float staminaRegenerationRate = 5f; // Per second
+    public UnityEngine.UI.Image staminaBar; 
+    public Slider staminaSlider;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        currentStamina = maxStamina;
     }
 
     void Update()
@@ -104,15 +114,27 @@ public class SkyPlayerMovement : MonoBehaviour
 
         // Check for running
         isRunning = Input.GetKey(KeyCode.LeftShift);
-        if (isRunning)
+        if (isRunning && currentStamina > 0)
         {
-            currentSpeed *= runMultiplier;
+            currentStamina -= staminaDepletionRate * Time.deltaTime;
+            UpdateStaminaBar();
         }
 
         Vector3 force = movementDirection.normalized * currentSpeed;
         force.y = 0;
         rb.AddForce(force, ForceMode.Force);
     }
+
+    public void HandleStaminaRegen()
+    {
+        if (!isRunning && currentStamina < maxStamina)
+        {
+            currentStamina += staminaRegenerationRate * Time.deltaTime;
+            currentStamina = Mathf.Min(currentStamina, maxStamina);
+            UpdateStaminaBar();
+        }
+    }
+
     public void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -162,8 +184,10 @@ public class SkyPlayerMovement : MonoBehaviour
     }
     public void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps - 1))
+        if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps - 1) && currentStamina >= jumpStaminaCost)
         {
+            currentStamina -= jumpStaminaCost;
+            UpdateStaminaBar();
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             jumpCount++;
         }
@@ -213,6 +237,31 @@ public class SkyPlayerMovement : MonoBehaviour
         }
     }
 
+    public void UpdateStaminaBar()
+    {
+        if (staminaBar != null)
+        {
+            staminaSlider.value = currentStamina / maxStamina;
+
+            // Change color to red when using stamina
+            if (isRunning || currentStamina < maxStamina)
+            {
+                staminaBar.color = Color.red;
+            }
+            // Change color to yellow when stamina is full or regenerating
+            if (!isRunning && currentStamina == maxStamina)
+            {
+                staminaBar.color = Color.yellow;
+            }
+            else if (!isRunning && currentStamina > maxStamina * 0.5f) // Adjust threshold as needed
+            {
+                // Blend between red and yellow based on stamina level
+                float lerpFactor = (currentStamina - maxStamina * 0.5f) / (maxStamina * 0.5f);
+                staminaBar.color = Color.Lerp(Color.red, Color.yellow, lerpFactor);
+            }
+        }
+    }
+
 
     // Draws a Gizmo in the editor to visualize the ground check
     void OnDrawGizmos()
@@ -223,4 +272,5 @@ public class SkyPlayerMovement : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * groundDistance);
     }
+
 }

@@ -4,6 +4,7 @@ using Photon.Pun; // Make sure to include the Photon.Pun namespace
 public class SkyCameraController : MonoBehaviour
 {
     public Transform player; // Assign the player's transform here in the inspector
+    public Transform cameraPivot;
     public float mouseSensitivity = 100f;
     public float rotationLimit = 80f;
 
@@ -16,7 +17,7 @@ public class SkyCameraController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         audioListener = GetComponent<AudioListener>();
-        photonView = GetComponentInParent<PhotonView>(); // Adjusted to get the PhotonView from the parent
+        photonView = player.GetComponent<PhotonView>(); // Adjusted to get the PhotonView from the parent
 
         // Disable the camera and audio listener for non-local players
         if (photonView != null && !photonView.IsMine)
@@ -37,7 +38,7 @@ public class SkyCameraController : MonoBehaviour
     void Update()
     {
         // Only handle mouse input if the camera belongs to the local player
-        if (photonView != null && photonView.IsMine)
+        if (photonView != null && photonView.IsMine && !photonView.GetComponent<SkyPlayerHealth>().isDead)
         {
             HandleMouseInput();
         }
@@ -49,17 +50,26 @@ public class SkyCameraController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        // Adjust camera rotation based on vertical mouse movement
+        // Adjust camera rotation based on vertical mouse movement 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -rotationLimit, rotationLimit);
 
-        // Apply rotation to the camera (for looking up and down)
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        // Apply rotation to the camera (for looking up and down)   
+        cameraPivot.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        // Rotate the player object (or camera's parent) based on horizontal mouse movement
-        if (photonView.IsMine)
+        // Check if the player is alive or if this is a spectator camera
+        bool isSpectating = !photonView.IsMine || photonView.GetComponent<SkyPlayerHealth>().isDead;
+
+        if (isSpectating)
         {
+            // For spectators, apply horizontal rotation directly to the camera to allow full freedom of movement
+            transform.Rotate(Vector3.up * mouseX);
+        }
+        else
+        {
+            // For the active player, rotate the player object (or camera's parent) based on horizontal mouse movement
             player.Rotate(Vector3.up * mouseX);
         }
     }
+
 }

@@ -14,6 +14,9 @@ public class SkyPlayerController : MonoBehaviour
     SkyCameraSwitch playerCameraSwitch;
     SkyPlayerHealth playerHealth;
     private PhotonView photonView;
+    public GameObject body;
+    public Vector3 bodyPos = new Vector3(0, -0.9f, 0);
+
     void Start()
     {
         photonView = GetComponent<PhotonView>();
@@ -43,7 +46,7 @@ public class SkyPlayerController : MonoBehaviour
             gunSelector.ADSActiveGun();
 
             playerHealth.AttemptToRevive();
-            
+            playerHealth.InputHandler();
         }
         else if (photonView.IsMine && playerHealth.isDead)
         {

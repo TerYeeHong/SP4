@@ -7,7 +7,7 @@ using UnityEngine;
 public static class PFGlobalData
 {
     public static int xp = 0;
-    public static int epg = 0; //currency (El Primo Gems
+    public static int epg = 0; //currency (El Primo Gems)
     public static int level = 1;
 
     public static void AddXP(int value)

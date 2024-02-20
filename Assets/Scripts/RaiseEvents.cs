@@ -148,22 +148,20 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
             PhotonView pv = PhotonView.Find(viewID);
             if (pv != null)
             {
-                SkyPlayerAnimation playerAnimation = pv.GetComponent<SkyPlayerAnimation>();
+              
+                    SkyPlayerAnimation playerAnimation = pv.GetComponent<SkyPlayerAnimation>();
                 if (playerAnimation != null)
                 {
-                    SkyPlayerAnimation playerAnimation = pv.GetComponent<SkyPlayerAnimation>();
-                    if (playerAnimation != null)
-                    {
-                        print("Found");
-                        playerAnimation.ChangeAnimationState(newState);
-                    }
+                    print("Found");
+                    playerAnimation.ChangeAnimationState(newState);
                 }
+             
             }
 
             if (eventCode == PLAYER_SHOOT)
             {
-                object[] data = (object[])photonEvent.CustomData;
-                int viewID = (int)data[0];
+                //object[] data = (object[])photonEvent.CustomData;
+                //int viewID = (int)data[0];
                 Vector3 startPoint = (Vector3)data[1];
                 Vector3 endPoint = (Vector3)data[2];
 
@@ -185,9 +183,9 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
             }
             if (eventCode == PLAYER_SWITCH_GUN)
             {
-                object[] data = (object[])photonEvent.CustomData;
-                int viewID = (int)data[0];
-                int index = (int)data[1];
+                //object[] data = (object[])photonEvent.CustomData;
+                //int viewID = (int)data[0];
+                //int index = (int)data[1];
 
                 PhotonView photonView = PhotonView.Find(viewID);
 
@@ -206,6 +204,7 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
         {
             object[] data = (object[])photonEvent.CustomData;
             int viewID = (int)data[0];
+            bool onAim = (bool)data[1];
             Vector3 startPoint = (Vector3)data[1];
             Vector3 endPoint = (Vector3)data[2];
 

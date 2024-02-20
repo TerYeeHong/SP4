@@ -105,6 +105,13 @@ MonoBehaviour:
   ShootConfig: {fileID: 11400000, guid: 975906a9a8febbf46bdfa6b6e2ce334d, type: 2}
   TrailConfig: {fileID: 11400000, guid: 8d2d1b9d534c05b43914e9e548cd61e2, type: 2}
   IsAutomatic: 0
+  isAiming: 0
+  normalFOV: 60
+  adsFOV: 45
+  cameraTransform: {fileID: 0}
+  adsPosition: {x: 0, y: -0.2, z: 0.42}
+  adsRotation: {x: 0, y: 0, z: 0}
+  adsSpeed: 10
 --- !u!1 &8556096907969543395
 GameObject:
   m_ObjectHideFlags: 0

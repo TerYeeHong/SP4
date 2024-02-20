@@ -17,9 +17,12 @@ public class LevelGenerator : MonoBehaviour
 
     [SerializeField] [Range(1, 200)] int x_length;
     [SerializeField] [Range(1, 200)] int z_length;
+    [SerializeField] int island_min_size = 7;
+    [SerializeField] int island_max_size = 21;
     [SerializeField] [Range(0, 200)] int gap;
     [SerializeField] [Range(0, 200)] int island_depth;
 
+    [Header("Bridge Details")]
     [SerializeField] [Range(5, 100)] int bridge_length_min;
     [SerializeField] [Range(5, 100)] int bridge_length_max;
     [SerializeField] [Range(0, 100)] int neighbour_spawn_chance;
@@ -32,6 +35,9 @@ public class LevelGenerator : MonoBehaviour
     List<Island> islands_list = new(); //queue so players unlock section by section
 
     List<GameObject> island_objects = new();
+
+
+    Vector3 spawn_center_position;
 
 
     //Each level consists of multiple islands, Only the main island is shown at the start
@@ -69,7 +75,7 @@ public class LevelGenerator : MonoBehaviour
 
         //Create island
 
-        IslandBoundary islandBoundary = new(0, Random.Range(7, 21), 0, Random.Range(7, 21));
+        IslandBoundary islandBoundary = new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
         //ISLAND_SHAPE shape = ISLAND_SHAPE.ROUND;
         //if (Random.Range(0, 3) == 1)
         //    shape = ISLAND_SHAPE.DONUT;
@@ -92,24 +98,24 @@ public class LevelGenerator : MonoBehaviour
     }
 
     
-    void GenerateLevel()
-    {
-        islands_list.Clear();
-        int section_amount = Random.Range(3, 12);
+    //void GenerateLevel()
+    //{
+    //    islands_list.Clear();
+    //    int section_amount = Random.Range(3, 12);
 
-        //Randomise how many big islands there are gonna be
-        //Settle the size of each big island
-        IslandBoundary islandBoundary = new(0, Random.Range(7, 21), 0, Random.Range(7, 21));
-        //islands_list.Enqueue(GenerateIsland(islandBoundary));
+    //    //Randomise how many big islands there are gonna be
+    //    //Settle the size of each big island
+    //    IslandBoundary islandBoundary = new(0, Random.Range(7, 21), 0, Random.Range(7, 21));
+    //    //islands_list.Enqueue(GenerateIsland(islandBoundary));
 
-        //Create sections
-        for (int i = 0; i < section_amount; ++i)
-        {
+    //    //Create sections
+    //    for (int i = 0; i < section_amount; ++i)
+    //    {
             
 
-        }
+    //    }
 
-    }
+    //}
 
     void GenerateNextIsland(Island curr, int depth)
     {
@@ -196,7 +202,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         int bridge_length = Random.Range(bridge_length_min, bridge_length_max);
-        IslandBoundary islandBoundary = new(0, Random.Range(7, 21), 0, Random.Range(7, 21));
+        IslandBoundary islandBoundary = new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
         int tries = 3;
         if (up_neighbour)
         {

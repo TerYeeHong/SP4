@@ -30,7 +30,10 @@ public class SkyCameraController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked; // Lock the cursor to the center of the screen for the local player
         }
     }
-
+    private void Start()
+    {
+         SkyCameraManager.Instance.RegisterCamera(photonView.OwnerActorNr, cam);
+    }
     void Update()
     {
         // Only handle mouse input if the camera belongs to the local player

@@ -38,6 +38,7 @@ public class SkyPlayerGunSelector : MonoBehaviour
         {
             if (Input.GetKeyDown((i + 1).ToString()))
             {
+                print("SWITHINC GUN");
                 SwitchGunByIndex(i);
                 break; // Prevent multiple switches in one frame
             }
@@ -58,18 +59,29 @@ public class SkyPlayerGunSelector : MonoBehaviour
             Destroy(activeGunGameObject);
         }
 
-        // Instantiate the new gun prefab
+        SwitchToNewGun(index);
+
+        RaiseGunSwitchEvent(index);
+
+        // Log for debugging
+        Debug.Log($"Switched to gun: {activeGun.Name}");
+    }
+
+    public void SwitchToNewGun(int index)
+    {
+
+        if (activeGunGameObject != null)
+        {
+            Destroy(activeGunGameObject);
+        }
+
+
         GameObject gunPrefab = gunPrefabs[index];
         GameObject instantiatedGun = Instantiate(gunPrefab, gunParent.position, gunParent.rotation, gunParent);
         activeGunGameObject = instantiatedGun;
         activeGun = instantiatedGun.GetComponent<SkyGun>();
         instantiatedGun.transform.localPosition = activeGun.SpawnPoint;
         instantiatedGun.transform.localRotation = Quaternion.Euler(activeGun.SpawnRotation);
-
-        RaiseGunSwitchEvent(index);
-
-        // Log for debugging
-        Debug.Log($"Switched to gun: {activeGun.Name}");
     }
 
     private void RaiseGunSwitchEvent(int gunIndex)
@@ -81,5 +93,19 @@ public class SkyPlayerGunSelector : MonoBehaviour
         SendOptions sendOptions = new SendOptions { Reliability = true };
 
         PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_SWITCH_GUN, content, raiseEventOptions, sendOptions);
+    }
+
+    public void ADSActiveGun()
+    {
+        if (Input.GetButton("Fire2"))
+        {
+            print("BEN");
+            activeGun.PlayerAim(true, GetComponent<PhotonView>());
+        }
+        if (Input.GetButtonUp("Fire2"))
+        {
+            print("BNE");
+            activeGun.PlayerAim(false, GetComponent<PhotonView>());
+        }
     }
 }

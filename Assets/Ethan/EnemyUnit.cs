@@ -33,6 +33,7 @@ public class EnemyUnit : Unit
     //[Header("Unit Data (Inheriting from EnemyUnitType)")]
     ////[SerializeField] protected bool sprite_faceleft_at_start = true;
 
+    [SerializeField] protected EnemyUnitType.ENEMY_RACE enemy_race_unit;
     [SerializeField] protected float range_unit;
     [SerializeField] protected int rarity_unit;
 
@@ -57,7 +58,8 @@ public class EnemyUnit : Unit
     //public int Power { get { return power_unit; } set { power_unit = value; } }
     //public float Speed { get { return speed_unit; } set { speed_unit = value; } }
     //public int Health { get { return health_unit; } set { health_unit = value; } }
-
+    
+    public EnemyUnitType.ENEMY_RACE EnemyRace { get { return enemy_race_unit; } set { enemy_race_unit = value; } }
     public float Range { get { return range_unit; } set { range_unit = value; } }
     public int Rarity { get { return rarity_unit; } set { rarity_unit = value; } }
 
@@ -89,6 +91,7 @@ public class EnemyUnit : Unit
             && enemy_type
             != null)
         {
+            enemy_race_unit = enemy_type.EnemyRace;
             range_unit = enemy_type.RangeDefault;
             rarity_unit = enemy_type.RarityDefault;
 
@@ -255,5 +258,11 @@ public class EnemyUnit : Unit
     public float GetSpeed()
     {
         return speed_unit;
+    }
+
+    [PunRPC]
+    public void SetActive(bool active)
+    {
+        gameObject.SetActive(active);
     }
 }

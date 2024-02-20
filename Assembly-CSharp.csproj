@@ -67,6 +67,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChatAppIdCheckerUI.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\AppSettingsExtensions.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplineEndless.cs" />
+    <Compile Include="Assets\Scripts\Ability\AbilityBeam.cs" />
     <Compile Include="Assets\Scripts\UIBillBoarding.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChannelSelector.cs" />
     <Compile Include="Assets\Scripts\TextPopupManager.cs" />
@@ -139,7 +140,9 @@
     <Compile Include="Assets\Scripts\Ability\AbilityStrikeSlash.cs" />
     <Compile Include="Assets\Skyler Scripts\SkyPlayerAnimation.cs" />
     <Compile Include="Assets\LeanTween\Framework\LeanAudio.cs" />
+    <Compile Include="Assets\SkyPlayerHealth.cs" />
     <Compile Include="Assets\Scripts\UnitType.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyCameraManager.cs" />
     <Compile Include="Assets\Skyler Scripts\SkylerTrailConfig.cs" />
     <Compile Include="Assets\Scripts\TextPopupAnimation.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSpline.cs" />
@@ -151,12 +154,14 @@
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplineTrack.cs" />
     <Compile Include="Assets\Scripts\Timer.cs" />
     <Compile Include="Assets\LeanTween\Framework\LeanTest.cs" />
+    <Compile Include="Assets\Scripts\Ability\AbilityXRay.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\FriendItem.cs" />
     <Compile Include="Assets\Scripts\Ability\AbilityStrike.cs" />
     <Compile Include="Assets\Scripts\JLGameManager.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplinePerformance.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChatGui.cs" />
     <Compile Include="Assets\Scripts\Projectile.cs" />
+    <Compile Include="Assets\Scripts\Ability\AbilityDash.cs" />
     <Compile Include="Assets\Scripts\JLGame.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
@@ -169,6 +174,7 @@
     <Compile Include="Assets\Scripts\Ability\AbilityBeam.cs" />
     <Compile Include="Assets\Skyler Scripts\SkyCameraSwitch.cs" />
     <Compile Include="Assets\SkyPlayerHealth.cs" />
+    <Compile Include="Assets\Scripts\YeeHong\MobManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

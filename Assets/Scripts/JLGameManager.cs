@@ -27,8 +27,12 @@ public class JLGameManager : MonoBehaviourPunCallbacks
     public UIManager uimanager;
     public CinemachineVirtualCamera virtualCam;
 
+    bool spawned_player = false;
+
+
 
     [Header("UI")]
+    public GameObject main_waiting_screen;
     public TextMeshProUGUI red_score_tmp;
     public TextMeshProUGUI blue_score_tmp;
     int red_score;
@@ -60,7 +64,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
 
         CountdownTimer.OnCountdownTimerHasExpired += OnCountdownTimerIsExpired;
 
-        RaiseEvents.UpdateTeamScoreEvent += UpdateTeamScore;
+        //RaiseEvents.UpdateTeamScoreEvent += UpdateTeamScore;
     }
     public override void OnDisable()
     {
@@ -68,7 +72,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
 
         CountdownTimer.OnCountdownTimerHasExpired -= OnCountdownTimerIsExpired;
 
-        RaiseEvents.UpdateTeamScoreEvent -= UpdateTeamScore;
+        //RaiseEvents.UpdateTeamScoreEvent -= UpdateTeamScore;
 
     }
 
@@ -116,6 +120,22 @@ public class JLGameManager : MonoBehaviourPunCallbacks
             return;
         }
 
+        //spawn in players
+        if (changedProps.ContainsKey(JLGame.PLAYER_LOADED_MAP))
+        {
+            if (!spawned_player && CheckAllPlayerLoadedMap())
+            {
+                spawned_player = true;
+                SpawnPlayers();
+            }
+            else
+            {
+                // not all players loaded yet. wait:
+                Debug.Log("setting text waiting for players! ", this.InfoText);
+                InfoText.text = "Waiting for other players...";
+            }
+        }
+
         if (!PhotonNetwork.IsMasterClient)
         {
             return;
@@ -151,6 +171,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
             }
         }
 
+
     }
 
     #endregion
@@ -175,16 +196,52 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         //PhotonNetwork.LocalPlayer.;
         return true;
     }
+    private bool CheckAllPlayerLoadedMap()
+    {
+        foreach (Player p in playerList)
+        {
+            object playerLoadedMap;
+
+            if (p.CustomProperties.TryGetValue(JLGame.PLAYER_LOADED_MAP, out playerLoadedMap))
+            {
+                if ((bool)playerLoadedMap)
+                {
+                    continue;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
+    }
     private void StartGame()
     {
         Debug.Log("StartGame!");
 
+        //LOAD THE MAPS FIRST, 
+        //ONCE ALL PLAYERS HAVE LOADED, NOTIFY EVERYONE,
+        //SPAWN IN PLAYERS
 
-        Vector3 position = new Vector3(Random.Range(-3, 3.0f), 5.0f, Random.Range(-3, 3.0f));
+        //Only master client inform all clients to generate map
+        if (PhotonNetwork.IsMasterClient)
+        {
+            LevelGenerator.m_instance.RaiseEventGenerateLevel();
+        }
+    }
+
+    void SpawnPlayers()
+    {
+        //Maps have all generated, so spawn player
+        main_waiting_screen.SetActive(false);
+
+        List<Grid> spawnPos = LevelGenerator.m_instance.SpawnSpoints;
+        int random_index = 0;
+        Vector3 position = new Vector3(spawnPos[random_index].x, 3.0f, spawnPos[random_index].y);
         Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
         //PhotonNetwork.InstantiateRoomObject is to create a object that requires sychronisation in all clients
-        GameObject player = PhotonNetwork.Instantiate("Player", position, rotation, 0);      
+        GameObject player = PhotonNetwork.Instantiate("Player", position, rotation, 0);
 
         //if im the real dude :)
         if (player.GetComponent<PhotonView>().IsMine)
@@ -255,38 +312,38 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
         PhotonNetwork.RaiseEvent(RaiseEvents.UPDATETEAMSCORE, dataSent, raiseEventOptions, SendOptions.SendReliable);
     }
-    public void UpdateTeamScore(string data)
-    {
-        string[] dataSplit = data.Split("/");
-        int team = int.Parse(dataSplit[0]);
-        int team_score = int.Parse(dataSplit[1]);
+    //public void UpdateTeamScore(string data)
+    //{
+    //    string[] dataSplit = data.Split("/");
+    //    int team = int.Parse(dataSplit[0]);
+    //    int team_score = int.Parse(dataSplit[1]);
 
-        switch ((UnitType.UNIT_TEAM)team)
-        {
-            case UnitType.UNIT_TEAM.TEAM_ONE:
-                red_score = team_score;
-                red_score_tmp.text = $"{team_score}/{score_max}";
+    //    switch ((UnitType.UNIT_TEAM)team)
+    //    {
+    //        case UnitType.UNIT_TEAM.TEAM_ONE:
+    //            red_score = team_score;
+    //            red_score_tmp.text = $"{team_score}/{score_max}";
 
-                if (red_score >= score_max)
-                {
-                    red_score = score_max;
-                    win_text.text = "RED TEAM WINS";
-                    WinGame();
-                }
-                break;
-            case UnitType.UNIT_TEAM.TEAM_TWO:
-                blue_score = team_score;
-                blue_score_tmp.text = $"{team_score}/{score_max}";
+    //            if (red_score >= score_max)
+    //            {
+    //                red_score = score_max;
+    //                win_text.text = "RED TEAM WINS";
+    //                WinGame();
+    //            }
+    //            break;
+    //        case UnitType.UNIT_TEAM.TEAM_TWO:
+    //            blue_score = team_score;
+    //            blue_score_tmp.text = $"{team_score}/{score_max}";
 
-                if (blue_score >= score_max)
-                {
-                    blue_score = score_max;
-                    win_text.text = "BLUE TEAM WINS";
-                    WinGame();
-                }
-                break;
-        }
-    }
+    //            if (blue_score >= score_max)
+    //            {
+    //                blue_score = score_max;
+    //                win_text.text = "BLUE TEAM WINS";
+    //                WinGame();
+    //            }
+    //            break;
+    //    }
+    //}
     void WinGame()
     {
         win_window.SetActive(true);

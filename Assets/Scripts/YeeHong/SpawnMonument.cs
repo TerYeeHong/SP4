@@ -11,21 +11,20 @@ public class SpawnMonument : MonoBehaviour
 
     private void Update()
     {
-        if (!canStart)
-            return;
+        //if (!canStart)
+        //    return;
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            //SPAWN ENEMIES
-            Debug.LogWarning("STA");
+        //if (Input.GetButtonDown("Jump"))
+        //{
+        //    //SPAWN ENEMIES
 
-            StartCoroutine(StartSpawningEnemies(10, 3.0f));
-            //Disable self
-            canStart = false;
-            //gameObject.SetActive(false);
-            GetComponent<Renderer>().enabled = false;
-            GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(false);
-        }
+        //    StartCoroutine(StartSpawningEnemies(10, 3.0f));
+        //    //Disable self
+        //    canStart = false;
+        //    //gameObject.SetActive(false);
+        //    GetComponent<Renderer>().enabled = false;
+        //    GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(false);
+        //}
     }
 
 
@@ -50,7 +49,12 @@ public class SpawnMonument : MonoBehaviour
     void SpawnEnemy(Vector3 position)
     {
         
-        EnemyManager.m_instance.SpawnFromPool("Fish", position, Quaternion.identity);
+        ////EnemyManager.m_instance.SpawnFromPool("Fish", position, Quaternion.identity);
+        //int ViewIdEnemy = EnemyManager.m_instance.FetchEnemy("Fish");
+        //PhotonView photonViewEnemy = PhotonNetwork.GetPhotonView(ViewIdEnemy);
+        //EnemyUnit enemyUnit = photonViewEnemy
+
+        //photonViewEnemy.RPC(nameof())
 
     }
 
@@ -62,15 +66,22 @@ public class SpawnMonument : MonoBehaviour
         if (!PhotonNetwork.IsMasterClient)
             return;
 
-        //Check the player that is in trigger is also master client
-        if (other.TryGetComponent(out SkyPlayerController skyPlayerController))
-        {
-            if (skyPlayerController.GetPhotonView.Owner.IsMasterClient)
-            {
-                GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(true);
-                canStart = true;
-            }
-        }
+        GameObject enemy = MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.FISH);
+        EnemyUnit enemyUnit = enemy.GetComponent<EnemyUnit>();
+
+        enemyUnit.photonView.RPC(nameof(enemyUnit.SetActive), RpcTarget.All, true);
+        enemy.transform.position = transform.position + new Vector3(0, 5, 0);
+
+
+        ////Check the player that is in trigger is also master client
+        //if (other.TryGetComponent(out SkyPlayerController skyPlayerController))
+        //{
+        //    if (skyPlayerController.GetPhotonView.Owner.IsMasterClient)
+        //    {
+        //        GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(true);
+        //        canStart = true;
+        //    }
+        //}
     }
     private void OnTriggerExit(Collider other)
     {
@@ -78,15 +89,15 @@ public class SpawnMonument : MonoBehaviour
         if (!PhotonNetwork.IsMasterClient)
             return;
 
-        //Check the player that is in trigger is also master client
-        if (other.TryGetComponent(out SkyPlayerController skyPlayerController))
-        {
-            if (skyPlayerController.GetPhotonView.Owner.IsMasterClient)
-            {
-                GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(false);
-                canStart = false;
+        ////Check the player that is in trigger is also master client
+        //if (other.TryGetComponent(out SkyPlayerController skyPlayerController))
+        //{
+        //    if (skyPlayerController.GetPhotonView.Owner.IsMasterClient)
+        //    {
+        //        GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(false);
+        //        canStart = false;
 
-            }
-        }
+        //    }
+        //}
     }
 }

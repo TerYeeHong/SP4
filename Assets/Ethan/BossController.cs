@@ -160,7 +160,7 @@ public class BossController : EnemyUnit
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
             PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYDIEEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
         }
-
+        navMeshAgent.speed = 0;
 
         // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         //Destroy(gameObject, 1.0f);
@@ -284,7 +284,7 @@ public class BossController : EnemyUnit
         {
             Debug.LogWarning("HDIAHDIA");
             animator.SetBool("IsDead", true);
-            enabled = false;
+           // enabled = false;
             // navMeshAgent.destination = movePositionTransform.position;
         }
 

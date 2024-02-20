@@ -126,7 +126,6 @@
     <Compile Include="Assets\Scripts\RaiseEvents.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\TestingZLegacy.cs" />
     <Compile Include="Assets\Scripts\Manager\GameEvents.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyCameraSwitch.cs" />
     <Compile Include="Assets\Scripts\Manager\AudioSfxManager.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\TestingZLegacyExt.cs" />
     <Compile Include="Assets\Scripts\MainMenu\LeaderboardMgr.cs" />
@@ -166,9 +165,9 @@
     <Compile Include="Assets\Scripts\Ability\AbilityXRay.cs" />
     <Compile Include="Assets\Ethan\EnemyAnimation.cs" />
     <Compile Include="Assets\Scripts\Ability\AbilityDash.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyCameraManager.cs" />
     <Compile Include="Assets\Scripts\Ability\AbilityBeam.cs" />
     <Compile Include="Assets\Skyler Scripts\SkyCameraSwitch.cs" />
-    <Compile Include="Assets\Skyler Scripts\SkyCameraManager.cs" />
     <Compile Include="Assets\SkyPlayerHealth.cs" />
   </ItemGroup>
   <ItemGroup>

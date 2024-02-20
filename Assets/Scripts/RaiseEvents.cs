@@ -178,7 +178,7 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 {
                     print("Gun Active");
                     // Now, use the active gun to play the trail
-                    gunSelector.SwitchToNewGun(index);
+                    //gunSelector.SwitchToNewGun(index);
                 }
             }
         }
@@ -217,9 +217,9 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 if (enemyUnit != null)
                 {
                     enemyUnit.TakeDamage(damage);
-                    print("Gun Active");
-                    // Now, use the active gun to play the trail
-                    gunSelector.SwitchToNewGun(index);
+                    //print("Gun Active");
+                    //// Now, use the active gun to play the trail
+                    //gunSelector.SwitchToNewGun(index);
                 }
             }
         }

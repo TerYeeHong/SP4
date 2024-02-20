@@ -316,6 +316,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1783673733}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &110926084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 110926085}
+  - component: {fileID: 110926086}
+  m_Layer: 0
+  m_Name: MobManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &110926085
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110926084}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 477307859}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &110926086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110926084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 351e35afa01e34d4f983c2ad14196cc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &128199362 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7238835836914912407, guid: b0816a80cb2d9264990cc8bdbad2bcc7,
@@ -796,6 +840,7 @@ Transform:
   - {fileID: 1335258915}
   - {fileID: 110360601}
   - {fileID: 1545914700}
+  - {fileID: 110926085}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2756,6 +2801,8 @@ MonoBehaviour:
   platform_default_prefab: {fileID: 2106841054820431133, guid: ca2959b903f69434b8dd63e64a05e1cf,
     type: 3}
   platform_connector_prefab: {fileID: 2106841054820431133, guid: cd6f9445670a4704dbfc551c38bf4e09,
+    type: 3}
+  spawn_monument_prefab: {fileID: 2528872531408247054, guid: 29a231e0898912f4eb98f6d62ed33de3,
     type: 3}
   spawn_percent: 75
   x_length: 1

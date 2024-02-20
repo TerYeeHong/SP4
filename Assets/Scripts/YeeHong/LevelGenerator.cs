@@ -18,6 +18,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] GameObject platform_default_prefab;
     [SerializeField] GameObject platform_connector_prefab;
 
+    [SerializeField] GameObject spawn_monument_prefab;
+
     [Header("Island Generation details")]
     //[SerializeField] [Range(2, 100)] int size = 5;
     [SerializeField] [Range(0, 100)] int spawn_percent = 50; //out of 100
@@ -513,6 +515,9 @@ public class LevelGenerator : MonoBehaviour
             //child to generator
             island_go.transform.parent = transform;
         }
+
+        //Generate a spawn monument
+        Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 1, island.center.y + 3), Quaternion.identity);
     }
 
     //Given boundary and Shape,

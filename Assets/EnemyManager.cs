@@ -17,7 +17,7 @@ public class EnemyManager : MonoBehaviour
 
     List<GameObject> Enemies = new List<GameObject>();
     List<int> ViewID = new List<int>();
-   [SerializeField] public PhotonView photonView;
+    [SerializeField] public PhotonView photonView;
 
     [System.Serializable]
     public class Pool

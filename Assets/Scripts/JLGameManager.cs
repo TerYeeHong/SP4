@@ -41,6 +41,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField] GameObject win_window;
     [SerializeField] TextMeshProUGUI win_text;
+    public Camera startCam;
 
     public List<Player> playerList = new List<Player>();
 
@@ -252,6 +253,8 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         {
             player.GetComponent<Rigidbody>().isKinematic = true;
         }
+
+        startCam.gameObject.SetActive(false);
 
         //Now as the master client, set the teams
         if (!PhotonNetwork.IsMasterClient)

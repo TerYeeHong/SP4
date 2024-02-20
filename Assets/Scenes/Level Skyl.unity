@@ -984,11 +984,13 @@ MonoBehaviour:
   health_tmp: {fileID: 0}
   uimanager: {fileID: 0}
   virtualCam: {fileID: 0}
+  main_waiting_screen: {fileID: 0}
   red_score_tmp: {fileID: 0}
   blue_score_tmp: {fileID: 0}
   score_max: 0
   win_window: {fileID: 0}
   win_text: {fileID: 0}
+  startCam: {fileID: 0}
 --- !u!114 &855850423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1374,6 +1376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crosshair_main: {fileID: 1451987115}
   replay_status_tmp: {fileID: 0}
+  main_start_spawn_object: {fileID: 0}
 --- !u!1 &1339084322
 GameObject:
   m_ObjectHideFlags: 0

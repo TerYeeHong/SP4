@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/Audio/SFX/Main/Abilties/XRayAbility.mp3.meta
 guid: ad543b5c5ea8aed48a1b80a3a0e8a15e
+=======
+guid: f7de49bb5545a964d907dd2aaff86371
+>>>>>>> Stashed changes:Assets/Audio/SFX/Main/Ability/XRayAbility.mp3.meta
 AudioImporter:
   externalObjects: {}
   serializedVersion: 6

@@ -158,7 +158,11 @@ MonoBehaviour:
   abilityActive: 5
   cooldownText: {fileID: 1915055173}
   enemyRenderer: {fileID: 1818482963}
+<<<<<<< Updated upstream
   sfx: {fileID: 8300000, guid: ad543b5c5ea8aed48a1b80a3a0e8a15e, type: 3}
+=======
+  sfx: {fileID: 8300000, guid: f7de49bb5545a964d907dd2aaff86371, type: 3}
+>>>>>>> Stashed changes
 --- !u!4 &19350783
 Transform:
   m_ObjectHideFlags: 0

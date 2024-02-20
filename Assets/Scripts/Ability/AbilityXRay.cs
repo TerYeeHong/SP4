@@ -10,7 +10,7 @@ public class AbilityXRay : MonoBehaviour
     public float abilityActive = 5f;
     public TMP_Text cooldownText;
     public SkinnedMeshRenderer enemyRenderer;
-    private float dissolveSpeed = 2f;
+    private float dissolveSpeed = 2.5f;
     private int enemyLayerIndex;
     private bool isEnemyLayerActive = false;
     private bool isCooldownActive = false;
@@ -27,14 +27,12 @@ public class AbilityXRay : MonoBehaviour
         enemyLayerIndex = LayerMask.NameToLayer("Enemy");
         DeactivateEnemyLayer(); // Deactivate enemy layer by default
 
-        // Make sure the cooldownText reference is set in the Inspector
         if (cooldownText == null)
         {
             Debug.LogError("TMP Text component not assigned for cooldown text!");
             return;
         }
 
-        // Hide the cooldown text initially
         cooldownText.gameObject.SetActive(false);
     }
 
@@ -56,13 +54,13 @@ public class AbilityXRay : MonoBehaviour
 
         yield return new WaitForSeconds(seconds);
 
-        DeactivateEnemyLayer();
+        StartCoroutine(DissolveOutEffect());
     }
 
     IEnumerator DissolveInEffect()
     {
-        float dissolveAmt = 1f; // Start from 1
-        while (dissolveAmt > -1f) // End at -1
+        float dissolveAmt = 1f;
+        while (dissolveAmt > -1f)
         {
             dissolveAmt -= Time.deltaTime * dissolveSpeed;
 
@@ -71,6 +69,22 @@ public class AbilityXRay : MonoBehaviour
             SetDissolveAmt(dissolveAmt);
             yield return null;
         }
+    }
+
+    IEnumerator DissolveOutEffect()
+    {
+        float dissolveAmt = -1f;
+        while (dissolveAmt < 1f)
+        {
+            dissolveAmt += Time.deltaTime * dissolveSpeed;
+
+            Debug.Log("Dissolve: " + dissolveAmt);
+
+            SetDissolveAmt(dissolveAmt);
+            yield return null;
+        }
+
+        DeactivateEnemyLayer();
     }
 
     IEnumerator CooldownCoroutine()
@@ -104,9 +118,8 @@ public class AbilityXRay : MonoBehaviour
         isEnemyLayerActive = false;
     }
 
-    // Method to set the DissolveAmt of the enemy material
     void SetDissolveAmt(float amt)
     {
-        enemyRenderer.material.SetFloat("_Dissolve", amt); // Make sure to use the correct property name
+        enemyRenderer.material.SetFloat("_Dissolve", amt);
     }
 }

@@ -158,7 +158,7 @@ MonoBehaviour:
   abilityActive: 5
   cooldownText: {fileID: 1915055173}
   enemyRenderer: {fileID: 1818482963}
-  sfx: {fileID: 8300000, guid: 17a881892dc1a764193f9d43c0fb72f5, type: 3}
+  sfx: {fileID: 8300000, guid: ad543b5c5ea8aed48a1b80a3a0e8a15e, type: 3}
 --- !u!4 &19350783
 Transform:
   m_ObjectHideFlags: 0

@@ -2,11 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using ExitGames.Client.Photon;
+using Photon.Realtime;
+using Photon.Pun;
+
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
+
 public class LevelGenerator : MonoBehaviour
 {
+    public static LevelGenerator m_instance = null;
+
+
     [Header("Prefab details")]
     [SerializeField] GameObject platform_default_prefab;
     [SerializeField] GameObject platform_connector_prefab;
+
+    [SerializeField] GameObject spawn_monument_prefab;
 
     [Header("Island Generation details")]
     //[SerializeField] [Range(2, 100)] int size = 5;
@@ -35,10 +47,63 @@ public class LevelGenerator : MonoBehaviour
     List<Island> islands_list = new(); //queue so players unlock section by section
 
     List<GameObject> island_objects = new();
+    List<Grid> spawn_points = new();
 
 
     Vector3 spawn_center_position;
+    bool level_generated = false;
 
+
+    private void OnEnable()
+    {
+        RaiseEvents.GenerateLevelEvent += OnGenerateLevel;
+    }
+    private void OnDisable()
+    {
+        RaiseEvents.GenerateLevelEvent -= OnGenerateLevel;
+    }
+
+    public List<Grid> SpawnSpoints { get { return spawn_points; } }
+
+    public void RaiseEventGenerateLevel()
+    {
+        //data: team, new_score
+        string dataSent = $"{(int)System.DateTime.Now.Ticks}/" + //seed
+            $"{spawn_percent}/" +
+            $"{x_length}/" +
+            $"{z_length}/" +
+            $"{island_min_size}/" +
+            $"{island_max_size}/" +
+            $"{gap}/" +
+            $"{island_depth}/" +
+            $"{bridge_length_min}/" +
+            $"{bridge_length_max}/" +
+            $"{neighbour_spawn_chance}";
+
+        // Update other clients
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(RaiseEvents.GENERATELEVEL, dataSent, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    void OnGenerateLevel(string data)
+    {
+        //Set all the settings from masterclient
+        //Every client including master client will generate islands only know to ensure seed is okay
+
+        string[] dataSplit = data.Split("/");
+        spawn_percent = int.Parse(dataSplit[1]);
+        x_length = int.Parse(dataSplit[2]);
+        z_length = int.Parse(dataSplit[3]);
+        island_min_size = int.Parse(dataSplit[4]);
+        island_max_size = int.Parse(dataSplit[5]);
+        gap = int.Parse(dataSplit[6]);
+        island_depth = int.Parse(dataSplit[7]);
+        bridge_length_min = int.Parse(dataSplit[8]);
+        bridge_length_max = int.Parse(dataSplit[9]);
+        neighbour_spawn_chance = int.Parse(dataSplit[10]);
+
+        RemakeIsland(int.Parse(dataSplit[0]));
+    }
 
     //Each level consists of multiple islands, Only the main island is shown at the start
     //Triggers can rise more islands to continue
@@ -47,23 +112,27 @@ public class LevelGenerator : MonoBehaviour
 
     private void Awake()
     {
+        if (m_instance == null)
+            m_instance = this;
         islands_list = new();
 
-        RemakeIsland(1);
+        //RemakeIsland(1);
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            RemakeIsland((int)System.DateTime.Now.Ticks);
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    RemakeIsland((int)System.DateTime.Now.Ticks);
 
-        if (Input.GetKeyDown(KeyCode.V))
-            RemakeIsland(1);
+        //if (Input.GetKeyDown(KeyCode.V))
+        //    RemakeIsland(1);
     }
 
     void RemakeIsland(int seed)
     {
-        Random.InitState(seed);
+        level_generated = false;
+        UpdateClientLoadedMap();
 
+        Random.InitState(seed);
 
         //Clear any existing ones
         foreach (GameObject island in island_objects)
@@ -72,6 +141,7 @@ public class LevelGenerator : MonoBehaviour
         }
         island_objects.Clear();
         islands_list.Clear();
+        spawn_points.Clear();
 
         //Create island
 
@@ -86,6 +156,22 @@ public class LevelGenerator : MonoBehaviour
 
         //InstantiateIsland(GenerateIsland(islandBoundary, shape));
         Island main_island = GenerateIsland(islandBoundary);
+
+        //3 by 3 around island center
+        for (int i = -1; i < 2; ++i) {
+            for (int j = -1; j < 2; ++j) {
+                spawn_points.Add(new Grid(main_island.center.x + i, main_island.center.y + j));
+            }
+        }
+        //make sure there are all ground around
+        for (int i = -3; i < 4; ++i)
+        {
+            for (int j = -3; j < 4; ++j)
+            {
+                main_island.island_grid.Add(new Grid(main_island.center.x + i, main_island.center.y + j));
+            }
+        }
+
         islands_list.Add(main_island);
         GenerateNextIsland(main_island, island_depth);
 
@@ -95,6 +181,17 @@ public class LevelGenerator : MonoBehaviour
             InstantiateIsland(island);
         }
 
+        level_generated = true;
+        UpdateClientLoadedMap();
+    }
+
+    void UpdateClientLoadedMap()
+    {
+        Hashtable props = new Hashtable
+            {
+                {JLGame.PLAYER_LOADED_MAP, level_generated}
+            };
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
     
@@ -418,6 +515,9 @@ public class LevelGenerator : MonoBehaviour
             //child to generator
             island_go.transform.parent = transform;
         }
+
+        //Generate a spawn monument
+        Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 1, island.center.y + 3), Quaternion.identity);
     }
 
     //Given boundary and Shape,

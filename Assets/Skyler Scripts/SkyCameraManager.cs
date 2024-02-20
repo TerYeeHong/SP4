@@ -16,7 +16,7 @@ public class SkyCameraManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
     }
     public void LogRegisteredCameras()

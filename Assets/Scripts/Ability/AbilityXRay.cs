@@ -17,6 +17,8 @@ public class AbilityXRay : MonoBehaviour
     public AudioClip sfx;
     private float dissolveAmt;
 
+    public Material originalMat, xrayMat;
+
     void Start()
     {
         if (cam == null)
@@ -30,6 +32,8 @@ public class AbilityXRay : MonoBehaviour
 
         dissolveAmt = 0.9f;
         SetDissolveAmt(dissolveAmt);
+
+        enemyRenderer.sharedMaterial = originalMat;
 
         cooldownText.gameObject.SetActive(false);
     }
@@ -57,6 +61,8 @@ public class AbilityXRay : MonoBehaviour
 
     IEnumerator DissolveInEffect()
     {
+        enemyRenderer.sharedMaterial = xrayMat;
+
         dissolveAmt = 0.9f;
         while (dissolveAmt > -1.1f)
         {
@@ -69,6 +75,8 @@ public class AbilityXRay : MonoBehaviour
 
     IEnumerator DissolveOutEffect()
     {
+        enemyRenderer.sharedMaterial = originalMat;
+
         dissolveAmt = -1.1f;
         while (dissolveAmt < 0.9f)
         {

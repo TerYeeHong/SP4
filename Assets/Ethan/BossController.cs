@@ -121,7 +121,7 @@ public class BossController : EnemyUnit
         base.Init();
         StartBossCollider = BossCollider.center;
          //BossHPCanvas.enabled = false;
-         players = GameObject.FindGameObjectsWithTag("Player");
+        players = GameObject.FindGameObjectsWithTag("Player");
         for (int i = 0; i < players.Length; i++)
         {
             distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);

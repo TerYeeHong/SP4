@@ -52,7 +52,7 @@ public class EnemyManager : MonoBehaviour
     {
         //InstantiateEnemy("Fish");
         //Enemies[1].SetActive(false);
-        //FetchEnemies();
+       // FetchEnemy("Wolfboss_A");
         //DisableEnemies(string data)
         //InstantiateEnemy("Fish");
 
@@ -212,18 +212,18 @@ public class EnemyManager : MonoBehaviour
     //}
 
 
-    int FetchEnemy(string tag)
+    public int FetchEnemy(string tag)
     {
         for (int i = 0; i < Enemies.Count; i++)
         {
             for (int v = 0; v < ViewID.Count; v++)
             {
-                if (tag == Enemies[i].tag)
-                {
+                //if (tag == Enemies[i].tag)
+                //{
                     ViewID[v] = Enemies[i].GetComponent<PhotonView>().ViewID;
                     //PhotonNetwork.GetPhotonView(ViewID[v])
                     return ViewID[v];
-                }
+                //}
             }
         }
         for (int i = 0; i < 5; ++i)

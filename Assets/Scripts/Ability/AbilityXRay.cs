@@ -70,11 +70,7 @@ public class AbilityXRay : MonoBehaviour
     IEnumerator DissolveOutEffect()
     {
         dissolveAmt = -1.1f;
-<<<<<<< Updated upstream
-        while (dissolveAmt < 0.9f)
-=======
         while (dissolveAmt < 1.1f)
->>>>>>> Stashed changes
         {
             dissolveAmt += Time.deltaTime * dissolveSpeed;
 

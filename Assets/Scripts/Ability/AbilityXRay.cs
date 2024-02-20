@@ -15,6 +15,7 @@ public class AbilityXRay : MonoBehaviour
     private bool isEnemyLayerActive = false;
     private bool isCooldownActive = false;
     public AudioClip sfx;
+    private float dissolveAmt;
 
     void Start()
     {
@@ -24,14 +25,11 @@ public class AbilityXRay : MonoBehaviour
             return;
         }
 
-        enemyLayerIndex = LayerMask.NameToLayer("Enemy");
+        enemyLayerIndex = LayerMask.NameToLayer("InvisEnemy");
         DeactivateEnemyLayer(); // Deactivate enemy layer by default
 
-        if (cooldownText == null)
-        {
-            Debug.LogError("TMP Text component not assigned for cooldown text!");
-            return;
-        }
+        dissolveAmt = 0.9f;
+        SetDissolveAmt(dissolveAmt);
 
         cooldownText.gameObject.SetActive(false);
     }
@@ -59,12 +57,10 @@ public class AbilityXRay : MonoBehaviour
 
     IEnumerator DissolveInEffect()
     {
-        float dissolveAmt = 1f;
-        while (dissolveAmt > -1f)
+        dissolveAmt = 0.9f;
+        while (dissolveAmt > -1.1f)
         {
             dissolveAmt -= Time.deltaTime * dissolveSpeed;
-
-            Debug.Log("Dissolve: " + dissolveAmt);
 
             SetDissolveAmt(dissolveAmt);
             yield return null;
@@ -73,12 +69,10 @@ public class AbilityXRay : MonoBehaviour
 
     IEnumerator DissolveOutEffect()
     {
-        float dissolveAmt = -1f;
-        while (dissolveAmt < 1f)
+        dissolveAmt = -1.1f;
+        while (dissolveAmt < 0.9f)
         {
             dissolveAmt += Time.deltaTime * dissolveSpeed;
-
-            Debug.Log("Dissolve: " + dissolveAmt);
 
             SetDissolveAmt(dissolveAmt);
             yield return null;

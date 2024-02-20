@@ -21,6 +21,7 @@ public class MainMenuMgt : MonoBehaviour
 
     private string scene;
     private string playerName;
+    public AudioClip clickSFX;
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +59,8 @@ public class MainMenuMgt : MonoBehaviour
     }
     public void OnLogOut()
     {
+        GameEvents.m_instance.playNewAudioClip.Invoke(clickSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+
         startTransition.SetActive(true);
         PlayFabClientAPI.ForgetAllCredentials();
 
@@ -67,6 +70,8 @@ public class MainMenuMgt : MonoBehaviour
 
     public void OnPlay()
     {
+        GameEvents.m_instance.playNewAudioClip.Invoke(clickSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+
         startTransition.SetActive(true);
 
         scene = "Play";

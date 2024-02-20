@@ -1304,6 +1304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GunSelector: {fileID: 959703559}
+  playerCam: {fileID: 3787938341306619098}
 --- !u!114 &959703559
 MonoBehaviour:
   m_ObjectHideFlags: 0

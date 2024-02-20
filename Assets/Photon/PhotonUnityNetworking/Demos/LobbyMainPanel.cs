@@ -8,6 +8,9 @@ namespace Photon.Pun.Demo.Asteroids
 {
     public class LobbyMainPanel : MonoBehaviourPunCallbacks
     {
+        [Header("Scene")]
+        public string scene_next;
+
         [Header("Login Panel")]
         public GameObject LoginPanel;
 
@@ -273,7 +276,9 @@ namespace Photon.Pun.Demo.Asteroids
             PhotonNetwork.CurrentRoom.IsVisible = false;
 
             //PhotonNetwork.LoadLevel("Skylar + Ethan");
-            PhotonNetwork.LoadLevel("MainLevel");
+            //PhotonNetwork.LoadLevel("MainLevel");
+            PhotonNetwork.LoadLevel(scene_next);
+            
         }
 
         #endregion

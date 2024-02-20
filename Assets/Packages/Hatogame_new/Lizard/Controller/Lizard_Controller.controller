@@ -9,7 +9,6 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions: []
   m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: -6631972306892212976}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
@@ -156,7 +155,6 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions: []
   m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 3545961998167242131}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
@@ -439,7 +437,6 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions: []
   m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: -3643543754024864724}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
@@ -509,7 +506,6 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions: []
   m_DstStateMachine: {fileID: 0}
-  m_DstState: {fileID: 7517583348347599673}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0

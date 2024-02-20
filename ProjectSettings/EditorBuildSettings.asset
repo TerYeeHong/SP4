@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: c7fa9fa4b73440d4bb0a76cc31cd717a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainLevel.unity
     guid: 09b42d2ec411d214991d42f42e3051f9
   - enabled: 0
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Ethan/Skylar + Ethan.unity
     guid: 1faae15a7137b95428a23e59df51c2b0
+  - enabled: 1
+    path: Assets/Scenes/YeeHongLevel.unity
+    guid: 2c6650b2f6d4f894ba3a40e744b97752
   m_configObjects: {}

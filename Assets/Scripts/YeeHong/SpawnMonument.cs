@@ -50,7 +50,12 @@ public class SpawnMonument : MonoBehaviour
     void SpawnEnemy(Vector3 position)
     {
         
-        EnemyManager.m_instance.SpawnFromPool("Fish", position, Quaternion.identity);
+        ////EnemyManager.m_instance.SpawnFromPool("Fish", position, Quaternion.identity);
+        //int ViewIdEnemy = EnemyManager.m_instance.FetchEnemy("Fish");
+        //PhotonView photonViewEnemy = PhotonNetwork.GetPhotonView(ViewIdEnemy);
+        //EnemyUnit enemyUnit = photonViewEnemy
+
+        //photonViewEnemy.RPC(nameof())
 
     }
 

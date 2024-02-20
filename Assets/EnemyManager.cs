@@ -212,7 +212,7 @@ public class EnemyManager : MonoBehaviour
     //}
 
 
-    int FetchEnemy(string tag)
+    public int FetchEnemy(string tag)
     {
         for (int i = 0; i < Enemies.Count; i++)
         {
@@ -241,6 +241,35 @@ public class EnemyManager : MonoBehaviour
         }
         return FetchEnemy(tag);
     }
+    //public GameObject FetchEnemy(string tag)
+    //{
+    //    for (int i = 0; i < Enemies.Count; i++)
+    //    {
+    //        for (int v = 0; v < ViewID.Count; v++)
+    //        {
+    //            if (tag == Enemies[i].tag)
+    //            {
+    //                ViewID[v] = Enemies[i].GetComponent<PhotonView>().ViewID;
+    //                //PhotonNetwork.GetPhotonView(ViewID[v])
+    //                return ViewID[v];
+    //            }
+    //        }
+    //    }
+    //    for (int i = 0; i < 5; ++i)
+    //    {
+    //        Vector3 spawnPos = new Vector3(0, 0, 0);
+    //        GameObject obj = PhotonNetwork.InstantiateRoomObject(tag, spawnPos, Quaternion.identity);
+
+    //        Enemies.Add(obj);
+    //        if (obj.TryGetComponent(out EnemyUnit enemyUnit))
+    //        {
+    //            // enemyUnit.RPC
+    //        }
+
+
+    //    }
+    //    return FetchEnemy(tag);
+    //}
 
 
     [PunRPC]

@@ -84,7 +84,8 @@ namespace Photon.Pun.UtilityScripts
             if (!this.isTimerRunning) return;
 
             float countdown = TimeRemaining();
-            this.Text.text = string.Format("Game starts in {0} seconds", countdown.ToString("n0"));
+            //this.Text.text = string.Format("Game starts in {0} seconds", countdown.ToString("n0"));
+            this.Text.text = "Waiting for all players to Generate Map"; 
 
             if (countdown > 0.0f) return;
 

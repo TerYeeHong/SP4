@@ -5,11 +5,11 @@ public class SkyPlayerShooting : MonoBehaviour
 {
     [SerializeField]
     private SkyPlayerGunSelector GunSelector;
-    private Camera playerCam;
+    public Camera playerCam;
 
     private void Start()
     {
-        playerCam = Camera.main;
+        //playerCam = Camera.main;
     }
 
     private void Update()

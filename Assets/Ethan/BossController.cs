@@ -40,7 +40,8 @@ public class BossController : EnemyUnit
     float distance;
     float nearestDistance = 1000;
 
-    bool dashAttack = false;
+    bool dashAttack = false;  
+    bool swipeAttack = false;
 
     STATES CURRENT_STATE = STATES.IDLE;
     enum STATES
@@ -61,8 +62,14 @@ public class BossController : EnemyUnit
         if (other.CompareTag("Player"))
         {
             // Perform actions when the hitbox collider overlaps with the player
-            
-            Debug.Log("Hitbox overlaps with the player.");
+            if (dashAttack)
+            {
+                Debug.Log("BOSS DASH INTO PLAYER.");
+            }
+            if (swipeAttack)
+            {
+                Debug.Log("BOSS SWIPE THE PLAYER.");
+            }
 
             // You can perform additional actions here, such as dealing damage to the player or triggering events.
         }
@@ -76,6 +83,16 @@ public class BossController : EnemyUnit
     public void DashAttackEND()
     {
         dashAttack = false;
+    }
+
+    public void SwipeAttackSTART()
+    {
+       swipeAttack = true;
+    }
+
+    public void SwipeAttackEND()
+    {
+        swipeAttack = false;
     }
 
 
@@ -154,11 +171,11 @@ public class BossController : EnemyUnit
 
     private void Update()
     {
-        Debug.Log(health_unit + " / " + max_health_unit);
+       // Debug.Log(health_unit + " / " + max_health_unit);
         BossHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
         //Debug.Log("dist "+ range_unit);
-        Debug.Log("current state: " + CURRENT_STATE);
+       // Debug.Log("current state: " + CURRENT_STATE);
 
         angle += circleSpeed * Time.deltaTime;
 
@@ -271,7 +288,7 @@ public class BossController : EnemyUnit
             // navMeshAgent.destination = movePositionTransform.position;
         }
 
-        Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
+        //Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
         //animator.SetTrigger("IsHit");
     }
 

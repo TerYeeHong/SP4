@@ -22,7 +22,8 @@ public class EnemyController : EnemyUnit
     public float m_Thrust = 20f;
     float distance;
     float nearestDistance = 1000;
-
+    bool attackBasic = false;
+    bool moving = false;
     STATES CURRENT_STATE = STATES.IDLE;
     enum STATES
     {
@@ -30,6 +31,7 @@ public class EnemyController : EnemyUnit
         WALKING,
         RUNNING,
         DEAD,
+        ATTACK,
         HIT
         
     }
@@ -37,6 +39,7 @@ public class EnemyController : EnemyUnit
     public override void Init()
     {
         base.Init();
+        navMeshAgent.speed = speed_unit;
         players = GameObject.FindGameObjectsWithTag("Player");
         for (int i = 0; i < players.Length; i++)
         {
@@ -61,6 +64,21 @@ public class EnemyController : EnemyUnit
 
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the collider belongs to an object tagged as "Player"
+        if (other.CompareTag("Player"))
+        {
+            // Perform actions when the hitbox collider overlaps with the player
+            if (attackBasic)
+            {
+                Debug.Log("FISH ATTACK PLAYER.");
+            }
+          
+
+            // You can perform additional actions here, such as dealing damage to the player or triggering events.
+        }
+    }
 
     private void OnEnable()
     {
@@ -74,6 +92,15 @@ public class EnemyController : EnemyUnit
         RaiseEvents.SetActiveEvent -= Active;
     }
 
+    public void AttackBasicSTART()
+    {
+         attackBasic = true;
+    }
+
+    public void AttackBasicEND()
+    {
+        attackBasic = false;
+    }
 
     public override void OnDeath()
     {
@@ -101,12 +128,17 @@ public class EnemyController : EnemyUnit
     {
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
         //Debug.Log("dist "+ range_unit);
-        Debug.Log("current state: " + CURRENT_STATE);
+        //Debug.Log("current state: " + CURRENT_STATE);
 
         if (CURRENT_STATE != STATES.DEAD)
         {
 
-            if (range_unit < 4)
+            if (range_unit < 3)
+            {
+
+                CURRENT_STATE = STATES.ATTACK;
+            }
+            else if (range_unit < 20)
             {
 
                 CURRENT_STATE = STATES.WALKING;
@@ -124,6 +156,12 @@ public class EnemyController : EnemyUnit
                 //animator.SetBool("IsHit", true);
                 //CURRENT_STATE = STATES.IDLE;
             }
+            else if (CURRENT_STATE == STATES.ATTACK)
+            {
+                animator.SetTrigger("IsAttacking");
+             
+
+            }
             else if (CURRENT_STATE == STATES.IDLE)
             {
                 animator.SetBool("IsMoving", false);
@@ -132,9 +170,14 @@ public class EnemyController : EnemyUnit
             {
 
                 animator.SetBool("IsMoving", true);
+                //moving = true;
+                speed_unit = 2;
+                navMeshAgent.speed = speed_unit;
                 navMeshAgent.destination = movePositionTransform.position;
             }
+
        
+
         }
         else if (CURRENT_STATE == STATES.DEAD)
         {
@@ -145,6 +188,13 @@ public class EnemyController : EnemyUnit
         }
 
         Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
+        {
+            speed_unit = 0;
+            navMeshAgent.speed = speed_unit;
+        }
+
         //animator.SetTrigger("IsHit");
     }
 

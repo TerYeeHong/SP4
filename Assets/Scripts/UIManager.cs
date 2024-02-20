@@ -7,17 +7,25 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject crosshair_main;
     [SerializeField] TextMeshProUGUI replay_status_tmp;
+    [SerializeField] GameObject main_start_spawn_object;
 
     private void OnEnable()
     {
         GameEvents.m_instance.playerStance.AddListener(OnPlayerStance);
         GameEvents.m_instance.updateReplayStatus.AddListener(OnUpdateReplayStatus);
+        GameEvents.m_instance.updateCanStartSpawnEnable.AddListener(OnUpdateCanStartSpawnEnable);
     }
     private void OnDisable()
     {
         GameEvents.m_instance.playerStance.RemoveListener(OnPlayerStance);
         GameEvents.m_instance.updateReplayStatus.RemoveListener(OnUpdateReplayStatus);
+        GameEvents.m_instance.updateCanStartSpawnEnable.RemoveListener(OnUpdateCanStartSpawnEnable);
 
+
+    }
+    void OnUpdateCanStartSpawnEnable(bool enable)
+    {
+        main_start_spawn_object.SetActive(enable);
     }
     void OnUpdateReplayStatus(InputController.REPLAY_STATUS status, float time)
     {
@@ -49,3 +57,4 @@ public class UIManager : MonoBehaviour
         }
     }
 }
+;

@@ -17,6 +17,9 @@ public class SkyPlayerController : MonoBehaviour
     public GameObject body;
     public Vector3 bodyPos = new Vector3(0, -0.9f, 0);
 
+    public PhotonView GetPhotonView { get { return photonView; } }
+
+
     void Start()
     {
         photonView = GetComponent<PhotonView>();

@@ -273,7 +273,8 @@ namespace Photon.Pun.Demo.Asteroids
             PhotonNetwork.CurrentRoom.IsVisible = false;
 
             //PhotonNetwork.LoadLevel("Skylar + Ethan");
-            PhotonNetwork.LoadLevel("MainLevel");
+            //PhotonNetwork.LoadLevel("MainLevel");
+            PhotonNetwork.LoadLevel("YeehongLevel");
         }
 
         #endregion

@@ -173,6 +173,7 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
 
                 PhotonView photonView = PhotonView.Find(viewID);
 
+                SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
                 // Assuming you have a method to find the PhotonView by ActorNumber
                 if (photonView != null)
                 {
@@ -218,8 +219,6 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 {
                     enemyUnit.TakeDamage(damage);
                     print("Gun Active");
-                    // Now, use the active gun to play the trail
-                    gunSelector.SwitchToNewGun(index);
                 }
             }
         }

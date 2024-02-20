@@ -22,6 +22,8 @@ public class SkyPlayerHealth : Unit
     public override void OnDeath()
     {
         isDead = true;
+        if (photonView.IsMine)
+            player.SetChildrenMeshRenderersEnabled(true);
         GetComponent<SkyPlayerAnimation>().ChangeAnimationState("Falling Back Death");
         GameEvents.m_instance.unitDied.Invoke(unit_type.name);
     }
@@ -121,8 +123,11 @@ public class SkyPlayerHealth : Unit
         collide_with_attacks = true;
         Health = MaxHealth;
         if (photonView.IsMine)
+        {
             SkyCameraManager.Instance.SwitchCamera(photonView.OwnerActorNr);
-
+            player.SetChildrenMeshRenderersEnabled(false);
+            GetComponent<SkyPlayerAnimation>().ChangeAnimationState(SkyPlayerAnimation.PLAYER_IDLE);
+        }
         photonView.gameObject.transform.position = new Vector3(photonView.gameObject.transform.position.x, photonView.gameObject.transform.position.y + 1, photonView.gameObject.transform.position.z);
     }
 

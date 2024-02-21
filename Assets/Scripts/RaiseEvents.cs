@@ -236,10 +236,8 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 Unit enemyUnit = targetView.GetComponent<Unit>();
                 if (enemyUnit != null)
                 {
+                    print("Enemy has unit script");
                     enemyUnit.TakeDamage(damage);
-                    //print("Gun Active");
-                    //// Now, use the active gun to play the trail
-                    //gunSelector.SwitchToNewGun(index);
                 }
             }
         }

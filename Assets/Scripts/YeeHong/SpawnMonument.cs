@@ -1,111 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using Photon.Pun;
 
 public class SpawnMonument : MonoBehaviour
 {
-    bool canStart = false;
-
-
-    private void Update()
-    {
-        //if (!canStart)
-        //    return;
-
-        //if (Input.GetButtonDown("Jump"))
-        //{
-        //    //SPAWN ENEMIES
-
-        //    StartCoroutine(StartSpawningEnemies(10, 3.0f));
-        //    //Disable self
-        //    canStart = false;
-        //    //gameObject.SetActive(false);
-        //    GetComponent<Renderer>().enabled = false;
-        //    GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(false);
-        //}
-    }
-
-
-    IEnumerator StartSpawningEnemies(int amount, float delay_interval = 3.0f)
-    {
-        Debug.LogWarning("ETHAN");
-
-        WaitForSeconds delay = new WaitForSeconds(delay_interval);
-        
-        for (int i = 0; i < amount; ++i)
-        {
-            Vector3 position = transform.position 
-                + new Vector3(Random.Range(-transform.localScale.x, transform.localScale.x), 
-                3, Random.Range(-transform.localScale.z, transform.localScale.z));
-
-            SpawnEnemy(position);
-
-            yield return delay;
-        }
-    }
-
-    void SpawnEnemy(Vector3 position)
-    {
-        
-        ////EnemyManager.m_instance.SpawnFromPool("Fish", position, Quaternion.identity);
-        //int ViewIdEnemy = EnemyManager.m_instance.FetchEnemy("Fish");
-        //PhotonView photonViewEnemy = PhotonNetwork.GetPhotonView(ViewIdEnemy);
-        //EnemyUnit enemyUnit = photonViewEnemy
-
-        //photonViewEnemy.RPC(nameof())
-
-    }
-
-
+    public List<Grid> island_grids; // Assuming this is populated with the islands where enemies can spawn
+    public int spawnAmount;
+    public bool isFinal;
 
     private void OnTriggerEnter(Collider other)
     {
-        //Only updates if this is the master client
-        if (!PhotonNetwork.IsMasterClient)
-            return;
+        if (other.CompareTag("Player") && PhotonNetwork.IsMasterClient)
+        {
+            StartSpawning();
+            MakeMonumentDisappear();
+        }
+    }
 
+    private void StartSpawning()
+    {
+        if (isFinal)
+        {
+            // Spawn a boss
+            Vector3 bossPosition = ChooseRandomIslandPosition();
+            SpawnWolf(bossPosition);
+        }
+        else
+        {
+            // Spawn wolves equal to spawnAmount on a random island
+            StartCoroutine(StartSpawningWolves(spawnAmount, 1.0f));
+        }
+    }
+
+    IEnumerator StartSpawningWolves(int amount, float delay)
+    {
+        WaitForSeconds delayTime = new WaitForSeconds(delay);
+
+        for (int i = 0; i < amount; i++)
+        {
+            Vector3 wolfPosition = ChooseRandomIslandPosition();
+            SpawnWolf(wolfPosition);
+            yield return delayTime;
+        }
+    }
+
+    Vector3 ChooseRandomIslandPosition()
+    {
+        // Assuming Grid class has a method or properties to get a position
+        Grid randomGrid = island_grids[Random.Range(0, island_grids.Count)];
+        // Adjust Y coordinate as needed, and ensure it's correct for your game's coordinate system
+        return new Vector3(randomGrid.x, 0, randomGrid.y);
+    }
+
+    void SpawnFish(Vector3 position)
+    {
         GameObject enemy = MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.FISH);
         EnemyUnit enemyUnit = enemy.GetComponent<EnemyUnit>();
 
         enemyUnit.photonView.RPC(nameof(enemyUnit.SetActive), RpcTarget.All, true);
-        enemy.transform.position = transform.position + new Vector3(0, 5, 0);
-
-        //PhotonView photonView = PhotonNetwork.GetPhotonView(MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.FISH));
-        //photonView.RPC(nameof(EnemyUnit.SetActive), RpcTarget.All, true);
-        //photonView.RPC(nameof(EnemyUnit.SetPosition), RpcTarget.All, transform.position + new Vector3(0, 5, 0));
-
-        //MobManager.m_instance.SpawnEnemy(EnemyUnitType.ENEMY_RACE.FISH);
-
-
-
-
-        ////Check the player that is in trigger is also master client
-        //if (other.TryGetComponent(out SkyPlayerController skyPlayerController))
-        //{
-        //    if (skyPlayerController.GetPhotonView.Owner.IsMasterClient)
-        //    {
-        //        GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(true);
-        //        canStart = true;
-        //    }
-        //}
+        enemy.transform.position = position;
     }
-    private void OnTriggerExit(Collider other)
+
+    void SpawnWolf(Vector3 position)
     {
-        //Only updates if this is the master client
-        if (!PhotonNetwork.IsMasterClient)
-            return;
+        GameObject enemy = MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.WOLF);
+        EnemyUnit enemyUnit = enemy.GetComponent<EnemyUnit>();
 
-        ////Check the player that is in trigger is also master client
-        //if (other.TryGetComponent(out SkyPlayerController skyPlayerController))
-        //{
-        //    if (skyPlayerController.GetPhotonView.Owner.IsMasterClient)
-        //    {
-        //        GameEvents.m_instance.updateCanStartSpawnEnable.Invoke(false);
-        //        canStart = false;
+        enemyUnit.photonView.RPC(nameof(enemyUnit.SetActive), RpcTarget.All, true);
+        enemy.transform.position = position;
+    }
 
-        //    }
-        //}
+    void MakeMonumentDisappear()
+    {
+        // Option 1: Deactivate the GameObject (can be reactivated later)
+        gameObject.SetActive(false);
+
+        // Option 2: Destroy the GameObject (permanent)
+        // Destroy(gameObject);
     }
 }

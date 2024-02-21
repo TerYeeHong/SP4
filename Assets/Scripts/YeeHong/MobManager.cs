@@ -103,7 +103,7 @@ public class MobManager : MonoBehaviour
             case EnemyUnitType.ENEMY_RACE.FISH:
                 return "CatfishA";
             case EnemyUnitType.ENEMY_RACE.WOLF:
-                return "CatfishA";
+                return "Wolfboss_A";
         }
 
         return "";

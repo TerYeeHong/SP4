@@ -7,7 +7,7 @@ using Photon.Realtime;
 using Photon.Pun;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-
+using System.Linq;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -524,6 +524,19 @@ public class LevelGenerator : MonoBehaviour
 
         //Generate a spawn monument
         Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 2, island.center.y + 3), Quaternion.identity);
+        SpawnMonument monument = spawn_monument_prefab.GetComponent<SpawnMonument>();
+        monument.island_grids = island.island_grid;
+        int i = 0;
+        foreach (Island island1 in islands_list)
+        {
+            i++;
+            if (island1 == islands_list[i])
+            {
+                monument.spawnAmount = i + Random.Range(3, 10 + i);
+            }
+        }
+        monument.isFinal = island.Equals(islands_list[islands_list.Count - 1]);
+
     }
 
     //Given boundary and Shape,

@@ -193,6 +193,7 @@ MonoBehaviour:
   floating_item_prefab: {fileID: 0}
   photonView: {fileID: 0}
   enemy_type: {fileID: 0}
+  enemy_race_unit: 0
   range_unit: 5
   rarity_unit: 1
   navMeshAgent: {fileID: 968977804}

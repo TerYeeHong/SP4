@@ -72,6 +72,14 @@ public class SpawnMonument : MonoBehaviour
         enemyUnit.photonView.RPC(nameof(enemyUnit.SetActive), RpcTarget.All, true);
         enemy.transform.position = transform.position + new Vector3(0, 5, 0);
 
+        //PhotonView photonView = PhotonNetwork.GetPhotonView(MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.FISH));
+        //photonView.RPC(nameof(EnemyUnit.SetActive), RpcTarget.All, true);
+        //photonView.RPC(nameof(EnemyUnit.SetPosition), RpcTarget.All, transform.position + new Vector3(0, 5, 0));
+
+        //MobManager.m_instance.SpawnEnemy(EnemyUnitType.ENEMY_RACE.FISH);
+
+
+
 
         ////Check the player that is in trigger is also master client
         //if (other.TryGetComponent(out SkyPlayerController skyPlayerController))

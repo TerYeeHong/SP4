@@ -517,7 +517,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         //Generate a spawn monument
-        Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 1, island.center.y + 3), Quaternion.identity);
+        Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 2, island.center.y + 3), Quaternion.identity);
     }
 
     //Given boundary and Shape,

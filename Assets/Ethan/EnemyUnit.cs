@@ -265,4 +265,9 @@ public class EnemyUnit : Unit
     {
         gameObject.SetActive(active);
     }
+    [PunRPC]
+    public void SetPosition(Vector3 pos)
+    {
+        transform.position = pos;
+    }
 }

@@ -157,49 +157,48 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 }
              
             }
+ 
+        }
+        if (eventCode == PLAYER_SHOOT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int viewID = (int)data[0];
+            Vector3 startPoint = (Vector3)data[1];
+            Vector3 endPoint = (Vector3)data[2];
 
-            if (eventCode == PLAYER_SHOOT)
+            PhotonView photonView = PhotonView.Find(viewID);
+
+            // Assuming you have a method to find the PhotonView by ActorNumber
+            if (photonView != null)
             {
-                //object[] data = (object[])photonEvent.CustomData;
-                //int viewID = (int)data[0];
-                Vector3 startPoint = (Vector3)data[1];
-                Vector3 endPoint = (Vector3)data[2];
-
-                PhotonView photonView = PhotonView.Find(viewID);
-
-                // Assuming you have a method to find the PhotonView by ActorNumber
-                if (photonView != null)
-                {
-                    print("View found");
-                    // Assuming the shooter's SkyPlayerGunSelector component can give us the active gun
-                    SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
-                    if (gunSelector != null && gunSelector.activeGun != null)
-                    {
-                        print("Gun Active");
-                        // Now, use the active gun to play the trail
-                        gunSelector.activeGun.StartCoroutine(gunSelector.activeGun.PlayTrail(startPoint, endPoint, new RaycastHit()));
-                    }
-                }
-            }
-            if (eventCode == PLAYER_SWITCH_GUN)
-            {
-                //object[] data = (object[])photonEvent.CustomData;
-                //int viewID = (int)data[0];
-                //int index = (int)data[1];
-
-                PhotonView photonView = PhotonView.Find(viewID);
-
+                print("View found");
+                // Assuming the shooter's SkyPlayerGunSelector component can give us the active gun
                 SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
-                // Assuming you have a method to find the PhotonView by ActorNumber
-                if (photonView != null)
+                if (gunSelector != null && gunSelector.activeGun != null)
                 {
                     print("Gun Active");
                     // Now, use the active gun to play the trail
-                    //gunSelector.SwitchToNewGun(index);
+                    gunSelector.activeGun.StartCoroutine(gunSelector.activeGun.PlayTrail(startPoint, endPoint, new RaycastHit()));
                 }
             }
         }
+        if (eventCode == PLAYER_SWITCH_GUN)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int viewID = (int)data[0];
+            int index = (int)data[1];
 
+            PhotonView photonView = PhotonView.Find(viewID);
+
+            SkyPlayerGunSelector gunSelector = photonView.GetComponent<SkyPlayerGunSelector>();
+            // Assuming you have a method to find the PhotonView by ActorNumber
+            if (photonView != null)
+            {
+                print("Gun Active");
+                // Now, use the active gun to play the trail
+                gunSelector.SwitchToNewGun(index);
+            }
+        }
         if (eventCode == PLAYER_SHOOT)
         {
             object[] data = (object[])photonEvent.CustomData;

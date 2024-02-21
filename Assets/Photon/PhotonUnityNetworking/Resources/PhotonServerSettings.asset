@@ -52,6 +52,9 @@ MonoBehaviour:
   - OnReviveRPC
   - SetActive
   - SetPosition
+  - ActivateLoseScreen
+  - ActivateWinScreen
+  - DeactivateScreens
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

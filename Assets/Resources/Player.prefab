@@ -1345,7 +1345,7 @@ MonoBehaviour:
   team_unit: 0
   name_unit: 
   max_health_unit: 0
-  power_unit: 40
+  power_unit: 5
   speed_unit: 0
   health_unit: 0
   godmode: 0

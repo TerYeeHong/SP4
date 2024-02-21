@@ -1419,10 +1419,14 @@ MonoBehaviour:
   activationKey: 120
   cooldownDuration: 10
   abilityActive: 5
-  enemyRenderer: {fileID: 3157063974883941378, guid: bc71b6500264cd448acd6d127b819b90,
-    type: 3}
+  cooldownText: {fileID: 0}
+  enemyRenderer:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   sfx: {fileID: 8300000, guid: ad543b5c5ea8aed48a1b80a3a0e8a15e, type: 3}
   dissolveAmt: 0
+  lizards: []
   isXRayActive: 0
   originalMat: {fileID: 2100000, guid: 14830531b59d3b443885c8aaacb7e16e, type: 2}
   xrayMat: {fileID: 2100000, guid: aa9e114196bd6ab468bed92609f85cf0, type: 2}

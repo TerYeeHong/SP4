@@ -8,16 +8,17 @@ public class AbilityXRay : MonoBehaviour
     public KeyCode activationKey = KeyCode.X;
     public float cooldownDuration = 10f;
     public float abilityActive = 5f;
-    //public TMP_Text cooldownText;
-    public SkinnedMeshRenderer enemyRenderer;
+    public TMP_Text cooldownText;
+    public SkinnedMeshRenderer[] enemyRenderer;
     private float dissolveSpeed = 2.5f;
     private bool isEnemyLayerActive = false;
     private bool isCooldownActive = false;
     public AudioClip sfx;
     public float dissolveAmt;
-
+    [SerializeField] private LizardEnemyController[] lizards;
     public bool isXRayActive;
     private float xRayActivationTime;
+
 
     public Material originalMat, xrayMat;
     void Start()
@@ -31,11 +32,19 @@ public class AbilityXRay : MonoBehaviour
         dissolveAmt = 1.2f;
         isXRayActive = false;
 
+        cooldownText = FindObjectOfType<TMP_Text>();
     //cooldownText.gameObject.SetActive(false);
     }
 
     void Update()
     {
+        lizards = FindObjectsOfType<LizardEnemyController>();
+        enemyRenderer = new SkinnedMeshRenderer[lizards.Length];
+        for (int i = 0; i < lizards.Length; i++)
+        {  
+            enemyRenderer[i] = lizards[i].GetComponentInChildren<SkinnedMeshRenderer>();  
+        }
+
         if (!isCooldownActive && Input.GetKeyDown(activationKey) && !isXRayActive)
         {
             isXRayActive = true;
@@ -92,13 +101,13 @@ public class AbilityXRay : MonoBehaviour
     IEnumerator CooldownCoroutine()
     {
         isCooldownActive = true;
-        //cooldownText.gameObject.SetActive(true);
+        cooldownText.gameObject.SetActive(true);
 
         float remainingTime = cooldownDuration;
 
         while (remainingTime > 0)
         {
-            //cooldownText.text = "Cooldown: " + remainingTime.ToString();
+            cooldownText.text = "Cooldown: " + remainingTime.ToString();
 
             yield return new WaitForSeconds(1f);
             remainingTime -= 1f;
@@ -109,6 +118,9 @@ public class AbilityXRay : MonoBehaviour
 
     void SetDissolveAmt(float amt)
     {
-        enemyRenderer.material.SetFloat("_Dissolve", amt);
+        for (int i = 0; i < enemyRenderer.Length; i++)
+        {
+            enemyRenderer[i].material.SetFloat("_Dissolve", amt);
+        }
     }
 }

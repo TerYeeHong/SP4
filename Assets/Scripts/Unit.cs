@@ -212,7 +212,7 @@ public class Unit : MonoBehaviour
 
         if (health_unit <= 0)
         {
-            enabled = false;
+           // enabled = false;
             //Debug.Log("Unit Dead");
             collide_with_attacks = false;
             OnDeath();
@@ -244,7 +244,7 @@ public class Unit : MonoBehaviour
         }
 
        // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
-        Destroy(gameObject, 5.0f);
+        Destroy(gameObject, 11.0f);
     }
 
     public Rigidbody GetRigidbody()

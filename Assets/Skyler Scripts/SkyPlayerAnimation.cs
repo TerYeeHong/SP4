@@ -7,10 +7,12 @@ public class SkyPlayerAnimation : MonoBehaviour
 {
     public Animator animator;
     private PhotonView photonView;
+    private SkyPlayerController player;
 
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
+        player = GetComponent<SkyPlayerController>();
     }
 
     public static string PLAYER_IDLE = "Idle";
@@ -47,6 +49,8 @@ public class SkyPlayerAnimation : MonoBehaviour
     public void ChangeAnimationState(string newState, float transitionDuration = 0.1f)
     {
         if (currentState == newState) return;
+
+        player.body.transform.localPosition = player.bodyPos;
 
         animator.CrossFade(newState, transitionDuration);
         currentState = newState;

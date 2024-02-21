@@ -14,6 +14,8 @@ public class SkyPlayerController : MonoBehaviour
     SkyCameraSwitch playerCameraSwitch;
     SkyPlayerHealth playerHealth;
     private PhotonView photonView;
+    public GameObject body;
+    public Vector3 bodyPos = new Vector3(0, -0.9f, 0);
 
     public PhotonView GetPhotonView { get { return photonView; } }
 
@@ -26,6 +28,11 @@ public class SkyPlayerController : MonoBehaviour
         gunSelector = GetComponent<SkyPlayerGunSelector>();
         playerCameraSwitch = GetComponent<SkyCameraSwitch>();
         playerHealth = GetComponent<SkyPlayerHealth>();
+
+        if (photonView.IsMine)
+        {
+            SetChildrenMeshRenderersEnabled(false);
+        }
     } 
 
     // Update is called once per frame
@@ -47,14 +54,21 @@ public class SkyPlayerController : MonoBehaviour
             gunSelector.ADSActiveGun();
 
             playerHealth.AttemptToRevive();
-            
+            playerHealth.InputHandler();
         }
         else if (photonView.IsMine && playerHealth.isDead)
         {
             playerCameraSwitch.CheckForCameraSwitchInput();
         }
     }
-
+    public void SetChildrenMeshRenderersEnabled(bool isEnabled)
+    {
+        SkinnedMeshRenderer[] childMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer renderer in childMeshRenderers)
+        {
+            renderer.enabled = isEnabled;
+        }
+    }
     private void FixedUpdate()
     {
         if (photonView.IsMine && !playerHealth.isDead)

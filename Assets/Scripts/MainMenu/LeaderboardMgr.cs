@@ -19,6 +19,8 @@ public class LeaderboardMgr : MonoBehaviour
 
     private int score;
 
+    public AudioClip clickSFX;
+
     private void Awake()
     {
         GetPlayerProfile();
@@ -55,6 +57,8 @@ public class LeaderboardMgr : MonoBehaviour
 
     public void OnBack()
     {
+        GameEvents.m_instance.playNewAudioClip.Invoke(clickSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+
         leaderboardCanvas.SetActive(false);
         mainCanvas.SetActive(true);
     }
@@ -66,6 +70,8 @@ public class LeaderboardMgr : MonoBehaviour
 
     public void OnGetGlobalTimerLeaderboard()
     {
+        GameEvents.m_instance.playNewAudioClip.Invoke(clickSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+
         leaderboardCanvas.SetActive(true);
         mainCanvas.SetActive(false);
 

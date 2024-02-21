@@ -21,9 +21,12 @@ public class BossController : EnemyUnit
     [SerializeField] private GameObject[] camerasOriginalPos;
     [SerializeField] public Canvas BossHPCanvas;
     [SerializeField] public Image BossHPBar;
+    [SerializeField] public CapsuleCollider BossCollider;
+    [SerializeField] public BoxCollider HitboxCollider;
+    Vector3 StartBossCollider;
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private PhotonView photonView;
-    //[SerializeField] private Rigidbody rigidbody;
+    //SerializeField] private Rigidbody rigidbody;
     [SerializeField] public float AttackCD;
     [SerializeField] public float Skill1CD;
     [SerializeField] public float Skill2CD;
@@ -37,6 +40,8 @@ public class BossController : EnemyUnit
     float distance;
     float nearestDistance = 1000;
 
+    bool dashAttack = false;  
+    bool swipeAttack = false;
 
     STATES CURRENT_STATE = STATES.IDLE;
     enum STATES
@@ -51,11 +56,71 @@ public class BossController : EnemyUnit
         
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the collider belongs to an object tagged as "Player"
+        if (other.CompareTag("Player"))
+        {
+            // Perform actions when the hitbox collider overlaps with the player
+            if (dashAttack)
+            {
+                Debug.Log("BOSS DASH INTO PLAYER.");
+            }
+            if (swipeAttack)
+            {
+                Debug.Log("BOSS SWIPE THE PLAYER.");
+            }
+
+            // You can perform additional actions here, such as dealing damage to the player or triggering events.
+        }
+    }
+
+    public void DashAttackSTART()
+    {
+        dashAttack = true;
+    }
+
+    public void DashAttackEND()
+    {
+        dashAttack = false;
+    }
+
+    public void SwipeAttackSTART()
+    {
+       swipeAttack = true;
+    }
+
+    public void SwipeAttackEND()
+    {
+        swipeAttack = false;
+    }
+
+
+    //public void HitCollideEvent(string moveName)
+    //{
+
+    //    Debug.Log("Hit event: " + moveName);
+
+
+    //    switch (moveName)
+    //    {
+    //        case "Dash_Attack":
+    //            Debug.Log("Hitbox DASH HIT PLAYER.");
+    //            break;
+    //        case "Swipe_Attack":
+    //            Debug.Log("Hitbox SWIPE ATTACK HIT PLAYER.");
+    //            break;
+    //        default:
+    //            // Handle other moves
+    //            break;
+    //    }
+    //}
+
     public override void Init()
     {
         base.Init();
-    
-        //BossHPCanvas.enabled = false;
+        StartBossCollider = BossCollider.center;
+         //BossHPCanvas.enabled = false;
         players = GameObject.FindGameObjectsWithTag("Player");
         for (int i = 0; i < players.Length; i++)
         {
@@ -95,7 +160,7 @@ public class BossController : EnemyUnit
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
             PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYDIEEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
         }
-
+        navMeshAgent.speed = 0;
 
         // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         //Destroy(gameObject, 1.0f);
@@ -106,11 +171,11 @@ public class BossController : EnemyUnit
 
     private void Update()
     {
-        Debug.Log(health_unit + " / " + max_health_unit);
+       // Debug.Log(health_unit + " / " + max_health_unit);
         BossHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
         //Debug.Log("dist "+ range_unit);
-        Debug.Log("current state: " + CURRENT_STATE);
+       // Debug.Log("current state: " + CURRENT_STATE);
 
         angle += circleSpeed * Time.deltaTime;
 
@@ -155,12 +220,12 @@ public class BossController : EnemyUnit
             
             }
 
-            if( range_unit < 5)
+            if( range_unit < 6)
             {
                 CURRENT_STATE = STATES.ATTACK;
             }
           
-            else if (range_unit < 15)
+            else if (range_unit < 35)
             {
 
                 CURRENT_STATE = STATES.WALKING;
@@ -175,9 +240,26 @@ public class BossController : EnemyUnit
 
             if (CURRENT_STATE == STATES.ATTACK)
             {
+
+                //BossCollider.transform.forward = BossCollider.transform.forward + new Vector3(0, 0, 5);
+                Vector3 hitBox = new Vector3(0, 1.7f, 5.15f);
+
+                
                 animator.SetTrigger("IsAttacking");
+
+                if(animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
+                {
+                    //BossCollider.center = hitBox;
+                    BossCollider.center = Vector3.Lerp(BossCollider.center, hitBox, 1.5f * Time.deltaTime);
+                    //if(HitboxCollider)
+                }
                 //animator.SetBool("IsHit", true);
                 //CURRENT_STATE = STATES.IDLE;
+            }
+            else
+            {
+
+                BossCollider.center = StartBossCollider;
             }
 
             if (CURRENT_STATE == STATES.HIT)
@@ -202,11 +284,11 @@ public class BossController : EnemyUnit
         {
             Debug.LogWarning("HDIAHDIA");
             animator.SetBool("IsDead", true);
-            enabled = false;
+           // enabled = false;
             // navMeshAgent.destination = movePositionTransform.position;
         }
 
-        Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
+        //Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
         //animator.SetTrigger("IsHit");
     }
 

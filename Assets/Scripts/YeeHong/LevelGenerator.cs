@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
@@ -12,7 +12,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator m_instance = null;
-
+    public NavMeshSurface navMeshSurface;
 
     [Header("Prefab details")]
     [SerializeField] GameObject platform_default_prefab;
@@ -102,6 +102,9 @@ public class LevelGenerator : MonoBehaviour
         bridge_length_max = int.Parse(dataSplit[9]);
         neighbour_spawn_chance = int.Parse(dataSplit[10]);
 
+        navMeshSurface.BuildNavMesh();
+        Debug.Log("dog hi");
+
         RemakeIsland(int.Parse(dataSplit[0]));
     }
 
@@ -115,7 +118,7 @@ public class LevelGenerator : MonoBehaviour
         if (m_instance == null)
             m_instance = this;
         islands_list = new();
-
+        Debug.Log("dog awake");
         //RemakeIsland(1);
     }
     private void Update()
@@ -182,6 +185,9 @@ public class LevelGenerator : MonoBehaviour
         }
 
         level_generated = true;
+
+        navMeshSurface.BuildNavMesh();
+        Debug.Log("dog build");
         UpdateClientLoadedMap();
     }
 

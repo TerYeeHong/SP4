@@ -199,6 +199,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         //PhotonNetwork.LocalPlayer.;
         return true;
     }
+
     private bool CheckAllPlayerLoadedMap()
     {
         foreach (Player p in playerList)

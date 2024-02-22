@@ -135,7 +135,7 @@ public class LevelGenerator : MonoBehaviour
         //    RemakeIsland(1);
     }
 
-    void RemakeIsland(int seed)
+    public void RemakeIsland(int seed)
     {
         level_generated = false;
         UpdateClientLoadedMap();

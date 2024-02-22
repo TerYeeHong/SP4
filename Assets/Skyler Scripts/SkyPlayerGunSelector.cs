@@ -11,12 +11,12 @@ public class SkyPlayerGunSelector : MonoBehaviour
     private Transform gunParent;
     [SerializeField]
     private List<GameObject> gunPrefabs; // Store gun prefabs here
+    public GameObject sniperScope;
 
     [Space]
     [Header("Runtime Filled")]
     public GameObject activeGunGameObject; // Holds the active gun GameObject
     public SkyGun activeGun; // Holds the SkyGun component of the active gun
-
     private void Start()
     {
         // Initialize with the first gun as the default active gun
@@ -101,11 +101,21 @@ public class SkyPlayerGunSelector : MonoBehaviour
         {
             print("BEN");
             activeGun.PlayerAim(true, GetComponent<PhotonView>());
+            if (activeGun.Type == SkylerGunType.Sniper)
+            {
+                sniperScope.SetActive(true);
+                activeGun.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
         if (Input.GetButtonUp("Fire2"))
         {
             print("BNE");
             activeGun.PlayerAim(false, GetComponent<PhotonView>());
+            if (activeGun.Type == SkylerGunType.Sniper)
+            {
+                sniperScope.SetActive(false);
+                activeGun.GetComponent<MeshRenderer>().enabled = true;
+            }
         }
     }
 }

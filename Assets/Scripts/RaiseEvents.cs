@@ -21,7 +21,7 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
     public const byte ENEMYDIEEVENT = 8;
 
 
-    public const byte PLAYER_ANIMATION_CHANGE = 8;
+    public const byte PLAYER_ANIMATION_CHANGE = 13;
 
     public const byte PLAYER_SHOOT = 9;
     public const byte PLAYER_SWITCH_GUN = 10;
@@ -34,6 +34,8 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
     public const byte SETINACTIVEEVENT = 32;
     public const byte SETACTIVEEVENT = 33;
 
+    public const byte PROJECTILE_SHOOT = 41;
+    public const byte PROJECTILE_DAMAGE = 42;
 
     public const byte GENERATELEVEL = 101;
 
@@ -225,37 +227,6 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
             }
         }
 
-        if (eventCode == UNIT_DAMAGED)
-        {
-            print("TRYING TO DAMAGE UNIT");
-            object[] data = (object[])photonEvent.CustomData;
-            int targetViewID = (int)data[0];
-            int damage = (int)data[1];
-
-            PhotonView targetView = PhotonView.Find(targetViewID);
-            if (targetView != null)
-            {
-                Unit enemyUnit = targetView.GetComponent<Unit>();
-                if (enemyUnit != null)
-                {
-                    if (enemyUnit.TakeDamage(damage))
-                    {
-                        //blessingMonument.Activate();
-                    }
-                    //print("Gun Active");
-                    //// Now, use the active gun to play the trail
-                    //gunSelector.SwitchToNewGun(index);
-                }
-
-                //If i broke the orb, i can get a blessing
-                if (targetView.IsMine)
-                {
-
-                }
-            }
-
-            
-        }
         if (eventCode == PLAYER_AIM)
         {
             object[] data = (object[])photonEvent.CustomData;
@@ -277,23 +248,6 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
             }
         }
 
-        if (eventCode == UNIT_DAMAGED)
-        {
-            print("TRYING TO DAMAGE UNIT");
-            object[] data = (object[])photonEvent.CustomData;
-            int targetViewID = (int)data[0];
-            int damage = (int)data[1];
-
-            PhotonView targetView = PhotonView.Find(targetViewID);
-            if (targetView != null)
-            {
-                Unit enemyUnit = targetView.GetComponent<Unit>();
-                if (enemyUnit != null)
-                {
-                    enemyUnit.TakeDamage(damage);
-                }
-            }
-        }
         if (eventCode == PLAYER_AIM)
         {
             object[] data = (object[])photonEvent.CustomData;
@@ -333,8 +287,31 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
             }
 
         }
+        if (eventCode == PROJECTILE_SHOOT)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            int shooterViewID = (int)data[0];
+            Vector3 position = (Vector3)data[1];
+            Vector3 rotationEulerAngles = (Vector3)data[2];
+            Quaternion rotation = Quaternion.Euler(rotationEulerAngles);
+            Vector3 shootDirection = (Vector3)data[3];
+            float speed = (float)data[4];
+            float lifetime = (float)data[5];
 
+            print("Projectile shoot event called");
 
+            PhotonView shooterView = PhotonView.Find(shooterViewID);
+            SkyPlayerGunSelector gunSelector = shooterView.GetComponent<SkyPlayerGunSelector>();
+            if (shooterView != null)
+            {
+                print("launcher found");
+                SkyGun gun = gunSelector.activeGun;
+                if (gun != null)
+                {
+                    gun.ShootProjectile(position, rotation, shootDirection, speed, lifetime);
+                }
+            }
+        }
 
     }
 }

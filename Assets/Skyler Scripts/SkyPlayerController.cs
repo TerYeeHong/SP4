@@ -29,8 +29,7 @@ public class SkyPlayerController : MonoBehaviour
     SkyPlayerShooting playerShooting;
     SkyPlayerGunSelector gunSelector;
     SkyCameraSwitch playerCameraSwitch;
-    SkyPlayerHealth playerHealth;
- 
+    public SkyPlayerHealth playerHealth;
     private PhotonView photonView;
     public GameObject body;
     public Vector3 bodyPos = new Vector3(0, -0.9f, 0);
@@ -51,6 +50,8 @@ public class SkyPlayerController : MonoBehaviour
         {
             SetChildrenMeshRenderersEnabled(false);
         }
+
+        SkyWinManager.instance.playerControllers.Add(this);
     } 
 
     // Update is called once per frame

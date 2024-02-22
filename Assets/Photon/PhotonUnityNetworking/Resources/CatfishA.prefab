@@ -1322,6 +1322,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   floating_item_prefab: {fileID: 0}
+  isDead: 1
   photonView: {fileID: 0}
   enemy_type: {fileID: 11400000, guid: 04ebc8d900668654e88c2f0858f01cc2, type: 2}
   enemy_race_unit: 0

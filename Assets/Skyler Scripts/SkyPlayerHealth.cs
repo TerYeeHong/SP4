@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class SkyPlayerHealth : Unit
 {
     public bool isDead;
     public float revivalRadius = 5f;
+    [SerializeField] public Canvas playerHPCanvas;
+    [SerializeField] public Image playerHPBar;
     [SerializeField] private float reviveTime = 5f;
 
     public Color gizmoColor = Color.yellow;
@@ -25,7 +28,7 @@ public class SkyPlayerHealth : Unit
         if (photonView.IsMine)
             player.SetChildrenMeshRenderersEnabled(true);
         GetComponent<SkyPlayerAnimation>().ChangeAnimationState("Falling Back Death");
-        GameEvents.m_instance.unitDied.Invoke(unit_type.name);
+       // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
     }
 
     public override bool TakeDamage(int damage)
@@ -38,6 +41,7 @@ public class SkyPlayerHealth : Unit
             damage += Random.Range(-2, 2);
 
         health_unit -= damage;
+       
 
         if (damage > 0)
             GameEvents.m_instance.createTextPopup.Invoke(damage.ToString(), transform.position, Color.white);
@@ -48,11 +52,48 @@ public class SkyPlayerHealth : Unit
 
         if (health_unit <= 0)
         {
+            health_unit = 0;
             collide_with_attacks = false;
             photonView.RPC("OnDeathRPC", RpcTarget.All);
             return true;
         }
         return false;
+    }
+
+    public bool HealTarget(int heal)
+    {
+        if (!enabled)
+            return true;
+
+        //Randomise it a bit
+        if (heal > 0)
+            heal += UnityEngine.Random.Range(-2, 2);
+
+        health_unit += heal;
+
+
+        if (heal > 0)
+            GameEvents.m_instance.createTextPopup.Invoke(heal.ToString(), transform.position, Color.white);
+
+        if (team_unit == UnitType.UNIT_TEAM.PLAYER)
+        {
+
+        }
+
+        if (health_unit <= 0)
+        {
+            health_unit = 0;
+            collide_with_attacks = false;
+            photonView.RPC("OnDeathRPC", RpcTarget.All);
+            return true;
+        }
+        return false;
+    }
+
+
+    public void HandleHealthBar()
+    {
+        playerHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
     }
 
     public void InputHandler()

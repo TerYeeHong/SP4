@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkyPlayerController : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class SkyPlayerController : MonoBehaviour
     SkyPlayerGunSelector gunSelector;
     SkyCameraSwitch playerCameraSwitch;
     SkyPlayerHealth playerHealth;
+ 
     private PhotonView photonView;
     public GameObject body;
     public Vector3 bodyPos = new Vector3(0, -0.9f, 0);
@@ -54,7 +56,8 @@ public class SkyPlayerController : MonoBehaviour
             gunSelector.ADSActiveGun();
 
             playerHealth.AttemptToRevive();
-            playerHealth.InputHandler();
+            playerHealth.InputHandler();  
+            playerHealth.HandleHealthBar();
         }
         else if (photonView.IsMine && playerHealth.isDead)
         {

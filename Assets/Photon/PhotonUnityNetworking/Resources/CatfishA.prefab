@@ -1220,6 +1220,19 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0.76, z: 0}
+--- !u!65 &8262707582813339524
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3840401418605293961}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.84, z: 0}
 --- !u!95 &9051413008889532089
 Animator:
   serializedVersion: 5
@@ -1298,6 +1311,7 @@ MonoBehaviour:
   floating_item_prefab: {fileID: 0}
   photonView: {fileID: 0}
   enemy_type: {fileID: 0}
+  enemy_race_unit: 0
   range_unit: 5
   rarity_unit: 1
   navMeshAgent: {fileID: 968977804}
@@ -1305,6 +1319,7 @@ MonoBehaviour:
   movePositionTransform: {fileID: 0}
   animator: {fileID: 9051413008889532089}
   players: []
+  targetPlayer: {fileID: 0}
   m_Thrust: 20
 --- !u!195 &968977804
 NavMeshAgent:
@@ -1313,7 +1328,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3840401418605293961}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 1.5
@@ -1328,19 +1343,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!65 &8262707582813339524
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3840401418605293961}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.84, z: 0}
 --- !u!4 &4467579706781182771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 475d05aae8eb3a94882ab417b6df0f25,

@@ -15,6 +15,7 @@ public class EnemyController : EnemyUnit
     [SerializeField] private Transform movePositionTransform;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] players;
+    [SerializeField] private GameObject targetPlayer;
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private Rigidbody rigidbody;
@@ -39,22 +40,13 @@ public class EnemyController : EnemyUnit
     public override void Init()
     {
         base.Init();
-        navMeshAgent.speed = speed_unit;
-        players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
-        {
-            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
-            if(distance < nearestDistance)
-            {
-                movePositionTransform = players[i].transform;
-            }
-        }
-        
+        // navMeshAgent.speed = speed_unit;
+        FindNearestPlayer();
         //foreach (GameObject playerObj in GameObject.FindGameObjectsWithTag("Player"))
         //{
         //    if (playerObj.name == "Player")
         //    {
-                
+
         //        movePositionTransform = playerObj.transform;
         //    }
         //}
@@ -73,8 +65,12 @@ public class EnemyController : EnemyUnit
             if (attackBasic)
             {
                 Debug.Log("FISH ATTACK PLAYER.");
+                if (other.GetComponent<SkyPlayerHealth>().Health > 0)
+                {
+                    other.GetComponent<SkyPlayerHealth>().TakeDamage(10);
+                }
+
             }
-          
 
             // You can perform additional actions here, such as dealing damage to the player or triggering events.
         }
@@ -102,6 +98,51 @@ public class EnemyController : EnemyUnit
         attackBasic = false;
     }
 
+    public void FindNearestPlayer()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                movePositionTransform = players[i].transform;
+                targetPlayer = players[i];
+            }
+        }
+    }
+
+
+    public bool HealTarget(int heal)
+    {
+        if (!enabled)
+            return true;
+
+        //Randomise it a bit
+        if (heal > 0)
+            heal += UnityEngine.Random.Range(-2, 2);
+
+        health_unit += heal;
+
+
+        if (heal > 0)
+            GameEvents.m_instance.createTextPopup.Invoke(heal.ToString(), transform.position, Color.white);
+
+        if (team_unit == UnitType.UNIT_TEAM.PLAYER)
+        {
+
+        }
+
+        if (health_unit <= 0)
+        {
+            health_unit = 0;
+            collide_with_attacks = false;
+            photonView.RPC("OnDeathRPC", RpcTarget.All);
+            return true;
+        }
+        return false;
+    }
+
     public override void OnDeath()
     {
         base.OnDeath();
@@ -127,74 +168,77 @@ public class EnemyController : EnemyUnit
     private void Update()
     {
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
-        //Debug.Log("dist "+ range_unit);
-        //Debug.Log("current state: " + CURRENT_STATE);
 
-        if (CURRENT_STATE != STATES.DEAD)
-        {
+        FindNearestPlayer();
 
-            if (range_unit < 3)
+            //Debug.Log("dist "+ range_unit);
+            //Debug.Log("current state: " + CURRENT_STATE);
+
+        if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
             {
 
-                CURRENT_STATE = STATES.ATTACK;
+                if (range_unit < 3)
+                {
+
+                    CURRENT_STATE = STATES.ATTACK;
+                }
+                else if (range_unit < 20)
+                {
+
+                    CURRENT_STATE = STATES.WALKING;
+                }
+                else if (movePositionTransform.position == navMeshAgent.destination)
+                {
+
+                    CURRENT_STATE = STATES.IDLE;
+                    //animator.SetBool("IsHit", false);
+                }
+
+                if (CURRENT_STATE == STATES.HIT)
+                {
+                    animator.SetTrigger("IsHit");
+                    //animator.SetBool("IsHit", true);
+                    //CURRENT_STATE = STATES.IDLE;
+                }
+                else if (CURRENT_STATE == STATES.ATTACK)
+                {
+                    animator.SetTrigger("IsAttacking");
+
+
+                }
+                else if (CURRENT_STATE == STATES.IDLE)
+                {
+                    animator.SetBool("IsMoving", false);
+                }
+                else if (CURRENT_STATE == STATES.WALKING)
+                {
+
+                    animator.SetBool("IsMoving", true);
+                    //moving = true;
+                    speed_unit = 2;
+                    navMeshAgent.speed = speed_unit;
+                    navMeshAgent.destination = movePositionTransform.position;
+                }
+
+
+
             }
-            else if (range_unit < 20)
+            else if (CURRENT_STATE == STATES.DEAD)
             {
-
-                CURRENT_STATE = STATES.WALKING;
-            }
-            else if (movePositionTransform.position == navMeshAgent.destination)
-            {
-
-                CURRENT_STATE = STATES.IDLE;
-                //animator.SetBool("IsHit", false);
+                Debug.LogWarning("HDIAHDIA");
+                animator.SetBool("IsDead", true);
+                enabled = false;
+                // navMeshAgent.destination = movePositionTransform.position;
             }
 
-            if (CURRENT_STATE == STATES.HIT)
-            {
-                animator.SetTrigger("IsHit");
-                //animator.SetBool("IsHit", true);
-                //CURRENT_STATE = STATES.IDLE;
-            }
-            else if (CURRENT_STATE == STATES.ATTACK)
-            {
-                animator.SetTrigger("IsAttacking");
-             
+            Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
 
-            }
-            else if (CURRENT_STATE == STATES.IDLE)
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
             {
-                animator.SetBool("IsMoving", false);
-            }
-            else if (CURRENT_STATE == STATES.WALKING)
-            {
-
-                animator.SetBool("IsMoving", true);
-                //moving = true;
-                speed_unit = 2;
+                speed_unit = 0;
                 navMeshAgent.speed = speed_unit;
-                navMeshAgent.destination = movePositionTransform.position;
             }
-
-       
-
-        }
-        else if (CURRENT_STATE == STATES.DEAD)
-        {
-            Debug.LogWarning("HDIAHDIA");
-            animator.SetBool("IsDead", true);
-            enabled = false;
-            // navMeshAgent.destination = movePositionTransform.position;
-        }
-
-        Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
-        {
-            speed_unit = 0;
-            navMeshAgent.speed = speed_unit;
-        }
-
+        
         //animator.SetTrigger("IsHit");
     }
 

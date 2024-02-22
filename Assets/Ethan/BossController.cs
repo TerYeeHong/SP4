@@ -23,6 +23,7 @@ public class BossController : EnemyUnit
     [SerializeField] public Image BossHPBar;
     [SerializeField] public CapsuleCollider BossCollider;
     [SerializeField] public BoxCollider HitboxCollider;
+    [SerializeField] private GameObject targetPlayer;
     Vector3 StartBossCollider;
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private PhotonView photonView;
@@ -65,10 +66,19 @@ public class BossController : EnemyUnit
             if (dashAttack)
             {
                 Debug.Log("BOSS DASH INTO PLAYER.");
+                if (other.GetComponent<SkyPlayerHealth>().Health > 0)
+                {
+                    other.GetComponent<SkyPlayerHealth>().TakeDamage(20);
+                }
+
             }
             if (swipeAttack)
             {
                 Debug.Log("BOSS SWIPE THE PLAYER.");
+                if (other.GetComponent<SkyPlayerHealth>().Health > 0)
+                {
+                    other.GetComponent<SkyPlayerHealth>().TakeDamage(35);
+                }
             }
 
             // You can perform additional actions here, such as dealing damage to the player or triggering events.
@@ -96,6 +106,20 @@ public class BossController : EnemyUnit
     }
 
 
+    public void FindNearestPlayer()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                movePositionTransform = players[i].transform;
+                targetPlayer = players[i];
+            }
+        }
+    }
+
     //public void HitCollideEvent(string moveName)
     //{
 
@@ -119,17 +143,7 @@ public class BossController : EnemyUnit
     public override void Init()
     {
         base.Init();
-        StartBossCollider = BossCollider.center;
-         //BossHPCanvas.enabled = false;
-        players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
-        {
-            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
-            if (distance < nearestDistance)
-            {
-                movePositionTransform = players[i].transform;
-            }
-        }
+        FindNearestPlayer();
 
     }
 
@@ -175,11 +189,13 @@ public class BossController : EnemyUnit
         BossHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
         //Debug.Log("dist "+ range_unit);
-       // Debug.Log("current state: " + CURRENT_STATE);
+        // Debug.Log("current state: " + CURRENT_STATE);
+
+        FindNearestPlayer();
 
         angle += circleSpeed * Time.deltaTime;
 
-        if (CURRENT_STATE != STATES.DEAD)
+        if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
         {
             if (CURRENT_STATE == STATES.INTRO)
             {
@@ -292,6 +308,37 @@ public class BossController : EnemyUnit
         //animator.SetTrigger("IsHit");
     }
 
+
+
+    public bool HealTarget(int heal)
+    {
+        if (!enabled)
+            return true;
+
+        //Randomise it a bit
+        if (heal > 0)
+            heal += UnityEngine.Random.Range(-2, 2);
+
+        health_unit += heal;
+
+
+        if (heal > 0)
+            GameEvents.m_instance.createTextPopup.Invoke(heal.ToString(), transform.position, Color.white);
+
+        if (team_unit == UnitType.UNIT_TEAM.PLAYER)
+        {
+
+        }
+
+        if (health_unit <= 0)
+        {
+            health_unit = 0;
+            collide_with_attacks = false;
+            photonView.RPC("OnDeathRPC", RpcTarget.All);
+            return true;
+        }
+        return false;
+    }
     public override bool TakeDamage(int damage)
     {
         //health_unit -= damage;

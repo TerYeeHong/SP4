@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\Manager\InputController.cs" />
     <Compile Include="Assets\Scripts\LogRegScripts\SceneMgt.cs" />
     <Compile Include="Assets\Scripts\Dissolve.cs" />
+    <Compile Include="Assets\Ethan\LizardEnemyController.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathBezier2d.cs" />
     <Compile Include="Assets\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\Ability\AbilityDebug.cs" />

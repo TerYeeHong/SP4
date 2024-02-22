@@ -11,6 +11,7 @@ public class EnemyUnitType : ScriptableObject
     public enum ENEMY_RACE
     {
         FISH = 0,
+        LIZARD,
         WOLF,
 
         NUM_TOTAL,

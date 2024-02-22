@@ -9,10 +9,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{E5FF7FA7-505F-4773-8F9C-59BAFAE56A43}</ProjectGuid>
+    <ProjectGuid>{FC4F1563-1F0F-95C6-A887-4AA4CBE5E6FF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>PhotonUnityNetworking.Editor</AssemblyName>
+    <AssemblyName>Voice.FMOD.Editor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -56,24 +56,10 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\PunSceneSettingsInspector.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\ReordableList\ReorderableListResources.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\ServerSettingsInspector.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\Views\PhotonTransformViewClassicEditor.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\Views\PhotonRigidbodyViewEditor.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\Views\MonoBehaviourPunEditor.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\PhotonViewHandler.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\Views\PhotonAnimatorViewEditor.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\Views\PhotonRigidbody2DViewEditor.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\PhotonEditor.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\Views\PhotonTransformViewEditor.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\PunSceneSettings.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\PhotonViewInspector.cs" />
-    <Compile Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\PhotonGUI.cs" />
+    <Compile Include="Assets\Photon\PhotonVoice\Code\FMOD\Editor\FMODHelpersMenu.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\PhotonUnityNetworking.Editor.asmdef" />
-    <None Include="Assets\Photon\PhotonUnityNetworking\Code\Editor\ReordableList\LICENSE.txt" />
+    <None Include="Assets\Photon\PhotonVoice\Code\FMOD\Editor\PhotonVoice.FMOD.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -786,13 +772,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="PhotonVoice.Editor.csproj">
+      <Project>{BEF80600-84E2-C82B-E0D1-59814DFCD115}</Project>
+      <Name>PhotonVoice.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="PhotonRealtime.csproj">
       <Project>{48683608-B7C6-873A-38F3-64AD697A8BE0}</Project>
       <Name>PhotonRealtime</Name>
     </ProjectReference>
-    <ProjectReference Include="PhotonUnityNetworking.csproj">
-      <Project>{E6541B82-1469-0116-0DF3-1336D94B47DF}</Project>
-      <Name>PhotonUnityNetworking</Name>
+    <ProjectReference Include="PhotonVoice.API.csproj">
+      <Project>{6F65F10D-982C-2BA6-1397-6D375EBE5779}</Project>
+      <Name>PhotonVoice.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="PhotonVoice.csproj">
+      <Project>{31E9562A-FD1E-CF86-80F2-372251952023}</Project>
+      <Name>PhotonVoice</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

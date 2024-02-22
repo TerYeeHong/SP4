@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: d4edb812-34ad-49bc-af70-8c0d51340479
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: 16e4b8b3-07fa-45e0-99a7-625cc9c14180
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
@@ -34,27 +34,24 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CantHearYou
+  - ChangeColour
   - ClickRpc
   - DestroyRpc
+  - HeresWhy
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - DisableEnemies
-  - SpawnFromPool
   - InstantiateEnemy
-  - ActivateFish
-  - ChangeActiveGun
-  - SwitchGunRPC
-  - RPC_SelectGun
-  - SetGameobjectInactive
-  - AddCameraToPlayerRPC
   - OnDeathRPC
   - OnReviveRPC
+  - RespawnSpaceship
   - SetActive
   - SetPosition
   - ActivateLoseScreen
   - ActivateWinScreen
   - DeactivateScreens
+  - SetGameobjectInactive
+  - SpawnFromPool
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

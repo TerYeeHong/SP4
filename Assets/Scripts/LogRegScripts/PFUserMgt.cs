@@ -16,19 +16,14 @@ public class PFUserMgt : MonoBehaviour
 
     [Header("Input Fields")]
     [SerializeField] TMP_InputField if_usernameReg;
-    [SerializeField] TMP_InputField if_usernameLogin;
-    [SerializeField] TMP_InputField if_emailReset;
     [SerializeField] TMP_InputField if_emailReg;
-    [SerializeField] TMP_InputField if_emailLogin;
+    [SerializeField] TMP_InputField if_Login;
     [SerializeField] TMP_InputField if_passwordReg;
-    [SerializeField] TMP_InputField if_passwordLoginEmail;
-    [SerializeField] TMP_InputField if_passwordLoginUser;
+    [SerializeField] TMP_InputField if_passwordLogin;
 
     [Header("Canvas")]
-    [SerializeField] GameObject loginEmailCanvas;
-    [SerializeField] GameObject loginUserCanvas;
+    [SerializeField] GameObject loginCanvas;
     [SerializeField] GameObject regCanvas;
-    [SerializeField] GameObject resetPassCanvas;
 
     public SceneMgt sceneMgt;
 
@@ -40,9 +35,7 @@ public class PFUserMgt : MonoBehaviour
         endTransition.SetActive(true);
 
         regCanvas.SetActive(false);
-        resetPassCanvas.SetActive(false);
-        loginEmailCanvas.SetActive(true);
-        loginUserCanvas.SetActive(false);
+        loginCanvas.SetActive(true);
     }
 
     void UpdateMsg(string msg)
@@ -60,33 +53,13 @@ public class PFUserMgt : MonoBehaviour
     {
         if (buttonNum == 1) //reg -> login email
         {
-            loginEmailCanvas.SetActive(true);
+            loginCanvas.SetActive(true);
             regCanvas.SetActive(false);
         }
         else if (buttonNum == 2) // login email -> reg
         {
-            loginEmailCanvas.SetActive(false);
+            loginCanvas.SetActive(false);
             regCanvas.SetActive(true);
-        }
-        else if (buttonNum == 3) // login email -> reset
-        {
-            resetPassCanvas.SetActive(true);
-            loginEmailCanvas.SetActive(false);
-        }
-        else if (buttonNum == 4) // reset -> login email
-        {
-            resetPassCanvas.SetActive(false);
-            loginEmailCanvas.SetActive(true);
-        }
-        else if (buttonNum == 5) // login email -> login username
-        {
-            loginEmailCanvas.SetActive(false);
-            loginUserCanvas.SetActive(true);
-        }
-        else if (buttonNum == 6) // login username -> login email
-        {
-            loginEmailCanvas.SetActive(true);
-            loginUserCanvas.SetActive(false);
         }
     }
 
@@ -116,23 +89,6 @@ public class PFUserMgt : MonoBehaviour
         PlayFabClientAPI.UpdateUserTitleDisplayName(req, OnDisplayNameUpdate, OnError);
     }
 
-    public void OnButtonResetPassword() //resest password request
-    {
-        var resetReq = new SendAccountRecoveryEmailRequest //create req object
-        {
-            Email = if_emailReset.text,
-            TitleId = "303F8"
-        };
-        //execute request by calling playfab api
-        PlayFabClientAPI.SendAccountRecoveryEmail(resetReq, OnResetSucc, OnError);
-    }
-
-    void OnResetSucc(SendAccountRecoveryEmailResult r)
-    {
-        msgBox.color = Color.white;
-        UpdateMsg("Reset Successful! Check your Email to reset password");
-    }
-
     public void OnGuestLogin()// guest login
     {
         var loginRequest = new LoginWithEmailAddressRequest
@@ -149,34 +105,38 @@ public class PFUserMgt : MonoBehaviour
         PlayFabClientAPI.LoginWithEmailAddress(loginRequest, OnLoginSucc, OnError);
     }
 
-    public void OnButtonLoginEmail()// login using email + password
+    public void OnButtonLogin()
     {
+        string input = if_Login.text;
+        string password = if_passwordLogin.text;
+
+        // Create a login request
         var loginRequest = new LoginWithEmailAddressRequest
         {
-            Email = if_emailLogin.text,
-            Password = if_passwordLoginEmail.text,
-            //to get player profile, to get display name
+            Email = input,
+            Password = password,
             InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
             {
                 GetPlayerProfile = true
             }
         };
-        PlayFabClientAPI.LoginWithEmailAddress(loginRequest, OnLoginSucc, OnError);
-    }
 
-    public void OnButtonLoginUserName()// login using username + password
-    {
-        var loginRequest = new LoginWithPlayFabRequest
+        // Attempt to log in with the provided email
+        PlayFabClientAPI.LoginWithEmailAddress(loginRequest, OnLoginSucc, error =>
         {
-            Username = if_usernameLogin.text,
-            Password = if_passwordLoginUser.text,
-            //to get player profile, to get display name
-            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+            // If login with email fails, assume input is a username and attempt login with username
+            var loginWithUsernameRequest = new LoginWithPlayFabRequest
             {
-                GetPlayerProfile = true
-            }
-        };
-        PlayFabClientAPI.LoginWithPlayFab(loginRequest, OnLoginSucc, OnError);
+                Username = input,
+                Password = password,
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                {
+                    GetPlayerProfile = true
+                }
+            };
+
+            PlayFabClientAPI.LoginWithPlayFab(loginWithUsernameRequest, OnLoginSucc, OnError);
+        });
     }
 
     void OnLoginSucc(LoginResult r)

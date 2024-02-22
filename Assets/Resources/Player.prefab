@@ -1069,6 +1069,7 @@ GameObject:
   - component: {fileID: -5295066503411827543}
   - component: {fileID: -6357412559734486261}
   - component: {fileID: -7693879859838931682}
+  - component: {fileID: -6078496037436778383}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1405,6 +1406,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCanvas: {fileID: 7019409581837623351}
+--- !u!114 &-6078496037436778383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787938341435706200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e88565b78b17fe4dabb385648062ad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 3787938341306619098}
+  activationKey: 120
+  cooldownDuration: 10
+  abilityActive: 5
+  cooldownText: {fileID: 0}
+  enemyRenderer:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  sfx: {fileID: 8300000, guid: ad543b5c5ea8aed48a1b80a3a0e8a15e, type: 3}
+  dissolveAmt: 0
+  lizards: []
+  isXRayActive: 0
+  originalMat: {fileID: 2100000, guid: 14830531b59d3b443885c8aaacb7e16e, type: 2}
+  xrayMat: {fileID: 2100000, guid: aa9e114196bd6ab468bed92609f85cf0, type: 2}
 --- !u!1 &3787938341617956075
 GameObject:
   m_ObjectHideFlags: 0

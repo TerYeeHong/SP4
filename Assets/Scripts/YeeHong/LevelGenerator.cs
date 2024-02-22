@@ -126,6 +126,11 @@ public class LevelGenerator : MonoBehaviour
     {
         //if (Input.GetKeyDown(KeyCode.Space))
         //    RemakeIsland((int)System.DateTime.Now.Ticks);
+        if (Input.GetKey(KeyCode.I))
+        {
+            navMeshSurface.BuildNavMesh();
+            Debug.Log("I presse");
+        }
 
         //if (Input.GetKeyDown(KeyCode.V))
         //    RemakeIsland(1);

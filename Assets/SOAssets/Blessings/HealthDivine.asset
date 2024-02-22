@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8278051bc79cbae4e999472a0e367bce, type: 3}
+  m_Name: HealthDivine
+  m_EditorClassIdentifier: 
+  icon: {fileID: -2048202043, guid: 7d7a0aba59194c44580bfce8bdd959dc, type: 3}
+  m_name_status: Health Divine
+  m_have_duration: 0
+  m_active_duration: 0
+  m_rarity: 2
+  m_description: Max Health increase by 100
+  health_buff: 100
+  power_buff: 0
+  speed_buff: 0

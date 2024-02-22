@@ -3,6 +3,20 @@ using Photon.Pun; // Make sure to include the Photon.Pun namespace
 
 public class SkyCameraController : MonoBehaviour
 {
+    private void OnEnable()
+    {
+        GameEvents.m_instance.onLockInput.AddListener(OnLockInput);
+    }
+    private void OnDisable()
+    {
+        GameEvents.m_instance.onLockInput.RemoveListener(OnLockInput);
+    }
+    void OnLockInput(bool enable)
+    {
+        input_locked = enable;
+    }
+    bool input_locked = false;
+
     public Transform player; // Assign the player's transform here in the inspector
     public Transform cameraPivot;
     public float mouseSensitivity = 100f;
@@ -37,6 +51,9 @@ public class SkyCameraController : MonoBehaviour
     }
     void Update()
     {
+        if (input_locked)
+            return;
+
         // Only handle mouse input if the camera belongs to the local player
         if (photonView != null && photonView.IsMine && !photonView.GetComponent<SkyPlayerHealth>().isDead)
         {

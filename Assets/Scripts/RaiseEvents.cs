@@ -73,8 +73,11 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
     public static event OnSetActive SetActiveEvent;
 
 
+
+
     public delegate void OnGenerateLevel(string data);
     public static event OnGenerateLevel GenerateLevelEvent;
+
 
     private void OnEnable()
     {

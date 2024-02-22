@@ -10,6 +10,8 @@ public static class PFGlobalData
     public static int epg = 0; //currency (El Primo Gems)
     public static int level = 1;
 
+    public static List<Status> blessings = new();
+
     public static void AddXP(int value)
     {
         //dont allow negative

@@ -24,6 +24,8 @@ public class GameEvents : MonoBehaviour
 
     [NonSerialized] public UnityEvent<InputController.REPLAY_STATUS, float> updateReplayStatus;
 
+    [NonSerialized] public UnityEvent<bool> onLockInput;
+
     //Gameplay Events
     [NonSerialized] public UnityEvent<bool> updatePlayerOnWater;
     [NonSerialized] public UnityEvent<string, Vector3, Color> createTextPopup;
@@ -64,6 +66,8 @@ public class GameEvents : MonoBehaviour
         createTextPopup = new UnityEvent<string, Vector3, Color>();
 
         unitDied = new UnityEvent<string>();
+
+        onLockInput = new UnityEvent<bool>();
 
         UnderwaterPostProcessEnable = new UnityEvent<bool>();
 

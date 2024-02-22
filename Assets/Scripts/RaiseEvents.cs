@@ -71,8 +71,11 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
     public static event OnSetActive SetActiveEvent;
 
 
+
+
     public delegate void OnGenerateLevel(string data);
     public static event OnGenerateLevel GenerateLevelEvent;
+
 
     private void OnEnable()
     {
@@ -236,12 +239,23 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 Unit enemyUnit = targetView.GetComponent<Unit>();
                 if (enemyUnit != null)
                 {
-                    enemyUnit.TakeDamage(damage);
+                    if (enemyUnit.TakeDamage(damage) && enemyUnit.TryGetComponent(out BlessingMonument blessingMonument))
+                    {
+
+                    }
                     //print("Gun Active");
                     //// Now, use the active gun to play the trail
                     //gunSelector.SwitchToNewGun(index);
                 }
+
+                //If i broke the orb, i can get a blessing
+                if (targetView.IsMine)
+                {
+
+                }
             }
+
+            
         }
         if (eventCode == PLAYER_AIM)
         {

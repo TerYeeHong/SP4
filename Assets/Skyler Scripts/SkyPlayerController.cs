@@ -7,6 +7,22 @@ using UnityEngine;
 
 public class SkyPlayerController : MonoBehaviour
 {
+
+    private void OnEnable()
+    {
+        GameEvents.m_instance.onLockInput.AddListener(OnLockInput);
+    }
+    private void OnDisable()
+    {
+        GameEvents.m_instance.onLockInput.RemoveListener(OnLockInput);
+    }
+    void OnLockInput(bool enable)
+    {
+        input_locked = enable;
+    }
+    bool input_locked = false;
+
+
     // Start is called before the first frame update
     SkyPlayerMovement playerMovement;
     SkyPlayerShooting playerShooting;
@@ -38,6 +54,9 @@ public class SkyPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (input_locked)
+            return;
+
         if (photonView.IsMine && !playerHealth.isDead)
         {
             playerMovement.HandleInput();

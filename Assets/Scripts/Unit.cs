@@ -243,6 +243,9 @@ public class Unit : MonoBehaviour
             dissolve.OnDeath(1.0f);
         }
 
+        
+
+
        // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         Destroy(gameObject, 11.0f);
     }

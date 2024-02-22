@@ -1219,7 +1219,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2.1265423
   m_Direction: 1
-  m_Center: {x: 0, y: 1.0527991, z: 0}
+  m_Center: {x: 0, y: 0.76, z: 0}
 --- !u!65 &8262707582813339524
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1332,6 +1332,7 @@ MonoBehaviour:
   movePositionTransform: {fileID: 0}
   animator: {fileID: 9051413008889532089}
   players: []
+  targetPlayer: {fileID: 0}
   m_Thrust: 20
 --- !u!195 &968977804
 NavMeshAgent:
@@ -1340,7 +1341,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3840401418605293961}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 1.5

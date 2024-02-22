@@ -15,6 +15,8 @@ public class LizardEnemyController : EnemyUnit
     [SerializeField] private Transform movePositionTransform;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] players;
+    [SerializeField] private GameObject targetPlayer;
+    EnemyController playerHit;
     AbilityXRay abilityXRay;
 
 
@@ -63,13 +65,27 @@ public class LizardEnemyController : EnemyUnit
         CURRENT_STATE = STATES.WALKING;
     }
 
+    public void FindNearestPlayer()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                movePositionTransform = players[i].transform;
+                targetPlayer = players[i];
+            }
+        }
+    }
+
+
     public override void Init()
     {
         dissolveAmt = 1.2f;
 
         base.Init();
-        navMeshAgent.speed = speed_unit;
-        players = GameObject.FindGameObjectsWithTag("Player");
+        FindNearestPlayer();
 
         for (int i = 0; i < players.Length; i++)
         {
@@ -88,6 +104,12 @@ public class LizardEnemyController : EnemyUnit
             if (attackBasic)
             {
                 Debug.Log("LIZARD ATTACK PLAYER.");
+
+                //other.GetComponent<EnemyController>().Health = playerHit.Health;
+                if (other.GetComponent<SkyPlayerHealth>().Health > 0)
+                {
+                    other.GetComponent<SkyPlayerHealth>().TakeDamage(15);
+                }
             }
         }
     }
@@ -121,12 +143,12 @@ public class LizardEnemyController : EnemyUnit
         Debug.Log("isDissolve: " + isDissolveInEffectPlaying);
         Debug.Log("state: " + CURRENT_STATE);
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
-
+        FindNearestPlayer();
         abilityXRay = FindAnyObjectByType<AbilityXRay>();
         if (CURRENT_STATE != STATES.ATTACK)
             isDissolveInEffectPlaying = false;
 
-        if (CURRENT_STATE != STATES.DEAD)
+        if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
         {
             if (range_unit < 3)
             {

@@ -135,6 +135,8 @@ public class SkyPlayerMovement : MonoBehaviour
         }
     }
 
+
+
     public void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);

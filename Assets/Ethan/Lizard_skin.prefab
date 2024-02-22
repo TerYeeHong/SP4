@@ -599,7 +599,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14830531b59d3b443885c8aaacb7e16e, type: 2}
+  - {fileID: 2100000, guid: 3cbcd6a588dac86489ea8f55ba4e1ed5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1342,10 +1342,12 @@ MonoBehaviour:
   animator: {fileID: 9110930946476113401}
   players: []
   m_Thrust: 20
+  invisTimer: 0
   isInvisible: 0
   enemyRenderer: {fileID: 4408897444016046495}
-  originalMat: {fileID: 2100000, guid: 14830531b59d3b443885c8aaacb7e16e, type: 2}
+  originalMat: {fileID: 2100000, guid: 3cbcd6a588dac86489ea8f55ba4e1ed5, type: 2}
   xrayMat: {fileID: 2100000, guid: aa9e114196bd6ab468bed92609f85cf0, type: 2}
+  dissolveAmt: 0
 --- !u!54 &1709029381191451219
 Rigidbody:
   m_ObjectHideFlags: 0

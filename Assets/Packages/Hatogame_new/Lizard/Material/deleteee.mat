@@ -40,7 +40,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Dissolve: -1.66
-    - _DissolveAmt: -0.27
+    - _DissolveAmt: -1
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors: []

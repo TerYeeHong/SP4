@@ -162,7 +162,7 @@ MonoBehaviour:
   dissolveAmt: 0
   lizards: []
   isXRayActive: 0
-  originalMat: {fileID: 2100000, guid: 14830531b59d3b443885c8aaacb7e16e, type: 2}
+  originalMat: {fileID: 2100000, guid: 3cbcd6a588dac86489ea8f55ba4e1ed5, type: 2}
   xrayMat: {fileID: 2100000, guid: aa9e114196bd6ab468bed92609f85cf0, type: 2}
 --- !u!4 &19350783
 Transform:
@@ -172,7 +172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19350781}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.294, y: 1.941, z: -5.492}
+  m_LocalPosition: {x: -12.86, y: 1.941, z: -22.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -401,6 +401,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8264649288849184499, guid: bc71b6500264cd448acd6d127b819b90,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8519014037035049344, guid: bc71b6500264cd448acd6d127b819b90,
         type: 3}

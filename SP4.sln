@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonUnityNetworking.Utili
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonChat", "PhotonChat.csproj", "{77BC1A09-9455-7283-49FE-5C419A23D12A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigRookGames", "BigRookGames.csproj", "{D3D24178-3974-B734-31F5-BEDAAA22AE50}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonUnityNetworking.Editor", "PhotonUnityNetworking.Editor.csproj", "{E5FF7FA7-505F-4773-8F9C-59BAFAE56A43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotonUnityNetworking.Utilities.PhotonPlayer.Editor", "PhotonUnityNetworking.Utilities.PhotonPlayer.Editor.csproj", "{D5B35EAE-09CF-8D45-81CE-B9F842A1E5F4}"
@@ -63,6 +65,10 @@ Global
 		{77BC1A09-9455-7283-49FE-5C419A23D12A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77BC1A09-9455-7283-49FE-5C419A23D12A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77BC1A09-9455-7283-49FE-5C419A23D12A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3D24178-3974-B734-31F5-BEDAAA22AE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3D24178-3974-B734-31F5-BEDAAA22AE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3D24178-3974-B734-31F5-BEDAAA22AE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D24178-3974-B734-31F5-BEDAAA22AE50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E5FF7FA7-505F-4773-8F9C-59BAFAE56A43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5FF7FA7-505F-4773-8F9C-59BAFAE56A43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5FF7FA7-505F-4773-8F9C-59BAFAE56A43}.Release|Any CPU.ActiveCfg = Release|Any CPU

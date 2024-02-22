@@ -116,6 +116,7 @@ public class SkyPlayerMovement : MonoBehaviour
         isRunning = Input.GetKey(KeyCode.LeftShift);
         if (isRunning && currentStamina > 0)
         {
+            currentSpeed *= runMultiplier;
             currentStamina -= staminaDepletionRate * Time.deltaTime;
             UpdateStaminaBar();
         }
@@ -148,7 +149,7 @@ public class SkyPlayerMovement : MonoBehaviour
 
        if (isGrounded)
         {
-            if (horizontalInput != 0 || verticalInput != 0)
+            if (horizontalInput == 1 || verticalInput == 1)
             {
                 rb.drag = groundDrag;
             }

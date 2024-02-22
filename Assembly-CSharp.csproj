@@ -146,6 +146,7 @@
     <Compile Include="Assets\Skyler Scripts\SkyPlayerHealth.cs" />
     <Compile Include="Assets\Scripts\UnitType.cs" />
     <Compile Include="Assets\Skyler Scripts\SkyCameraManager.cs" />
+    <Compile Include="Assets\Rocket.cs" />
     <Compile Include="Assets\Skyler Scripts\SkylerTrailConfig.cs" />
     <Compile Include="Assets\Scripts\TextPopupAnimation.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSpline.cs" />
@@ -1013,6 +1014,10 @@
     <ProjectReference Include="PhotonUnityNetworking.csproj">
       <Project>{E6541B82-1469-0116-0DF3-1336D94B47DF}</Project>
       <Name>PhotonUnityNetworking</Name>
+    </ProjectReference>
+    <ProjectReference Include="BigRookGames.csproj">
+      <Project>{D3D24178-3974-B734-31F5-BEDAAA22AE50}</Project>
+      <Name>BigRookGames</Name>
     </ProjectReference>
     <ProjectReference Include="PhotonUnityNetworking.Demos.csproj">
       <Project>{4EDD81A8-8151-F5B3-184D-6DCB9A3A0E87}</Project>

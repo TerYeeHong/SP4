@@ -31,10 +31,10 @@ public class SkyWinManager : MonoBehaviourPunCallbacks
             loseScreen.SetActive(false);
         }
 
-        if (CheckAllPlayersDead())
-        {
-            loseScreen.SetActive(true);
-        }
+        //if (CheckAllPlayersDead())
+        //{
+        //    loseScreen.SetActive(true);
+        //}
     }
 
     private bool CheckAllPlayersDead()

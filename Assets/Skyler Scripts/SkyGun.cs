@@ -31,6 +31,13 @@ public class SkyGun : MonoBehaviour
     public float adsSpeed = 10f;
     private Coroutine aimingCoroutine = null;
 
+    public int damage;
+    public bool isHitScan = true;
+
+    public GameObject projectilePrefab; 
+    public float projectileSpeed = 1000f; // Speed of the projectile
+    public float projectileLifetime = 5f; // How long the projectile exists before being automatically destroyed
+
     void Awake()
     {
         playerCamera = GetComponentInParent<Camera>();
@@ -72,7 +79,7 @@ public class SkyGun : MonoBehaviour
                 Unit playerUnit = photonView.GetComponent<Unit>();
 
                 if (unit != null && playerUnit != null)
-                    RaiseUnitHitEvent(unit, playerUnit.Power);
+                    RaiseUnitHitEvent(unit, damage + playerUnit.Power);
             }
             else
             {
@@ -82,6 +89,58 @@ public class SkyGun : MonoBehaviour
             }
         }
     }
+    // Adjusted ShootProjectile method to accept parameters
+    public void ShootProjectile(Vector3 position, Quaternion rotation, Vector3 shootDirection, float speed, float lifetime)
+    {
+        print("projectile being shot");
+        GameObject projectile = Instantiate(projectilePrefab, position, rotation);
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = shootDirection * speed; 
+        }
+
+        Destroy(projectile, lifetime);
+    }
+
+    public void ShootProjectileEvent(Camera playerCamera, PhotonView photonView)
+    {
+        print("ROcket Shooting event");
+        if (Time.time > ShootConfig.FireRate + LastShootTime && !isHitScan)
+        {
+            print("Can shoot.");
+
+            LastShootTime = Time.time;
+
+            Vector3 shootDirection = playerCamera.transform.forward;
+            object[] content = new object[] {
+            photonView.ViewID,
+            ShootPoint.position,
+            Quaternion.identity.eulerAngles,
+            shootDirection,
+            projectileSpeed,
+            projectileLifetime
+        };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            SendOptions sendOptions = new SendOptions { Reliability = true };
+
+            PhotonNetwork.RaiseEvent(RaiseEvents.PROJECTILE_SHOOT, content, raiseEventOptions, sendOptions);
+        }
+    }
+
+
+    // This would be in your projectile's script, called upon collision
+    public void ApplyDamageEvent(int targetViewID, int damageAmount)
+    {
+        object[] content = new object[] { targetViewID, damageAmount };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+
+        PhotonNetwork.RaiseEvent(RaiseEvents.PROJECTILE_DAMAGE, content, raiseEventOptions, sendOptions);
+    }
+
+
     void RaiseUnitHitEvent(Unit target, int damage)
     {
         if (target.GetComponent<PhotonView>() != null)
@@ -187,7 +246,7 @@ public class SkyGun : MonoBehaviour
         {
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, normalFOV, adsSpeed * Time.deltaTime);
             transform.localPosition = Vector3.Lerp(transform.localPosition, SpawnPoint, adsSpeed * Time.deltaTime);
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, originalRotation, adsSpeed * Time.deltaTime);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(SpawnRotation), adsSpeed * Time.deltaTime);
             aimingCoroutine = null;
             yield return null;
         }

@@ -55,6 +55,7 @@ MonoBehaviour:
   - ActivateLoseScreen
   - ActivateWinScreen
   - DeactivateScreens
+  - ShootProjectileRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

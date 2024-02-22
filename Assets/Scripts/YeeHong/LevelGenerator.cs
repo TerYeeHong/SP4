@@ -7,7 +7,7 @@ using Photon.Realtime;
 using Photon.Pun;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-
+using System.Linq;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -44,10 +44,11 @@ public class LevelGenerator : MonoBehaviour
     //int size_x_level, size_z_level;
     //Grid[] grid_level;
 
-    List<Island> islands_list = new(); //queue so players unlock section by section
+    public List<Island> islands_list = new(); //queue so players unlock section by section
 
     List<GameObject> island_objects = new();
     List<Grid> spawn_points = new();
+    List<SpawnMonument> spawn_monuments = new();
 
 
     Vector3 spawn_center_position;
@@ -145,6 +146,7 @@ public class LevelGenerator : MonoBehaviour
         island_objects.Clear();
         islands_list.Clear();
         spawn_points.Clear();
+        spawn_monuments.Clear();
 
         //Create island
 
@@ -160,16 +162,17 @@ public class LevelGenerator : MonoBehaviour
         //InstantiateIsland(GenerateIsland(islandBoundary, shape));
         Island main_island = GenerateIsland(islandBoundary);
 
+        int i, j;
         //3 by 3 around island center
-        for (int i = -1; i < 2; ++i) {
-            for (int j = -1; j < 2; ++j) {
+        for (i = -1; i < 2; ++i) {
+            for (j = -1; j < 2; ++j) {
                 spawn_points.Add(new Grid(main_island.center.x + i, main_island.center.y + j));
             }
         }
         //make sure there are all ground around
-        for (int i = -3; i < 4; ++i)
+        for (i = -3; i < 4; ++i)
         {
-            for (int j = -3; j < 4; ++j)
+            for (j = -3; j < 4; ++j)
             {
                 main_island.island_grid.Add(new Grid(main_island.center.x + i, main_island.center.y + j));
             }
@@ -186,9 +189,16 @@ public class LevelGenerator : MonoBehaviour
 
         level_generated = true;
 
+
         navMeshSurface.BuildNavMesh();
         Debug.Log("dog build");
         UpdateClientLoadedMap();
+        int index = 0;
+        foreach (SpawnMonument monument in spawn_monuments)
+        {
+            monument.InitMonument(index);
+            index++;
+        }
     }
 
     void UpdateClientLoadedMap()
@@ -523,7 +533,9 @@ public class LevelGenerator : MonoBehaviour
         }
 
         //Generate a spawn monument
-        Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 2, island.center.y + 3), Quaternion.identity);
+        GameObject monumentGO = Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 2, island.center.y + 3), Quaternion.identity);
+        SpawnMonument monument = monumentGO.GetComponent<SpawnMonument>();
+        spawn_monuments.Add(monument);
     }
 
     //Given boundary and Shape,
@@ -836,7 +848,7 @@ public class LevelGenerator : MonoBehaviour
             }
 
             //Draw straight path
-            for (int i = first + 1; i < second; ++i)
+            for (int i = first + 1; i < second + 1; ++i)
             {
                 bridge_owner.island_bridge_grid.Add(new Grid(i, island_connector.y));
             }
@@ -868,7 +880,7 @@ public class LevelGenerator : MonoBehaviour
             }
 
             //Draw straight path
-            for (int i = first + 1; i < second; ++i)
+            for (int i = first + 1; i < second + 1; ++i)
             {
                 bridge_owner.island_bridge_grid.Add(new Grid(island_connector.x, i));
             }

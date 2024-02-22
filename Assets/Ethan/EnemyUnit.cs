@@ -134,10 +134,23 @@ public class EnemyUnit : Unit
 
     public override void OnDeath()
     {
-        base.OnDeath();
+        //base.OnDeath();
         //Debug.Log("NIGAAAAAAAAAAAAAA");
         // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         //Destroy(gameObject, 1.0f);
+
+        //Destroy(rigidbody_unit);
+        //if (gameObject.TryGetComponent(out Collider collider))
+        //{
+        //    collider.enabled = false;
+        //}
+        //if (gameObject.TryGetComponent(out Dissolve dissolve))
+        //{
+        //    dissolve.OnDeath(1.0f);
+        //}
+        photonView.RPC(nameof(SetActive), RpcTarget.All, false);
+
+
     }
 
     //protected void UpdateDirection()

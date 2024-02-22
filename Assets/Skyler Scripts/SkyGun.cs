@@ -15,7 +15,7 @@ public class SkyGun : MonoBehaviour
     public SkylerTrailConfig TrailConfig;
     public bool IsAutomatic;
 
-    private Transform ShootPoint;
+    public Transform ShootPoint;
     private float LastShootTime;
     private ParticleSystem ShootSystem;
     private ObjectPool<TrailRenderer> TrailPool;
@@ -42,8 +42,6 @@ public class SkyGun : MonoBehaviour
         // Assuming ModelPrefab is already the gun model attached to this GameObject.
         // If ModelPrefab should be instantiated as a child object, uncomment the following lines:
         // Model = Instantiate(ModelPrefab, SpawnPoint, Quaternion.Euler(SpawnRotation), transform);
-
-        ShootPoint = transform; // Assuming the shoot point is the transform this script is attached to.
         // If there's a specific child transform for shooting, find it by name or tag.
         ShootSystem = GetComponentInChildren<ParticleSystem>();
     }

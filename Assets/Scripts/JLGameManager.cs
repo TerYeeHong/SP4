@@ -39,6 +39,9 @@ public class JLGameManager : MonoBehaviourPunCallbacks
     int blue_score;
     public int score_max;
 
+
+    public List<GameObject> player_list;
+
     [SerializeField] GameObject win_window;
     [SerializeField] TextMeshProUGUI win_text;
 
@@ -242,6 +245,8 @@ public class JLGameManager : MonoBehaviourPunCallbacks
 
         //PhotonNetwork.InstantiateRoomObject is to create a object that requires sychronisation in all clients
         GameObject player = PhotonNetwork.Instantiate("Player", position, rotation, 0);
+
+        player_list.Add(player);
 
         //if im the real dude :)
         if (player.GetComponent<PhotonView>().IsMine)

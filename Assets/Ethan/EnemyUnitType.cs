@@ -4,7 +4,7 @@ using UnityEngine;
 
 //CONTAIN DEFAULT VALUES TO ASSIGN TO A UNIT COMPONENT
 [CreateAssetMenu]
-public class EnemyUnitType : ScriptableObject
+public class EnemyUnitType : UnitType
 
 {
     //AS LONG AS 2 UNITS NOT FROM SAME TEAM, THEY CAN DAMAGE EACH OTHER

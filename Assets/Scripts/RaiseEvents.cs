@@ -238,9 +238,9 @@ public class RaiseEvents : MonoBehaviour, IOnEventCallback
                 Unit enemyUnit = targetView.GetComponent<Unit>();
                 if (enemyUnit != null)
                 {
-                    if (enemyUnit.TakeDamage(damage) && enemyUnit.TryGetComponent(out BlessingMonument blessingMonument))
+                    if (enemyUnit.TakeDamage(damage))
                     {
-
+                        //blessingMonument.Activate();
                     }
                     //print("Gun Active");
                     //// Now, use the active gun to play the trail

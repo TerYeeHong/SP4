@@ -73,6 +73,11 @@ public class SkyGun : MonoBehaviour
 
                 if (unit != null && playerUnit != null)
                     RaiseUnitHitEvent(unit, playerUnit.Power);
+
+                if (unit.TryGetComponent(out BlessingMonument blessingMonument))
+                {
+                    unit.TakeDamage(playerUnit.Power);
+                }
             }
             else
             {

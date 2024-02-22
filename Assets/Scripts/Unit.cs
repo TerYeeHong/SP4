@@ -176,9 +176,9 @@ public class Unit : MonoBehaviour
         if (godmode)
             return false;
 
-        //Randomise it a bit
-        if (damage > 0)
-            damage += Random.Range(-2, 2);
+        ////Randomise it a bit
+        //if (damage > 0)
+        //    damage += Random.Range(-2, 2);
 
         ////See if immune, Ignore taking damage at all
         //if (godmode
@@ -230,6 +230,12 @@ public class Unit : MonoBehaviour
 
     public virtual void OnDeath()
     {
+        if (TryGetComponent(out BlessingMonument blessingMonument))
+        {
+            blessingMonument.Activate();
+            return;
+        }
+
         //DropLoot();
         //gameObject.SetActive(false);
         //rigidbody_unit.isKinematic = true;

@@ -9,14 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46556967b6808af499110867a67bcc30, type: 3}
-  m_Name: Walker Enemy
+  m_Script: {fileID: 11500000, guid: 046f527baee63c5458b6a0f49660afc4, type: 3}
+  m_Name: BlessingMonument
   m_EditorClassIdentifier: 
   team_unit: 1
-  name_unit: Walker
-  health_unit: 100
-  power_unit: 10
-  speed_unit: 2
-  enemy_race_unit: 0
-  range_unit: 20
-  rarity_unit: 1
+  name_unit: BlessingMonument
+  health_unit: 20
+  power_unit: 0
+  speed_unit: 0

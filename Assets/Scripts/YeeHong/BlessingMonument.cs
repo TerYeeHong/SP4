@@ -13,41 +13,58 @@ public class BlessingMonument : MonoBehaviour
 
     bool assigned = false;
 
-    private void OnTriggerEnter(Collider other)
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Player"))
+    //    {
+    //        if (!assigned)
+    //        {
+    //            //make a copy
+    //            blessing_cards_copy = new List<BlessingCardOdds>();
+    //            foreach (var item in blessing_cards)
+    //            {
+    //                blessing_cards_copy.Add(new BlessingCardOdds
+    //                {
+    //                    status = item.status,
+    //                    odds = item.odds
+    //                });
+    //            }
+
+    //            //Assign using the copy
+    //            AssignBlessingCards();
+    //            assigned = true;
+    //        }
+    //    }
+    //}
+
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Player"))
+    //    {
+    //        assigned = false;
+    //    }
+    //}
+
+    public void Activate()
     {
-        Debug.Log("HAHA");
-
-        if (other.gameObject.CompareTag("Player"))
+        if (!assigned)
         {
-            Debug.Log("HAHA");
-
-            if (!assigned)
+            //make a copy
+            blessing_cards_copy = new List<BlessingCardOdds>();
+            foreach (var item in blessing_cards)
             {
-                Debug.Log("HAHA");
-
-                //make a copy
-                blessing_cards_copy = new List<BlessingCardOdds>();
-                foreach (var item in blessing_cards)
+                blessing_cards_copy.Add(new BlessingCardOdds
                 {
-                    blessing_cards_copy.Add(new BlessingCardOdds
-                    {
-                        status = item.status,
-                        odds = item.odds
-                    });
-                }
-
-                //Assign using the copy
-                AssignBlessingCards();
-                assigned = true;
+                    status = item.status,
+                    odds = item.odds
+                });
             }
-        }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            assigned = false;
+            //Assign using the copy
+            AssignBlessingCards();
+            assigned = true;
+
+            Activated();
         }
     }
 

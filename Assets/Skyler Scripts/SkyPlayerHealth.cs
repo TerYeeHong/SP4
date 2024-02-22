@@ -25,7 +25,8 @@ public class SkyPlayerHealth : Unit
         if (photonView.IsMine)
             player.SetChildrenMeshRenderersEnabled(true);
         GetComponent<SkyPlayerAnimation>().ChangeAnimationState("Falling Back Death");
-        GameEvents.m_instance.unitDied.Invoke(unit_type.name);
+        SkyWinManager.instance.CheckLose();
+        //GameEvents.m_instance.unitDied.Invoke(unit_type.name);
     }
 
     public override bool TakeDamage(int damage)

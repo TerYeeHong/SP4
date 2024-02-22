@@ -4,44 +4,114 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class SkyWinManager : MonoBehaviourPunCallbacks
+public class SkyWinManager : MonoBehaviour
 {
+    public static SkyWinManager instance { get; private set; }
+
     [SerializeField] private GameObject loseScreen;
     [SerializeField] private GameObject winSceen;
 
+    [SerializeField] private Camera startCam;
+    public List<SkyPlayerController> playerControllers = new List<SkyPlayerController>();
+
+    private void Awake()
+    {
+        // Check if instance already exists and if it's not this one, destroy this instance (Singleton pattern)
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+
+    }
+
     private void Update()
     {
-        // Example key inputs for testing
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // Manually activate lose screen for testing
-            loseScreen.SetActive(true);
-            winSceen.SetActive(false);
+            ActivateLoseScreen();
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            // Manually deactivate lose screen for testing
-            loseScreen.SetActive(false);
-            winSceen.SetActive(false);
+            DeactivateScreens();
         }
         if (Input.GetKeyDown(KeyCode.F))
         {
-            // Manually activate lose screen for testing
-            winSceen.SetActive(true);
-            loseScreen.SetActive(false);
+            ActivateWinScreen();
+        }
+    }
+
+    public void ActivateLoseScreen()
+    {
+        loseScreen.SetActive(true);
+        winSceen.SetActive(false);
+    }
+
+    public void ActivateWinScreen()
+    {
+        winSceen.SetActive(true);
+        loseScreen.SetActive(false);
+    }
+
+    public void DeactivateScreens()
+    {
+        loseScreen.SetActive(false);
+        winSceen.SetActive(false);
+    }
+
+    public void CheckLose()
+    {
+        if (CheckAllPlayersDead())
+        {
+            ActivateLoseScreen();
+        }
+    }
+
+    public void FloorClear()
+    {
+        SkyGlobalStuffs.floorsCleared += 1;
+        CheckWin();
+
+        if (!CheckWin())
+        {
+            RestartGame();
+        }
+        else
+        {
+            OnWin();
+        }
+    }
+
+    public void OnWin()
+    {
+        ActivateWinScreen();
+    }
+
+    private void RestartGame()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startCam.gameObject.SetActive(true);
+            LevelGenerator.m_instance.RaiseEventGenerateLevel();
+        }
+    }
+
+    private bool CheckWin()
+    {
+        if (SkyGlobalStuffs.floorsCleared > SkyGlobalStuffs.maxFloors)
+        {
+            return true;
         }
 
-        //if (CheckAllPlayersDead())
-        //{
-        //    loseScreen.SetActive(true);
-        //}
+        return false;
     }
 
     private bool CheckAllPlayersDead()
     {
-        foreach (GameObject player in JLGameManager.Instance.player_list)
+        foreach (SkyPlayerController player in playerControllers)
         {
-            if (!player.GetComponent<SkyPlayerHealth>().isDead)
+            if (!player.playerHealth.isDead)
                 return false;
         }
 

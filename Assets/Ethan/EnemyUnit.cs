@@ -15,6 +15,7 @@ public class EnemyUnit : Unit
     public LayerMask player_layer;
     public LayerMask enemy_layer;
     public GameObject floating_item_prefab;
+    public bool isDead = true;
 
     public PhotonView photonView;
 
@@ -149,7 +150,7 @@ public class EnemyUnit : Unit
         //    dissolve.OnDeath(1.0f);
         //}
         photonView.RPC(nameof(SetActive), RpcTarget.All, false);
-
+        isDead = true;
 
     }
 

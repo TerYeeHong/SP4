@@ -149,7 +149,7 @@ public class SkyPlayerMovement : MonoBehaviour
 
        if (isGrounded)
         {
-            if (horizontalInput == 1 || verticalInput == 1)
+            if ((horizontalInput < -0.2 || horizontalInput > 0.2)  || (verticalInput < -0.2 || verticalInput > 0.2) )
             {
                 rb.drag = groundDrag;
             }

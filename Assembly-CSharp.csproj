@@ -68,7 +68,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\AppSettingsExtensions.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplineEndless.cs" />
     <Compile Include="Assets\Scripts\Ability\AbilityBeam.cs" />
-    <Compile Include="Assets\SkyPlayerCanvas.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyPlayerCanvas.cs" />
     <Compile Include="Assets\Scripts\UIBillBoarding.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\ChannelSelector.cs" />
     <Compile Include="Assets\Scripts\TextPopupManager.cs" />
@@ -173,6 +173,7 @@
     <Compile Include="Assets\Photon\PhotonChat\Demos\Common\OnStartDelete.cs" />
     <Compile Include="Assets\Scripts\YeeHong\IslandGenerator.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralBasic.cs" />
+    <Compile Include="Assets\Skyler Scripts\SkyGlobalStuffs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

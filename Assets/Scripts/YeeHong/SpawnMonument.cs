@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.Linq;
 
 public class SpawnMonument : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class SpawnMonument : MonoBehaviour
     private int spawnAmount;
     private bool isFinal;
     private bool isInteractable = true;
+    private List<EnemyUnit> spawnedEnemies = new List<EnemyUnit>();
 
     private void Start()
     {
@@ -56,6 +58,7 @@ public class SpawnMonument : MonoBehaviour
         {
             Vector3 position = ChooseRandomIslandPosition();
             GameObject fish = SpawnFish(position);
+
             yield return delayTime;
         }
 
@@ -76,19 +79,54 @@ public class SpawnMonument : MonoBehaviour
     {
         GameObject enemy = MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.FISH);
         EnemyUnit enemyUnit = enemy.GetComponent<EnemyUnit>();
-
         enemyUnit.photonView.RPC(nameof(enemyUnit.SetActive), RpcTarget.All, true);
+        enemyUnit.SetDefaultStat();
+        enemyUnit.isDead = false;
         enemy.transform.position = position;
+
+        spawnedEnemies.Add(enemyUnit); // Add the enemy to the list
+
         return enemy;
     }
 
-    void SpawnWolf(Vector3 position)
+    GameObject SpawnWolf(Vector3 position)
     {
         GameObject enemy = MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.WOLF);
         EnemyUnit enemyUnit = enemy.GetComponent<EnemyUnit>();
-
         enemyUnit.photonView.RPC(nameof(enemyUnit.SetActive), RpcTarget.All, true);
+        enemyUnit.SetDefaultStat();
+        enemyUnit.isDead = false;
         enemy.transform.position = position;
+
+        spawnedEnemies.Add(enemyUnit); // Add the enemy to the list
+
+        return enemy;
+    }
+    private void CheckForLevelCompletion()
+    {
+        // Remove any null references from the list in case enemies were destroyed
+        spawnedEnemies.RemoveAll(enemy => enemy == null);
+
+        // Check if all enemies in the list are dead
+        if (spawnedEnemies.Count > 0 && spawnedEnemies.All(enemy => enemy.isDead))
+        {
+            // All enemies are dead, proceed to next level or trigger victory
+            ProceedToNextLevel();
+        }
+    }
+
+    private void Update()
+    {
+        CheckForLevelCompletion();
+    }
+
+    private void ProceedToNextLevel()
+    {
+        // Example: Load the next level scene
+        // SceneManager.LoadScene("NextLevelSceneName");
+
+        // Or simply inform the player and unlock the next level
+        Debug.Log("All enemies defeated. Proceed to the next level.");
     }
 
     void MakeMonumentDisappear()

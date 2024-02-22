@@ -86,12 +86,19 @@ public class EnemyUnit : Unit
     }
     public override void SetDefaultStat()
     {
-        base.SetDefaultStat();
+        //base.SetDefaultStat();
         //Get default data from unit_type
         if (inherit_from_unitType
             && enemy_type
             != null)
         {
+            team_unit = enemy_type.TeamDefault;
+            name_unit = enemy_type.NameDefault;
+            max_health_unit = enemy_type.HealthDefault;
+            power_unit = enemy_type.PowerDefault;
+            speed_unit = enemy_type.SpeedDefault;
+            health_unit = max_health_unit;
+
             enemy_race_unit = enemy_type.EnemyRace;
             range_unit = enemy_type.RangeDefault;
             rarity_unit = enemy_type.RarityDefault;
@@ -107,31 +114,31 @@ public class EnemyUnit : Unit
     //    facing_direction = new_dir;
     //    UpdateDirection();
     //}
-    public Vector3 GetFacingDirection()
-    {
-        return facing_direction;
-    }
-    public Vector3 GetPointingDirection()
-    {
-        return pointing_direction;
-    }
-    public void SetFacincDirection(Vector3 dir)
-    {
-        facing_direction = dir;
-    }
-    public void SetPointingDirection(Vector3 dir)
-    {
-        pointing_direction = dir;
-    }
+    //public Vector3 GetFacingDirection()
+    //{
+    //    return facing_direction;
+    //}
+    //public Vector3 GetPointingDirection()
+    //{
+    //    return pointing_direction;
+    //}
+    //public void SetFacincDirection(Vector3 dir)
+    //{
+    //    facing_direction = dir;
+    //}
+    //public void SetPointingDirection(Vector3 dir)
+    //{
+    //    pointing_direction = dir;
+    //}
 
-    public Transform GetHeadTransform()
-    {
-        return transform_head;
-    }
-    public Vector3 GetDir()
-    {
-        return transform_head.forward;
-    }
+    //public Transform GetHeadTransform()
+    //{
+    //    return transform_head;
+    //}
+    //public Vector3 GetDir()
+    //{
+    //    return transform_head.forward;
+    //}
 
     public override void OnDeath()
     {
@@ -183,7 +190,7 @@ public class EnemyUnit : Unit
     //    }
     //    return false;
     //}
-    public virtual bool TakeDamage(int damage)
+    public override bool TakeDamage(int damage)
     {
         if (!enabled)
             return true;

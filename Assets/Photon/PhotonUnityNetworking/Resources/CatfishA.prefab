@@ -1324,7 +1324,7 @@ MonoBehaviour:
   floating_item_prefab: {fileID: 0}
   isDead: 1
   photonView: {fileID: 0}
-  enemy_type: {fileID: 0}
+  enemy_type: {fileID: 11400000, guid: 04ebc8d900668654e88c2f0858f01cc2, type: 2}
   enemy_race_unit: 0
   range_unit: 5
   rarity_unit: 1
@@ -1370,7 +1370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 1
+  m_SynchronizeScale: 0
   m_UseLocal: 1
 --- !u!4 &4467579706781182771 stripped
 Transform:

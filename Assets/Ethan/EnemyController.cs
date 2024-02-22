@@ -40,15 +40,7 @@ public class EnemyController : EnemyUnit
     {
         base.Init();
         navMeshAgent.speed = speed_unit;
-        players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
-        {
-            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
-            if(distance < nearestDistance)
-            {
-                movePositionTransform = players[i].transform;
-            }
-        }
+        FindNearestPlayer();
         
         //foreach (GameObject playerObj in GameObject.FindGameObjectsWithTag("Player"))
         //{
@@ -62,6 +54,19 @@ public class EnemyController : EnemyUnit
         // player = GameObject.Find("Player");
         //movePositionTransform = player.transform;
 
+    }
+
+    public void FindNearestPlayer()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = 0; i < players.Length; i++)
+        {
+            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                movePositionTransform = players[i].transform;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -127,6 +132,7 @@ public class EnemyController : EnemyUnit
     private void Update()
     {
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
+
         //Debug.Log("dist "+ range_unit);
         //Debug.Log("current state: " + CURRENT_STATE);
 
@@ -170,10 +176,8 @@ public class EnemyController : EnemyUnit
             {
 
                 animator.SetBool("IsMoving", true);
-                //moving = true;
-                speed_unit = 2;
-                navMeshAgent.speed = speed_unit;
-                navMeshAgent.destination = movePositionTransform.position;
+                FindNearestPlayer();
+                StartChase();
             }
 
        
@@ -198,23 +202,31 @@ public class EnemyController : EnemyUnit
         //animator.SetTrigger("IsHit");
     }
 
+    public virtual void StartChase()
+    {
+        //GetComponent<NavMeshAgent>().enabled = true;
+        //navMeshAgent.enabled = true;
+        GetComponent<NavMeshAgent>().enabled = true;
+
+
+        //moving = true;
+        speed_unit = enemy_type.SpeedDefault;
+        navMeshAgent.speed = speed_unit;
+        navMeshAgent.destination = movePositionTransform.position;
+    }
+
     public override bool TakeDamage(int damage)
     {
-        //health_unit -= damage;
-        Debug.Log("GETTING MY ASS HIT");
-       
-        Debug.Log("damage" + damage);
         //Damage pop up
         if (damage > 0)
         {
-            Debug.Log("OUCHH");
-
-           // rigidbody.AddForce(transform.forward * m_Thrust);
+            // rigidbody.AddForce(transform.forward * m_Thrust);
             CURRENT_STATE = STATES.HIT;
             animator.SetTrigger("IsHit");
 
-         
 
+            FindNearestPlayer();
+            StartChase();
         }
 
         //if (health_unit <= 0)

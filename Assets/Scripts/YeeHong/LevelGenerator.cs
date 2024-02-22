@@ -7,7 +7,6 @@ using Photon.Realtime;
 using Photon.Pun;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using System.Linq;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -17,8 +16,8 @@ public class LevelGenerator : MonoBehaviour
     [Header("Prefab details")]
     [SerializeField] GameObject platform_default_prefab;
     [SerializeField] GameObject platform_connector_prefab;
-
     [SerializeField] GameObject spawn_monument_prefab;
+    [SerializeField] List<IslandObject> island_prefabs;
 
     [Header("Island Generation details")]
     //[SerializeField] [Range(2, 100)] int size = 5;
@@ -38,6 +37,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] [Range(5, 100)] int bridge_length_min;
     [SerializeField] [Range(5, 100)] int bridge_length_max;
     [SerializeField] [Range(0, 100)] int neighbour_spawn_chance;
+    [SerializeField] [Range(1, 100)] int bridge_thickness = 2;
 
 
 
@@ -79,7 +79,8 @@ public class LevelGenerator : MonoBehaviour
             $"{island_depth}/" +
             $"{bridge_length_min}/" +
             $"{bridge_length_max}/" +
-            $"{neighbour_spawn_chance}";
+            $"{neighbour_spawn_chance}/" +
+            $"{bridge_thickness}";
 
         // Update other clients
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
@@ -89,7 +90,7 @@ public class LevelGenerator : MonoBehaviour
     void OnGenerateLevel(string data)
     {
         //Set all the settings from masterclient
-        //Every client including master client will generate islands only know to ensure seed is okay
+        //Every client including master client will generate islands only now to ensure seed is okay
 
         string[] dataSplit = data.Split("/");
         spawn_percent = int.Parse(dataSplit[1]);
@@ -102,9 +103,9 @@ public class LevelGenerator : MonoBehaviour
         bridge_length_min = int.Parse(dataSplit[8]);
         bridge_length_max = int.Parse(dataSplit[9]);
         neighbour_spawn_chance = int.Parse(dataSplit[10]);
+        bridge_thickness = int.Parse(dataSplit[11]);
 
         navMeshSurface.BuildNavMesh();
-        Debug.Log("dog hi");
 
         RemakeIsland(int.Parse(dataSplit[0]));
     }
@@ -119,18 +120,16 @@ public class LevelGenerator : MonoBehaviour
         if (m_instance == null)
             m_instance = this;
         islands_list = new();
-        Debug.Log("dog awake");
         //RemakeIsland(1);
     }
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //    RemakeIsland((int)System.DateTime.Now.Ticks);
-        if (Input.GetKey(KeyCode.I))
-        {
-            navMeshSurface.BuildNavMesh();
-            Debug.Log("I presse");
-        }
+        ////if (Input.GetKeyDown(KeyCode.Space))
+        ////    RemakeIsland((int)System.DateTime.Now.Ticks);
+        //if (Input.GetKey(KeyCode.I))
+        //{
+        //    navMeshSurface.BuildNavMesh();
+        //}
 
         //if (Input.GetKeyDown(KeyCode.V))
         //    RemakeIsland(1);
@@ -237,71 +236,8 @@ public class LevelGenerator : MonoBehaviour
 
     void GenerateNextIsland(Island curr, int depth)
     {
-        ////Loop all directions, try generating a island
-        //int neighbours = 1;
-        //for (int i = 0; i < 2; ++i)
-        //{
-        //    if (Random.Range(0, 100) < neighbour_spawn_chance)
-        //        ++neighbours;
-        //    else break;
-        //}
-        //bool up_neighbour = (Random.Range(0, 100) < neighbour_spawn_chance)? true : false;
-        //bool down_neighbour = (Random.Range(0, 100) < neighbour_spawn_chance) ? true : false;
-        //bool left_neighbour = (Random.Range(0, 100) < neighbour_spawn_chance) ? true : false;
-        //bool right_neighbour = (Random.Range(0, 100) < neighbour_spawn_chance) ? true : false;
-
-        //while (neighbours > 0)
-        //{
-        //    //Try create neighbours
-        //    for (int i = 0; i < 4; ++i)
-        //    {
-        //        int bridge_length = Random.Range(bridge_length_min, bridge_length_max);
-        //        IslandBoundary islandBoundary = new(0, Random.Range(7, 21), 0, Random.Range(7, 21));
-        //        islandBoundary.DisplaceX(curr.center.x);
-        //        islandBoundary.DisplaceZ(curr.center.y);
-
-        //        //if alr added to this dir, skip, else displace this dir again
-        //        switch (i)
-        //        {
-        //            case 0: 
-        //                if (up_neighbour) 
-        //                    continue;
-        //                islandBoundary.DisplaceZ(bridge_length);
-        //                break;
-        //            case 1: 
-        //                if (down_neighbour) 
-        //                    continue; 
-        //                islandBoundary.DisplaceZ(-bridge_length);
-        //                break;
-        //            case 2: 
-        //                if (left_neighbour) 
-        //                    continue;
-        //                islandBoundary.DisplaceX(bridge_length);
-        //                break;
-        //            case 3: 
-        //                if (right_neighbour) 
-        //                    continue;
-        //                islandBoundary.DisplaceX(-bridge_length);
-        //                break;
-        //        }
-
-        //        Island island = GenerateIsland(islandBoundary);
-
-        //        //Make sure is valid, dont overlap with any existing ones
-        //        bool valid = true;
-
-        //        if (valid)
-        //        {
-        //            sections_queue.Enqueue(island);
-        //            --neighbours; 
-        //        }
-
-        //    }
-        //}
-
         if (depth <= 0)
             return;
-
 
         bool up_neighbour = (Random.Range(0, 100) < neighbour_spawn_chance) ? true : false;
         bool down_neighbour = (Random.Range(0, 100) < neighbour_spawn_chance) ? true : false;
@@ -320,13 +256,15 @@ public class LevelGenerator : MonoBehaviour
         }
 
         int bridge_length = Random.Range(bridge_length_min, bridge_length_max);
-        IslandBoundary islandBoundary = new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
+        IslandBoundary islandBoundary;
+        //= new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
         int tries = 3;
         if (up_neighbour)
         {
             //tries n times to generate, else give up on generating
             for (int i = 0; i < tries; ++i)
             {
+                islandBoundary = new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
                 //Generate one, make sure it doesnt overlap anything 
                 islandBoundary.DisplaceX(curr.center.x);
                 islandBoundary.DisplaceZ(curr.island_boundary.max_z + bridge_length);
@@ -362,6 +300,7 @@ public class LevelGenerator : MonoBehaviour
             //tries n times to generate, else give up on generating
             for (int i = 0; i < tries; ++i)
             {
+                islandBoundary = new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
                 //Generate one, make sure it doesnt overlap anything 
                 islandBoundary.DisplaceX(curr.center.x);
                 islandBoundary.DisplaceZ(curr.island_boundary.min_z - bridge_length);
@@ -397,6 +336,7 @@ public class LevelGenerator : MonoBehaviour
             //tries n times to generate, else give up on generating
             for (int i = 0; i < tries; ++i)
             {
+                islandBoundary = new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
                 //Generate one, make sure it doesnt overlap anything 
                 islandBoundary.DisplaceX(curr.island_boundary.max_x + bridge_length);
                 islandBoundary.DisplaceZ(curr.center.y);
@@ -432,6 +372,7 @@ public class LevelGenerator : MonoBehaviour
             //tries n times to generate, else give up on generating
             for (int i = 0; i < tries; ++i)
             {
+                islandBoundary = new(0, Random.Range(island_min_size, island_max_size), 0, Random.Range(island_min_size, island_max_size));
                 //Generate one, make sure it doesnt overlap anything 
                 islandBoundary.DisplaceX(curr.island_boundary.min_x - bridge_length);
                 islandBoundary.DisplaceZ(curr.center.y);
@@ -474,22 +415,6 @@ public class LevelGenerator : MonoBehaviour
     }
 
    
-    Island CreateIsland()
-    {
-        int size_x_section;
-        int size_z_section;
-
-        size_x_section = Random.Range(3, 8);
-        size_z_section = Random.Range(3, 8);
-        Island section = new Island(size_x_section, size_z_section);
-
-        //islands_list.Enqueue(section);
-        return section;
-    }
-    void NextIsland()
-    {
-
-    }
 
 
     void InstantiateIsland(Island island)
@@ -535,6 +460,24 @@ public class LevelGenerator : MonoBehaviour
 
             //child to generator
             island_go.transform.parent = transform;
+        }
+
+        foreach (IslandObject islandObject in island_prefabs)
+        {
+            int amt = Random.Range(islandObject.min_amount, islandObject.max_amount);
+            for (int i = 0; i < amt; ++i)
+            {
+                //int x_position = Random.Range(island.island_boundary.min_x, island.island_boundary.max_x);
+                //int z_position = Random.Range(island.island_boundary.min_z, island.island_boundary.max_z);
+                
+                Vector3 pos = new Vector3(Random.Range(island.island_boundary.min_x, island.island_boundary.max_x),
+                    islandObject.y_position,
+                    Random.Range(island.island_boundary.min_z, island.island_boundary.max_z));
+
+                //island.PointInIsland(x_position, z_position);
+                GameObject obj = Instantiate(islandObject.object_prefab, pos, Quaternion.identity);
+                island_objects.Add(obj);
+            }
         }
 
         //Generate a spawn monument
@@ -843,54 +786,29 @@ public class LevelGenerator : MonoBehaviour
         //Draw line to z
         if (x_longer)
         {
-            //see which one has is closer to origin
-            int first = island_connector.x;
-            int second = island_connector_next.x;
-            if (island_connector.x > island_connector_next.x)
-            {
-                first = island_connector_next.x;
-                second = island_connector.x;
-            }
-
-            //Draw straight path
-            for (int i = first + 1; i < second + 1; ++i)
-            {
-                bridge_owner.island_bridge_grid.Add(new Grid(i, island_connector.y));
-            }
+            int z_center = (int)((island_connector.y + island_connector_next.y) * 0.5f);
 
             //draw second line
-            first = island_connector.y;
-            second = island_connector_next.y;
-            if (island_connector.y > island_connector_next.y)
-            {
-                first = island_connector_next.y;
-                second = island_connector.y;
-            }
-
-            //Draw straight path
-            for (int i = first; i < second; ++i)
-            {
-                bridge_owner.island_bridge_grid.Add(new Grid(island_connector_next.x, i));
-            }
-        }
-        else
-        {
-            //see which one has is closer to origin
             int first = island_connector.y;
-            int second = island_connector_next.y;
-            if (island_connector.y > island_connector_next.y)
+            int second = z_center;
+            if (island_connector.y > z_center)
             {
-                first = island_connector_next.y;
+                first = z_center;
                 second = island_connector.y;
             }
 
             //Draw straight path
-            for (int i = first + 1; i < second + 1; ++i)
+            for (int i = first + 1 - bridge_thickness; i < second + bridge_thickness; ++i)
             {
-                bridge_owner.island_bridge_grid.Add(new Grid(island_connector.x, i));
+                //bridge_owner.island_bridge_grid.Add(new Grid(island_connector.x, i));
+
+                for (int j = island_connector.x - bridge_thickness + 1; j < island_connector.x + bridge_thickness; ++j)
+                {
+                    bridge_owner.island_bridge_grid.Add(new Grid(j + 1, i));
+                }
             }
 
-            //draw second line
+            //see which one has is closer to origin
             first = island_connector.x;
             second = island_connector_next.x;
             if (island_connector.x > island_connector_next.x)
@@ -900,9 +818,118 @@ public class LevelGenerator : MonoBehaviour
             }
 
             //Draw straight path
-            for (int i = first; i < second; ++i)
+            for (int i = first + bridge_thickness; i < second - bridge_thickness + 2; ++i)
             {
-                bridge_owner.island_bridge_grid.Add(new Grid(i, island_connector_next.y));
+                //bridge_owner.island_bridge_grid.Add(new Grid(i, z_center));
+
+                for (int j = z_center - bridge_thickness + 1; j < z_center + bridge_thickness; ++j)
+                {
+                    bridge_owner.island_bridge_grid.Add(new Grid(i, j));
+                }
+            }
+
+            //draw second line
+            first = z_center;
+            second = island_connector_next.y;
+            if (z_center > island_connector_next.y)
+            {
+                first = island_connector_next.y;
+                second = z_center;
+            }
+
+            //Draw straight path
+            for (int i = first + 1 - bridge_thickness; i < second + bridge_thickness; ++i)
+            {
+                //bridge_owner.island_bridge_grid.Add(new Grid(island_connector_next.x, i));
+
+                for (int j = island_connector_next.x - bridge_thickness + 1; j < island_connector_next.x + bridge_thickness; ++j)
+                {
+                    bridge_owner.island_bridge_grid.Add(new Grid(j + 1, i));
+                }
+            }
+        }
+        else
+        {
+            int x_center = (int)((island_connector.x + island_connector_next.x) * 0.5f);
+
+
+            //draw second line
+            int first = island_connector.x;
+            int second = x_center;
+            if (island_connector.x > x_center)
+            {
+                first = x_center;
+                second = island_connector.x;
+            }
+
+            ////Draw straight path
+            //for (int i = first; i < second + 1; ++i)
+            //{
+            //    bridge_owner.island_bridge_grid.Add(new Grid(i, island_connector.y));
+            //}
+
+            //Draw straight path
+            for (int i = first + 1 - bridge_thickness; i < second + bridge_thickness; ++i)
+            {
+                //bridge_owner.island_bridge_grid.Add(new Grid(island_connector.x, i));
+
+                for (int j = island_connector.y - bridge_thickness + 1; j < island_connector.y + bridge_thickness; ++j)
+                {
+                    bridge_owner.island_bridge_grid.Add(new Grid(i, j+1));
+                }
+            }
+
+
+            //see which one has is closer to origin
+            first = island_connector.y;
+            second = island_connector_next.y;
+            if (island_connector.y > island_connector_next.y)
+            {
+                first = island_connector_next.y;
+                second = island_connector.y;
+            }
+
+            ////Draw straight path
+            //for (int i = first + 1; i < second + 1; ++i)
+            //{
+            //    bridge_owner.island_bridge_grid.Add(new Grid(x_center, i));
+            //}
+            //Draw straight path
+            for (int i = first + bridge_thickness; i < second - bridge_thickness + 2; ++i)
+            {
+                //bridge_owner.island_bridge_grid.Add(new Grid(i, z_center));
+
+                for (int j = x_center - bridge_thickness + 1; j < x_center + bridge_thickness; ++j)
+                {
+                    bridge_owner.island_bridge_grid.Add(new Grid(j, i));
+                }
+            }
+
+
+
+            //draw second line
+            first = x_center;
+            second = island_connector_next.x;
+            if (x_center > island_connector_next.x)
+            {
+                first = island_connector_next.x;
+                second = x_center;
+            }
+
+            ////Draw straight path
+            //for (int i = first; i < second + 1; ++i)
+            //{
+            //    bridge_owner.island_bridge_grid.Add(new Grid(i, island_connector_next.y));
+            //}
+            //Draw straight path
+            for (int i = first + 1 - bridge_thickness; i < second + bridge_thickness; ++i)
+            {
+                //bridge_owner.island_bridge_grid.Add(new Grid(island_connector_next.x, i));
+
+                for (int j = island_connector_next.y - bridge_thickness + 1; j < island_connector_next.y + bridge_thickness; ++j)
+                {
+                    bridge_owner.island_bridge_grid.Add(new Grid(i, j+1));
+                }
             }
         }
 
@@ -1098,4 +1125,14 @@ public class IslandConnectors
     public DIRECTION direction;
     public Grid connector_grid; //1 or more
 
+}
+
+
+[System.Serializable]
+public class IslandObject
+{
+    public GameObject object_prefab;
+    public int min_amount;
+    public int max_amount;
+    public float y_position;
 }

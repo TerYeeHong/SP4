@@ -252,6 +252,7 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         //if im the real dude :)
         if (player.GetComponent<PhotonView>().IsMine)
         {
+            GameObject.Find("StartingCamera").SetActive(false); //disable the starting camera
             //virtualCam.Follow = player.transform;
         }
         else

@@ -10,6 +10,8 @@ public class UIBillBoarding : MonoBehaviour
     void Awake()
     {
         cam = Camera.main;
+
+
     }
 
     // Update is called once per frame

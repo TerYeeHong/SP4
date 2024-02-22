@@ -13,6 +13,8 @@ public class SkyWinManager : MonoBehaviour
 
     [SerializeField] private Camera startCam;
     public List<SkyPlayerController> playerControllers = new List<SkyPlayerController>();
+    [SerializeField] private List<SkyPedestal> pedestals;
+
 
     private void Awake()
     {
@@ -25,7 +27,24 @@ public class SkyWinManager : MonoBehaviour
         instance = this;
 
     }
+    public void CheckPedestals()
+    {
+        foreach (SkyPedestal pedestal in pedestals)
+        {
+            if (!pedestal.isOccupied)
+                return; 
+        }
 
+        // If all pedestals are occupied
+        ProceedToNextFloor();
+    }
+
+    private void ProceedToNextFloor()
+    {
+        // Logic to proceed to the next floor
+        FloorClear();
+        Debug.Log("Proceeding to the next floor...");
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))

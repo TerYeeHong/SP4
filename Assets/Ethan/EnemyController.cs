@@ -26,7 +26,7 @@ public class EnemyController : EnemyUnit
     bool attackBasic = false;
     bool moving = false;
     STATES CURRENT_STATE = STATES.IDLE;
-    enum STATES
+    public enum STATES
     {
         IDLE,
         WALKING,
@@ -149,6 +149,7 @@ public class EnemyController : EnemyUnit
         // animator.SetBool("IsDead", true);
        
         CURRENT_STATE = STATES.DEAD;
+        ChangeAnimationState(STATES.WALKING);
         if (photonView.IsMine)
         {
             Debug.Log("photonView.ViewID" + photonView.ViewID);
@@ -181,29 +182,33 @@ public class EnemyController : EnemyUnit
                 {
 
                     CURRENT_STATE = STATES.ATTACK;
+                    ChangeAnimationState(STATES.ATTACK);
                 }
                 else if (range_unit < 20)
                 {
 
                     CURRENT_STATE = STATES.WALKING;
+                    ChangeAnimationState(STATES.WALKING);
                 }
                 else if (movePositionTransform.position == navMeshAgent.destination)
                 {
 
                     CURRENT_STATE = STATES.IDLE;
+                     ChangeAnimationState(STATES.IDLE);
                     //animator.SetBool("IsHit", false);
                 }
 
                 if (CURRENT_STATE == STATES.HIT)
                 {
                     animator.SetTrigger("IsHit");
-                    //animator.SetBool("IsHit", true);
-                    //CURRENT_STATE = STATES.IDLE;
+                  ChangeAnimationState(STATES.HIT);
+                //animator.SetBool("IsHit", true);
+                //CURRENT_STATE = STATES.IDLE;
                 }
                 else if (CURRENT_STATE == STATES.ATTACK)
                 {
                     animator.SetTrigger("IsAttacking");
-
+                    
 
                 }
                 else if (CURRENT_STATE == STATES.IDLE)
@@ -268,6 +273,25 @@ public class EnemyController : EnemyUnit
 
         return base.TakeDamage(damage);
     }
+
+    public void ChangeAnimationState(STATES newState, float transitionDuration = 0.1f)
+    {
+        if (CURRENT_STATE == newState) return;
+
+        // gameObject.transform.localPosition = gameObject.bodyPos;
+
+        animator.CrossFade(newState.ToString(), transitionDuration);
+        CURRENT_STATE = newState;
+
+        // Network synchronization code remains the same
+        if (photonView.IsMine)
+        {
+            object[] content = new object[] { GetComponent<PhotonView>().ViewID, newState };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_ANIMATION_CHANGE, content, raiseEventOptions, SendOptions.SendReliable);
+        }
+    }
+
 
     public void Inactive(string data)
     {

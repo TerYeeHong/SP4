@@ -19,6 +19,7 @@ public class LizardEnemyController : EnemyUnit
     EnemyController playerHit;
     AbilityXRay abilityXRay;
 
+    public Vector3 bodyPos = new Vector3(0, -0.9f, 0);
 
     //public NavMeshSurface navMeshSurface;
     //[SerializeField] private PhotonView photonView;
@@ -30,6 +31,7 @@ public class LizardEnemyController : EnemyUnit
     float nearestDistance = 100;
     bool attackBasic = false;
     public int invisTimer = 0;
+    [SerializeField] public float enhanceAttackTimer = 1.5f;
 
     public bool isInvisible = false;
 
@@ -38,7 +40,7 @@ public class LizardEnemyController : EnemyUnit
     public Material originalMat, xrayMat;
 
     STATES CURRENT_STATE = STATES.IDLE;
-    enum STATES
+    public enum STATES
     {
         IDLE,
         WALKING,
@@ -63,6 +65,7 @@ public class LizardEnemyController : EnemyUnit
     {
         isInvisible = true;
         CURRENT_STATE = STATES.WALKING;
+        ChangeAnimationState(STATES.WALKING);
     }
 
     public void FindNearestPlayer()
@@ -99,10 +102,18 @@ public class LizardEnemyController : EnemyUnit
             {
                 Debug.Log("LIZARD ATTACK PLAYER.");
 
+                
                 //other.GetComponent<EnemyController>().Health = playerHit.Health;
                 if (other.GetComponent<SkyPlayerHealth>().Health > 0)
                 {
-                    other.GetComponent<SkyPlayerHealth>().TakeDamage(15);
+                    if (enhanceAttackTimer > 0)
+                    {
+                        other.GetComponent<SkyPlayerHealth>().TakeDamage(30);
+                    }
+                    else
+                    {
+                        other.GetComponent<SkyPlayerHealth>().TakeDamage(8);
+                    }
                 }
             }
 
@@ -128,6 +139,7 @@ public class LizardEnemyController : EnemyUnit
         // animator.SetBool("IsDead", true);
 
         CURRENT_STATE = STATES.DEAD;
+        ChangeAnimationState(STATES.DEAD);
         if (photonView.IsMine)
         {
             Debug.Log("photonView.ViewID" + photonView.ViewID);
@@ -155,23 +167,25 @@ public class LizardEnemyController : EnemyUnit
         if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
         {
 
-            if (range_unit < 3)
+            if (range_unit < 2.5)
             {
 
                 CURRENT_STATE = STATES.ATTACK;
-              
+                ChangeAnimationState(STATES.ATTACK);
             }
 
             else if (range_unit < 20 && CURRENT_STATE != STATES.GOINVIS)
             {
 
                 CURRENT_STATE = STATES.WALKING;
-               
+                ChangeAnimationState(STATES.WALKING);
+
             }
             else if (movePositionTransform.position == navMeshAgent.destination)
             {
 
                 CURRENT_STATE = STATES.IDLE;
+                ChangeAnimationState(STATES.IDLE);
                 //animator.SetBool("IsHit", false);
             }
 
@@ -214,7 +228,8 @@ public class LizardEnemyController : EnemyUnit
                 {
                     //invisTimer = 0;
                     CURRENT_STATE = STATES.GOINVIS;
-                   
+                    ChangeAnimationState(STATES.GOINVIS);
+
                 }
                 animator.SetBool("IsMoving", true);
                 //moving = true;
@@ -230,10 +245,12 @@ public class LizardEnemyController : EnemyUnit
             if (isInvisible && abilityXRay.isXRayActive == false)
             {
                 enemyRenderer.sharedMaterial = xrayMat;
+                enhanceAttackTimer = 1.5f;
                // SetDissolveAmt(1.1f);
             }
             else if (!isInvisible)
             {
+                enhanceAttackTimer -= 1 * Time.deltaTime;
                 enemyRenderer.sharedMaterial = originalMat;
                 //SetDissolveAmt(-1.1f);
             }
@@ -241,6 +258,8 @@ public class LizardEnemyController : EnemyUnit
         }
         else if (CURRENT_STATE == STATES.DEAD)
         {
+            speed_unit = 0;
+            navMeshAgent.speed = speed_unit;
             Debug.LogWarning("HDIAHDIA");
             animator.SetBool("IsDead", true);
             enabled = false;
@@ -257,6 +276,26 @@ public class LizardEnemyController : EnemyUnit
 
         //animator.SetTrigger("IsHit");
     }
+
+    public void ChangeAnimationState(STATES newState, float transitionDuration = 0.1f)
+    {
+        if (CURRENT_STATE == newState) return;
+
+       // gameObject.transform.localPosition = gameObject.bodyPos;
+
+        animator.CrossFade(newState.ToString(), transitionDuration);
+        CURRENT_STATE = newState;
+
+        // Network synchronization code remains the same
+        if (photonView.IsMine)
+        {
+            object[] content = new object[] { GetComponent<PhotonView>().ViewID, newState };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_ANIMATION_CHANGE, content, raiseEventOptions, SendOptions.SendReliable);
+        }
+    }
+
+
 
     public override bool TakeDamage(int damage)
     {

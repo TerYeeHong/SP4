@@ -26,6 +26,14 @@ public class BossController : EnemyUnit
     [SerializeField] public BoxCollider HitboxCollider;
     [SerializeField] private GameObject targetPlayer;
 
+    [SerializeField] public AudioClip dash;
+    [SerializeField] public AudioClip land;
+    [SerializeField] public AudioClip swipe;
+    [SerializeField] public AudioClip roar;
+    [SerializeField] public AudioClip growl;   
+    [SerializeField] public AudioClip step1;
+    [SerializeField] public AudioClip step2;
+
     public GameObject pillarPrefab; 
     public float spawnRadius = 15f; // pillar radius
     Vector3 StartBossCollider;
@@ -154,9 +162,22 @@ public class BossController : EnemyUnit
         pillar.transform.position = targetPosition;
     }
 
+    public void Step1()
+    {
+        GameEvents.m_instance.playNewAudioClip.Invoke(step1, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+    }
+
+    public void Step2()
+    {
+        
+        GameEvents.m_instance.playNewAudioClip.Invoke(step2, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+    }
+
+
     public void DashAttackSTART()
     {
         dashAttack = true;
+        GameEvents.m_instance.playNewAudioClip.Invoke(dash, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
     }
 
     public void DashAttackEND()
@@ -167,19 +188,27 @@ public class BossController : EnemyUnit
     public void SwipeAttackSTART()
     {
        swipeAttack = true;
+        GameEvents.m_instance.playNewAudioClip.Invoke(swipe, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
     }
 
     public void SwipeAttackEND()
     {
         swipeAttack = false;
-    } 
+    }
+
+
+    public void Roar()
+    {
+        GameEvents.m_instance.playNewAudioClip.Invoke(roar, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+    }
+
     public void SpawnPillarSTART()
     {
         SpawnPillar(0f);
         SpawnPillar(90f);
         SpawnPillar(180f);
         SpawnPillar(270f);
- 
+       // GameEvents.m_instance.playNewAudioClip.Invoke(roar, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
     }
     public void SpawnPillarEND()
     {
@@ -190,6 +219,7 @@ public class BossController : EnemyUnit
     public void KnockupSTART()
     {
         knockup = true;
+        GameEvents.m_instance.playNewAudioClip.Invoke(land, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
     }
 
     public void KnockupEND()
@@ -390,7 +420,7 @@ public class BossController : EnemyUnit
             }
             else if (CURRENT_STATE == STATES.SKILL2)
             {
-             
+                GameEvents.m_instance.playNewAudioClip.Invoke(growl, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
                 Skill2CD = 16;
                 //timer += 1 * Time.deltaTime;
                 animator.SetTrigger("IsKnockup");

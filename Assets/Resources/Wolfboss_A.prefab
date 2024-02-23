@@ -1973,6 +1973,13 @@ MonoBehaviour:
   BossCollider: {fileID: 1961082380}
   HitboxCollider: {fileID: 0}
   targetPlayer: {fileID: 0}
+  dash: {fileID: 8300000, guid: 209d1dfe57af36d48a3f19e2b8a24fbf, type: 3}
+  land: {fileID: 8300000, guid: f27d28520b073314aa070a827e25d051, type: 3}
+  swipe: {fileID: 8300000, guid: 7a1f8013475151f47b19724f4d9a514f, type: 3}
+  roar: {fileID: 8300000, guid: 10861990314b321498dbbf3a2613a3a3, type: 3}
+  growl: {fileID: 8300000, guid: 1a0e1703cd154c24da47ec97f7de830e, type: 3}
+  step1: {fileID: 8300000, guid: 7320477106835f34b812feb2a0928a55, type: 3}
+  step2: {fileID: 8300000, guid: 6b633fcca364fe246a42d17a1a8126a1, type: 3}
   pillarPrefab: {fileID: 2238837666048095154, guid: 575555e1c4b01ea49aeae36db1f845e2,
     type: 3}
   spawnRadius: 15

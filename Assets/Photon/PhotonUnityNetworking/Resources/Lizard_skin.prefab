@@ -1343,6 +1343,10 @@ MonoBehaviour:
   animator: {fileID: 9110930946476113401}
   players: []
   targetPlayer: {fileID: 0}
+  attack: {fileID: 8300000, guid: 2f556f4d2b1450448b5032cb6cdd583d, type: 3}
+  invisible: {fileID: 8300000, guid: a7e0480236f96864a9b826ad0a59575a, type: 3}
+  visible: {fileID: 8300000, guid: 2254cb021e25ac04a81f233919670593, type: 3}
+  step: {fileID: 8300000, guid: db8fe94117c87da46a57e4d0b07b5caf, type: 3}
   bodyPos: {x: 0, y: -0.9, z: 0}
   m_Thrust: 20
   invisTimer: 0

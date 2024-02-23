@@ -19,6 +19,13 @@ public class LizardEnemyController : EnemyUnit
     EnemyController playerHit;
     AbilityXRay abilityXRay;
 
+
+    [SerializeField] public AudioClip attack;
+    [SerializeField] public AudioClip invisible;
+    [SerializeField] public AudioClip visible;
+    [SerializeField] public AudioClip step;
+
+
     public Vector3 bodyPos = new Vector3(0, -0.9f, 0);
 
     //public NavMeshSurface navMeshSurface;
@@ -55,9 +62,17 @@ public class LizardEnemyController : EnemyUnit
 
     }
 
+    public void Step()
+    {
+        GameEvents.m_instance.playNewAudioClip.Invoke(step, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+    }
+
+    
+
     public void AttackBasicSTART()
     {
         attackBasic = true;
+        GameEvents.m_instance.playNewAudioClip.Invoke(attack, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
     }
 
     public void AttackBasicEND()
@@ -68,6 +83,9 @@ public class LizardEnemyController : EnemyUnit
     public void InvisibleEND()
     {
         StartCoroutine(DissolveOutEffect());
+        isInvisible = true;
+
+        GameEvents.m_instance.playNewAudioClip.Invoke(invisible, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
         CURRENT_STATE = STATES.WALKING;
         ChangeAnimationState(STATES.WALKING);
     }

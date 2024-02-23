@@ -1972,6 +1972,7 @@ MonoBehaviour:
   BossCollider: {fileID: 1961082380}
   HitboxCollider: {fileID: 0}
   targetPlayer: {fileID: 0}
+  dash: {fileID: 8300000, guid: 209d1dfe57af36d48a3f19e2b8a24fbf, type: 3}
   pillarPrefab: {fileID: 2238837666048095154, guid: 575555e1c4b01ea49aeae36db1f845e2,
     type: 3}
   spawnRadius: 15

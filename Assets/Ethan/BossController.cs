@@ -26,6 +26,8 @@ public class BossController : EnemyUnit
     [SerializeField] public BoxCollider HitboxCollider;
     [SerializeField] private GameObject targetPlayer;
 
+    [SerializeField] public AudioClip dash;
+
     public GameObject pillarPrefab; 
     public float spawnRadius = 15f; // pillar radius
     Vector3 StartBossCollider;
@@ -157,6 +159,7 @@ public class BossController : EnemyUnit
     public void DashAttackSTART()
     {
         dashAttack = true;
+        GameEvents.m_instance.playNewAudioClip.Invoke(dash, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
     }
 
     public void DashAttackEND()

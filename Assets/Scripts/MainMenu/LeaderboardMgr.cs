@@ -17,7 +17,7 @@ public class LeaderboardMgr : MonoBehaviour
     [SerializeField] GameObject leaderboardCanvas;
     [SerializeField] GameObject mainCanvas;
 
-    private int score;
+    private int addTime;
 
     public AudioClip clickSFX;
 
@@ -32,11 +32,6 @@ public class LeaderboardMgr : MonoBehaviour
         mainCanvas.SetActive(true);
     }
 
-    //void UpdateMsg(string msg)
-    //{
-    //    leaderboardBox.text = msg;
-    //}
-
     void GetPlayerProfile()
     {
         GetPlayerProfileRequest request = new GetPlayerProfileRequest();
@@ -48,11 +43,11 @@ public class LeaderboardMgr : MonoBehaviour
         userDisplayName = r.PlayerProfile.DisplayName;
     }
 
-    public void OnAddScore()
+    public void OnAddScore(int time)
     {
-        score += 10;
+        addTime += time;
         SendLeaderboard();
-        Invoke("OnGetGlobalTimerLeaderboard", 1.0f);
+        Invoke("OnGetGlobalTimerLeaderboard", 1.0f); // update lb
     }
 
     public void OnBack()
@@ -82,7 +77,6 @@ public class LeaderboardMgr : MonoBehaviour
             MaxResultsCount = 100
         };
         PlayFabClientAPI.GetLeaderboard(lbreq, OnGetGlobalTimerLeaderboard, OnError);
-        leaderboardCanvas.SetActive(true);
     }
 
     void OnGetGlobalTimerLeaderboard(GetLeaderboardResult r)
@@ -117,11 +111,11 @@ public class LeaderboardMgr : MonoBehaviour
                 new StatisticUpdate
                 {
                     StatisticName = "Best Time",
-                    Value = score
+                    Value = addTime
                 }
             }
         };
-        Debug.Log("Submitting score: " + score);
+        Debug.Log("Submitting score: " + addTime);
         PlayFabClientAPI.UpdatePlayerStatistics(req, OnLeaderboardUpdate, OnError);
     }
 

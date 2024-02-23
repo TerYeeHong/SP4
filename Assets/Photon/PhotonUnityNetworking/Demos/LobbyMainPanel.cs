@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 namespace Photon.Pun.Demo.Asteroids
 {
@@ -41,6 +42,7 @@ namespace Photon.Pun.Demo.Asteroids
         public GameObject PlayerListEntryPrefab;
 
         public AudioClip clickSFX;
+        public Text ErrorText;
 
         private Dictionary<string, RoomInfo> cachedRoomList;
         private Dictionary<string, GameObject> roomListEntries;
@@ -54,7 +56,9 @@ namespace Photon.Pun.Demo.Asteroids
 
             cachedRoomList = new Dictionary<string, RoomInfo>();
             roomListEntries = new Dictionary<string, GameObject>();
-            
+
+            ErrorText.text = "";
+
             //PlayerNameInput.text = "Player " + Random.Range(1000, 10000);
         }
 
@@ -103,7 +107,7 @@ namespace Photon.Pun.Demo.Asteroids
         {
             string roomName = "Room " + Random.Range(1000, 10000);
 
-            RoomOptions options = new RoomOptions {MaxPlayers = 8};
+            RoomOptions options = new RoomOptions {MaxPlayers = 4};
 
             PhotonNetwork.CreateRoom(roomName, options, null);
         }
@@ -210,6 +214,11 @@ namespace Photon.Pun.Demo.Asteroids
         #endregion
 
         #region UI CALLBACKS
+        public void OnBackToMainMenuButtonClicked()
+        {
+            // Disconnect from the Photon server
+            PhotonNetwork.Disconnect();
+        }
 
         public void OnBackButtonClicked()
         {
@@ -224,11 +233,33 @@ namespace Photon.Pun.Demo.Asteroids
         public void OnCreateRoomButtonClicked()
         {
             string roomName = RoomNameInputField.text;
-            roomName = (roomName.Equals(string.Empty)) ? "Room " + Random.Range(1000, 10000) : roomName;
+
+            // Check if the room name is empty
+            if (string.IsNullOrEmpty(roomName))
+            {
+                ErrorText.text = "Error: Room name cannot be empty.";
+                return;
+            }
+
+            // Check if the room name contains only alphabetic characters
+            if (!Regex.IsMatch(roomName, @"^[a-zA-Z]+$"))
+            {
+                ErrorText.text = "Error: Room name should contain only alphabetic characters.";
+                return;
+            }
 
             byte maxPlayers;
-            byte.TryParse(MaxPlayersInputField.text, out maxPlayers);
-            maxPlayers = (byte) Mathf.Clamp(maxPlayers, 2, 8);
+            if (!byte.TryParse(MaxPlayersInputField.text, out maxPlayers))
+            {
+                ErrorText.text = "Error: Invalid input for max players.";
+                return;
+            }
+
+            if (maxPlayers < 1 || maxPlayers > 4)
+            {
+                ErrorText.text = "Error: Max players should be between 1 and 4.";
+                return;
+            }
 
             RoomOptions options = new RoomOptions {MaxPlayers = maxPlayers, PlayerTtl = 10000 };
 
@@ -328,6 +359,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         private void SetActivePanel(string activePanel)
         {
+            ErrorText.text = "";
             LoginPanel.SetActive(activePanel.Equals(LoginPanel.name));
             SelectionPanel.SetActive(activePanel.Equals(SelectionPanel.name));
             CreateRoomPanel.SetActive(activePanel.Equals(CreateRoomPanel.name));

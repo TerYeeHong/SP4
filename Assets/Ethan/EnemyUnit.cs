@@ -89,8 +89,7 @@ public class EnemyUnit : Unit
         //base.SetDefaultStat();
         //Get default data from unit_type
         if (inherit_from_unitType
-            && enemy_type
-            != null)
+            && enemy_type != null)
         {
             team_unit = enemy_type.TeamDefault;
             name_unit = enemy_type.NameDefault;

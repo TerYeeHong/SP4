@@ -6,6 +6,37 @@ using UnityEngine.UI;
 
 public class SkyPlayerHealth : Unit
 {
+    [Header("References for Status Checks")]
+    [SerializeField] Status health_divine;
+    [SerializeField] Status health_moderate;
+    [SerializeField] Status health_mini;
+
+    protected int health_divine_count;
+    protected int health_moderate_count;
+    protected int health_mini_count;
+
+
+    private void OnEnable()
+    {
+        GameEvents.m_instance.onStatusChange.AddListener(StatusCheckAll);
+    }
+    private void OnDisable()
+    {
+        GameEvents.m_instance.onStatusChange.RemoveListener(StatusCheckAll);
+    }
+
+    public void StatusCheckAll()
+    {
+        health_divine_count = PFGlobalData.GetBlessingCount(health_divine.Name_status);
+        health_moderate_count = PFGlobalData.GetBlessingCount(health_moderate.Name_status);
+        health_mini_count = PFGlobalData.GetBlessingCount(health_mini.Name_status);
+
+        max_health_unit = 200 + health_divine_count * 100 + health_moderate_count * 40 + health_mini_count * 20;
+
+    }
+
+
+
     public bool isDead;
     public float revivalRadius = 5f;
     [SerializeField] public Canvas playerHPCanvas;

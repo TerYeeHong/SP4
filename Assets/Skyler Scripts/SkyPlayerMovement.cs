@@ -63,9 +63,9 @@ public class SkyPlayerMovement : MonoBehaviour
 
         //Disable and enable stamina bar
         if (jump_count > 0 || sprint_count > 0)
-            staminaBar.enabled = true;
+            staminaBar.gameObject.SetActive(true);
         else
-            staminaBar.enabled = false;
+            staminaBar.gameObject.SetActive(false);
     }
 
 
@@ -197,9 +197,11 @@ public class SkyPlayerMovement : MonoBehaviour
             }
         }
 
+
         Vector3 force = movementDirection.normalized * currentSpeed;
         force.y = 0;
-        rb.AddForce(force, ForceMode.Force);
+        rb.velocity = new Vector3(force.x, rb.velocity.y, force.z);
+        //rb.AddForce(force, ForceMode.Force);
     }
 
     public void HandleStaminaRegen()
@@ -263,11 +265,16 @@ public class SkyPlayerMovement : MonoBehaviour
     }
     public void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps) && currentStamina >= jumpStaminaCost)
+        if (Input.GetButtonDown("Jump") && (jumpCount < maxJumps) && currentStamina >= jumpStaminaCost)
         {
+            stopDrag = 0;
+            groundDrag = 0;
+             
+
             currentStamina -= jumpStaminaCost;
             UpdateStaminaBar();
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            //rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             jumpCount++;
         }
     }
@@ -281,7 +288,7 @@ public class SkyPlayerMovement : MonoBehaviour
                 if (jumpCount > 0)
                 {
                     playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_LANDING);
-                    jumpCount = 0;
+                    //jumpCount = 0;
                 }
                 else if (rb.velocity.magnitude > 0.1f && (Mathf.Abs(rb.velocity.x) > 0.1f || Mathf.Abs(rb.velocity.z) > 0.1f))
                 {

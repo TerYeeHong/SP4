@@ -52,11 +52,14 @@ public class SkyPlayerGunSelector : MonoBehaviour
     {
         weapon_master_count = PFGlobalData.GetBlessingCount(weapon_master.Name_status) + 1;
 
-        gunPrefabs.Clear();
-        for (int i = 0; i < weapon_master_count; ++i)
-        {
-            gunPrefabs.Add(gunPrefabsList[i]);
-        }
+
+        //gunPrefabs.Clear();
+        //for (int i = 0; i < weapon_master_count; ++i)
+        //{
+        //    if (i >= gunPrefabsList.Count)
+        //        break;
+        //    gunPrefabs.Add(gunPrefabsList[i]);
+        //}
 
     }
 
@@ -65,6 +68,9 @@ public class SkyPlayerGunSelector : MonoBehaviour
         // Example input handling for switching guns using number keys 1-9
         for (int i = 0; i < gunPrefabs.Count; i++)
         {
+            if (i >= weapon_master_count)
+                break;
+
             if (Input.GetKeyDown((i + 1).ToString()))
             {
                 print("SWITHINC GUN");

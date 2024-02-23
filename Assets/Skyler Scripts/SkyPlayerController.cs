@@ -20,6 +20,7 @@ public class SkyPlayerController : MonoBehaviour
     void OnLockInput(bool enable)
     {
         input_locked = enable;
+
     }
     bool input_locked = false;
 
@@ -62,9 +63,10 @@ public class SkyPlayerController : MonoBehaviour
 
         if (photonView.IsMine && !playerHealth.isDead)
         {
+            playerMovement.ResetJump();
+
             playerMovement.HandleInput();
             playerMovement.SlideCheck();
-            playerMovement.ResetJump();
             playerMovement.HandleJump();
             playerMovement.HandleDash();
             playerMovement.UpdateAnimationState();
@@ -94,6 +96,12 @@ public class SkyPlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        GetComponent<Rigidbody>().velocity = new Vector3(0, GetComponent<Rigidbody>().velocity.y, 0);
+
+
+        if (input_locked)
+            return;
+
         if (photonView.IsMine && !playerHealth.isDead)
         {
             playerMovement.HandleMovement();

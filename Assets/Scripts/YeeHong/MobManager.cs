@@ -36,6 +36,8 @@ public class MobManager : MonoBehaviour
             if (enemyUnit.EnemyRace == enemy_race)
             {
                 enemy.GetComponent<NavMeshAgent>().enabled = false;
+                enemyUnit.SetDefaultStat();
+
                 return enemy;
             }
         }
@@ -137,6 +139,8 @@ public class MobManager : MonoBehaviour
         {
             case EnemyUnitType.ENEMY_RACE.FISH:
                 return "CatfishA";
+            case EnemyUnitType.ENEMY_RACE.LIZARD:
+                return "Lizard_skin";
             case EnemyUnitType.ENEMY_RACE.WOLF:
                 return "Wolfboss_A";
         }

@@ -1225,9 +1225,9 @@ MonoBehaviour:
   speed_moderate: {fileID: 11400000, guid: 5caa44cb8e5ce6244bf2e059cb7adb17, type: 2}
   speed_mini: {fileID: 11400000, guid: 3ca7ddb4bda7136468e3ce1265b72a50, type: 2}
   jump: {fileID: 11400000, guid: bbb09eda262e4994d8bd9912cb84e838, type: 2}
-  sprint: {fileID: 0}
-  sliding: {fileID: 0}
-  stamina: {fileID: 0}
+  sprint: {fileID: 11400000, guid: 5bafa409e013427438fe544bb7459f71, type: 2}
+  sliding: {fileID: 11400000, guid: db56b5a4e4071bb4685e33f423d837ef, type: 2}
+  stamina: {fileID: 11400000, guid: e31553fb995ff1c45b2b8725c10b30f8, type: 2}
   speed: 30
   deceleration: 5
   jumpForce: 5
@@ -1236,13 +1236,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   groundCheck: {fileID: 3787938341760227179}
-  groundDistance: 0.12
+  groundDistance: 0.105
   playerAnimation: {fileID: 3787938341435706193}
   maxSlideTime: 2
   slideForce: 10
   slideYScale: 0.4
   dashForce: 20
-  groundDrag: 5
+  groundDrag: 0
   airResistance: 2
   stopDrag: 30
   maxSpeed: 25
@@ -1330,7 +1330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b7e7dcffbd9a5439b4838aa2e2b16c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon_master: {fileID: 0}
+  weapon_master: {fileID: 11400000, guid: 2ffc0b23e0412764db744a701fcde7f5, type: 2}
   gunParent: {fileID: 3787938341306619101}
   gunPrefabs:
   - {fileID: 8016613405039040811, guid: dc68e5099ff22494eba21e7288540796, type: 3}
@@ -1430,11 +1430,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e88565b78b17fe4dabb385648062ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 3787938341306619098}
   activationKey: 120
   cooldownDuration: 10
   abilityActive: 5
-  cooldownText: {fileID: 0}
   enemyRenderer:
   - {fileID: 0}
   - {fileID: 0}
@@ -2231,7 +2229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

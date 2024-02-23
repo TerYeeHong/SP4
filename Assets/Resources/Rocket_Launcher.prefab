@@ -4910,6 +4910,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc6cdf99b930fad46a4542014e4165c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  power_divine: {fileID: 11400000, guid: c8a99b80cb0a93c41a0d696ddb6aa0b0, type: 2}
+  power_moderate: {fileID: 11400000, guid: 87293a126d100834f8c0142edff68d4f, type: 2}
+  power_mini: {fileID: 11400000, guid: 7b216198dee6a98428dd1d383b423c2b, type: 2}
   Type: 4
   Name: RocketLauncher
   ModelPrefab: {fileID: 0}

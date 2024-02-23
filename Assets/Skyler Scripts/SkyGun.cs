@@ -6,6 +6,35 @@ using Photon.Realtime;
 using UnityEngine.Pool;
 public class SkyGun : MonoBehaviour
 {
+    [Header("References for Status Checks")]
+    [SerializeField] Status power_divine;
+    [SerializeField] Status power_moderate;
+    [SerializeField] Status power_mini;
+
+    protected int power_divine_count;
+    protected int power_moderate_count;
+    protected int power_mini_count;
+
+    private void OnEnable()
+    {
+        GameEvents.m_instance.onStatusChange.AddListener(StatusCheckAll);
+    }
+    private void OnDisable()
+    {
+        GameEvents.m_instance.onStatusChange.RemoveListener(StatusCheckAll);
+    }
+
+    public void StatusCheckAll()
+    {
+        power_divine_count = PFGlobalData.GetBlessingCount(power_divine.Name_status);
+        power_moderate_count = PFGlobalData.GetBlessingCount(power_moderate.Name_status);
+        power_mini_count = PFGlobalData.GetBlessingCount(power_mini.Name_status);
+
+        extra_power = power_divine_count * 20 + power_moderate_count * 10 + power_mini_count * 5;
+    }
+
+    int extra_power = 0;
+
     public SkylerGunType Type;
     public string Name;
     public GameObject ModelPrefab;
@@ -79,11 +108,11 @@ public class SkyGun : MonoBehaviour
                 Unit playerUnit = photonView.GetComponent<Unit>();
 
                 if (unit != null && playerUnit != null)
-                    RaiseUnitHitEvent(unit, damage + playerUnit.Power);
+                    RaiseUnitHitEvent(unit, damage + playerUnit.Power + extra_power);
 
                 if (unit.TryGetComponent(out BlessingMonument blessingMonument))
                 {
-                    unit.TakeDamage(playerUnit.Power);
+                    unit.TakeDamage(playerUnit.Power + damage + extra_power);
                 }
             }
             else

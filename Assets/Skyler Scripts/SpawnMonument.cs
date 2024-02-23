@@ -45,8 +45,23 @@ public class SpawnMonument : MonoBehaviour
         }
         else
         {
-            // Spawn wolves equal to spawnAmount on a random island
-            StartCoroutine(StartSpawningFish(spawnAmount, 1.0f));
+            for (int i = 0; i < spawnAmount; ++i)
+            {
+                int odds = Random.Range(0, 100); //0-99
+                //Chance to spawn lizards
+                if (odds < 0)
+                {
+                    // Spawn wolves equal to spawnAmount on a random island
+                    StartCoroutine(StartSpawningLizard(spawnAmount, 1.0f));
+                }
+                else
+                {
+                    // Spawn wolves equal to spawnAmount on a random island
+                    StartCoroutine(StartSpawningFish(spawnAmount, 1.0f));
+                }
+            }
+
+
         }
     }
 
@@ -65,7 +80,21 @@ public class SpawnMonument : MonoBehaviour
         // After spawning all fish, make the monument disappear
         MakeMonumentDisappear();
     }
+    IEnumerator StartSpawningLizard(int amount, float delay)
+    {
+        WaitForSeconds delayTime = new WaitForSeconds(delay);
 
+        for (int i = 0; i < amount; i++)
+        {
+            Vector3 position = ChooseRandomIslandPosition();
+            GameObject fish = SpawnLizard(position);
+
+            yield return delayTime;
+        }
+
+        // After spawning all fish, make the monument disappear
+        MakeMonumentDisappear();
+    }
 
     Vector3 ChooseRandomIslandPosition()
     {
@@ -102,6 +131,21 @@ public class SpawnMonument : MonoBehaviour
 
         return enemy;
     }
+
+    GameObject SpawnLizard(Vector3 position)
+    {
+        GameObject enemy = MobManager.m_instance.FetchEnemy(EnemyUnitType.ENEMY_RACE.LIZARD);
+        EnemyUnit enemyUnit = enemy.GetComponent<EnemyUnit>();
+        enemyUnit.photonView.RPC(nameof(enemyUnit.SetActive), RpcTarget.All, true);
+        enemyUnit.SetDefaultStat();
+        enemyUnit.isDead = false;
+        enemy.transform.position = position;
+
+        spawnedEnemies.Add(enemyUnit); // Add the enemy to the list
+
+        return enemy;
+    }
+
     private void CheckForLevelCompletion()
     {
         // Remove any null references from the list in case enemies were destroyed

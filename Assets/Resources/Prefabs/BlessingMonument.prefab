@@ -57,11 +57,19 @@ MonoBehaviour:
   - status: {fileID: 11400000, guid: b0e6797b50701804f99da1b2740a2ee1, type: 2}
     odds: 1
   - status: {fileID: 11400000, guid: 5bafa409e013427438fe544bb7459f71, type: 2}
-    odds: 1
+    odds: 10000
   - status: {fileID: 11400000, guid: bbb09eda262e4994d8bd9912cb84e838, type: 2}
     odds: 1
   - status: {fileID: 11400000, guid: c8a99b80cb0a93c41a0d696ddb6aa0b0, type: 2}
     odds: 1
+  - status: {fileID: 11400000, guid: 2ffc0b23e0412764db744a701fcde7f5, type: 2}
+    odds: 1
+  - status: {fileID: 11400000, guid: 3ca7ddb4bda7136468e3ce1265b72a50, type: 2}
+    odds: 1
+  - status: {fileID: 11400000, guid: 2ffc0b23e0412764db744a701fcde7f5, type: 2}
+    odds: 10000
+  - status: {fileID: 11400000, guid: e31553fb995ff1c45b2b8725c10b30f8, type: 2}
+    odds: 10000
   choices: 3
   uses: 1
 --- !u!33 &4131504883712997906

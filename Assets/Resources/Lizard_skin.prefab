@@ -1333,8 +1333,8 @@ MonoBehaviour:
     m_Bits: 0
   floating_item_prefab: {fileID: 0}
   isDead: 1
-  photonView: {fileID: 0}
-  enemy_type: {fileID: 0}
+  photonView: {fileID: -8007388556371597769}
+  enemy_type: {fileID: 11400000, guid: 4a5cb56e5714dbf4aa21acce1ff02ebd, type: 2}
   enemy_race_unit: 1
   range_unit: 5
   rarity_unit: 5

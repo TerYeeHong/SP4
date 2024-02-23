@@ -20,6 +20,10 @@ public class EnemyController : EnemyUnit
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private Rigidbody rigidbody;
 
+    [SerializeField] public AudioClip attack;
+    [SerializeField] public AudioClip step1;
+    [SerializeField] public AudioClip step2;
+
     public float m_Thrust = 20f;
     float distance;
     float nearestDistance = 1000;
@@ -88,9 +92,25 @@ public class EnemyController : EnemyUnit
         RaiseEvents.SetActiveEvent -= Active;
     }
 
+    public void Step1()
+    {
+        //GameEvents.m_instance.playNewAudioClip3D.Invoke(step1, AudioSfxManager.AUDIO_EFFECT.DEFAULT, gameObject.transform.position);
+        GameEvents.m_instance.playNewAudioClip.Invoke(step1, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+    }
+
+    public void Step2()
+    {
+
+        //GameEvents.m_instance.playNewAudioClip3D.Invoke(step2, AudioSfxManager.AUDIO_EFFECT.DEFAULT, gameObject.transform.position);
+        GameEvents.m_instance.playNewAudioClip.Invoke(step2, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+    }
+
+
     public void AttackBasicSTART()
     {
          attackBasic = true;
+        //GameEvents.m_instance.playNewAudioClip3D.Invoke(attack, AudioSfxManager.AUDIO_EFFECT.DEFAULT, gameObject.transform.position);
+        GameEvents.m_instance.playNewAudioClip.Invoke(attack, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
     }
 
     public void AttackBasicEND()
@@ -189,6 +209,7 @@ public class EnemyController : EnemyUnit
                 if (range_unit < 4)
                 {
 
+                    
                     CURRENT_STATE = STATES.ATTACK;
                     Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, targetPlayer.transform.position.y, targetPlayer.transform.position.z);
                     gameObject.transform.LookAt(lookAt);

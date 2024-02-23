@@ -90,9 +90,13 @@ public class SkyGun : MonoBehaviour
             ShootSystem.Play();
 
             Vector3 shootDirection = playerCamera.transform.forward;
-            shootDirection += new Vector3(Random.Range(-ShootConfig.Spread.x, ShootConfig.Spread.x),
-                                          Random.Range(-ShootConfig.Spread.y, ShootConfig.Spread.y),
-                                          Random.Range(-ShootConfig.Spread.z, ShootConfig.Spread.z));
+
+            // Choose spread based on aiming state
+            Vector3 spread = isAiming ? ShootConfig.ADSSpread : ShootConfig.Spread;
+
+            shootDirection += new Vector3(Random.Range(-spread.x, spread.x),
+                                          Random.Range(-spread.y, spread.y),
+                                          Random.Range(-spread.z, spread.z));
 
             shootDirection.Normalize();
 

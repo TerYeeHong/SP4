@@ -11,9 +11,12 @@ public class SkyWinManager : MonoBehaviour
     [SerializeField] private GameObject loseScreen;
     [SerializeField] private GameObject winSceen;
 
-    [SerializeField] private Camera startCam;
+    [SerializeField] public Camera startCam;
     public List<SkyPlayerController> playerControllers = new List<SkyPlayerController>();
     [SerializeField] private List<SkyPedestal> pedestals;
+    [SerializeField] private GameObject pedestalPrefab; // Assign in the inspector
+    [SerializeField] private int numberOfPedestalsToSpawn;
+
 
 
     private void Awake()
@@ -42,22 +45,22 @@ public class SkyWinManager : MonoBehaviour
     private void ProceedToNextFloor()
     {
         // Logic to proceed to the next floor
-        FloorClear();
         Debug.Log("Proceeding to the next floor...");
+        FloorClear();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ActivateLoseScreen();
-        }
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    ActivateLoseScreen();
+        //}
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    ActivateWinScreen();
+        //}
         if (Input.GetKeyDown(KeyCode.Q))
         {
             DeactivateScreens();
-        }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            ActivateWinScreen();
         }
     }
 
@@ -86,6 +89,32 @@ public class SkyWinManager : MonoBehaviour
             ActivateLoseScreen();
         }
     }
+    public void SpawnPedestalsOnIsland(Island island)
+    {
+        numberOfPedestalsToSpawn = PhotonNetwork.PlayerList.Length;
+        for (int i = 0; i < numberOfPedestalsToSpawn; i++)
+        {
+            // Assuming island.island_grid is accessible and contains grid points
+            if (island.island_grid.Count > 0)
+            {
+                int randomIndex = Random.Range(0, island.island_grid.Count);
+                Grid selectedGrid = island.island_grid[randomIndex];
+
+                // Calculate the spawn position based on the selected grid
+                Vector3 spawnPosition = new Vector3(selectedGrid.x, 1, selectedGrid.y); // Adjust Y position as needed
+
+                // Instantiate the pedestal prefab at the spawn position
+                var newPedestal = Instantiate(pedestalPrefab, spawnPosition, pedestalPrefab.transform.rotation);
+
+                // Assuming SkyPedestal is a component of the pedestal prefab
+                SkyPedestal pedestalComponent = newPedestal.GetComponent<SkyPedestal>();
+                if (pedestalComponent != null)
+                {
+                    pedestals.Add(pedestalComponent);
+                }
+            }
+        }
+    }
 
     public void FloorClear()
     {
@@ -111,9 +140,25 @@ public class SkyWinManager : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
+            SkyGlobalStuffs.currentIsland = 0;
             startCam.gameObject.SetActive(true);
             LevelGenerator.m_instance.RaiseEventGenerateLevel();
         }
+    }
+
+    public void TPToSpawn()
+    {
+        List<Grid> spawnPos = LevelGenerator.m_instance.SpawnSpoints;
+        int random_index = 0;
+        Vector3 position = new Vector3(spawnPos[random_index].x, 3.0f, spawnPos[random_index].y);
+        Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+
+        foreach (SkyPlayerController player in playerControllers)
+        {
+            player.transform.position = position;
+            player.transform.rotation = rotation;
+        }
+
     }
 
     private bool CheckWin()

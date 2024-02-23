@@ -52,6 +52,9 @@ MonoBehaviour:
   - DeactivateScreens
   - SetGameobjectInactive
   - SpawnFromPool
+  - ShootProjectileRPC
+  - OnVoidedRPC
+  - TeleportToPosition
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

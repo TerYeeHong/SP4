@@ -1377,6 +1377,8 @@ MonoBehaviour:
   crosshair_main: {fileID: 1451987115}
   replay_status_tmp: {fileID: 0}
   main_start_spawn_object: {fileID: 0}
+  actionProgressSlider: {fileID: 0}
+  spectatingText: {fileID: 0}
 --- !u!1 &1339084322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,6 +1558,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3787938341435706192, guid: 4c22bc298267638479397678cf32f965,
+        type: 3}
+      propertyPath: groundDistance
+      value: 0.105
       objectReference: {fileID: 0}
     - target: {fileID: 3787938341435706200, guid: 4c22bc298267638479397678cf32f965,
         type: 3}

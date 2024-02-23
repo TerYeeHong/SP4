@@ -9,6 +9,7 @@ public class SkyPedestal : MonoBehaviour
         if (other.CompareTag("Player")) // Make sure your player GameObject has the "Player" tag
         {
             isOccupied = true;
+            print("Is Occupied : " + isOccupied);
             SkyWinManager.instance.CheckPedestals();
         }
     }
@@ -18,6 +19,7 @@ public class SkyPedestal : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isOccupied = false;
+            print("Is Occupied : " + isOccupied);
             SkyWinManager.instance.CheckPedestals();
         }
     }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class SkyPlayerHealth : Unit
 {
@@ -168,16 +169,6 @@ public class SkyPlayerHealth : Unit
                 photonView.RPC("OnDeathRPC", RpcTarget.All);
             }
         }
-
-        // Check if the K key was pressed - Revive the player
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            // Ensure only the local player can revive themselves for testing
-            if (photonView.IsMine && isDead)
-            {
-                photonView.RPC("OnReviveRPC", RpcTarget.All);
-            }
-        }
     }
 
     public void AttemptToRevive()
@@ -207,24 +198,50 @@ public class SkyPlayerHealth : Unit
     IEnumerator AttemptRevive(SkyPlayerHealth playerToRevive)
     {
         Vector3 startPosition = transform.position;
-        yield return new WaitForSeconds(reviveTime); 
+        UIManager.Instance.ShowActionProgress(true); // Show the progress bar at the start
 
-        if (Vector3.Distance(startPosition, transform.position) < 1f) 
+        float elapsedTime = 0f; // Track the elapsed time
+        while (elapsedTime < reviveTime)
         {
-            playerToRevive.photonView.RPC("OnReviveRPC", RpcTarget.All);
+            elapsedTime += Time.deltaTime; // Increment the elapsed time
+
+            // Calculate the current progress as a percentage
+            float progress = Mathf.Clamp01(elapsedTime / reviveTime);
+            UIManager.Instance.SetActionProgress(progress); // Update the progress bar
+
+            // Optional: Check if the player has moved too far from the initial position
+            if (Vector3.Distance(startPosition, transform.position) >= 1f)
+            {
+                Debug.Log("Revival failed: Player moved.");
+                UIManager.Instance.ShowActionProgress(false); // Hide the progress bar if the player moves
+                yield break; // Exit the coroutine early if the condition fails
+            }
+
+            yield return null; // Wait until the next frame to continue
         }
-        else
-        {
-            Debug.Log("Revival failed: Player moved.");
-        }
+
+        // If the loop completes without interruptions, revive the player
+        playerToRevive.photonView.RPC("OnReviveRPC", RpcTarget.All);
+        UIManager.Instance.ShowActionProgress(false); // Hide the progress bar on completion
     }
 
+    public void CheckForOffMap()
+    {
+        print("Checking for off map");
+        if (gameObject.transform.position.y <= -10.0f)
+        {
+            photonView.RPC("OnVoidedRPC", RpcTarget.All);
+            photonView.RPC("OnDeathRPC", RpcTarget.All);
+        }
+    }
 
     public void OnRevive()
     {
         isDead = false;
+        UIManager.Instance.SetActiveAndChangeName(false, "");
         collide_with_attacks = true;
         Health = MaxHealth;
+        player.SetChildrenMeshRenderersEnabled(true);
         if (photonView.IsMine)
         {
             SkyCameraManager.Instance.SwitchCamera(photonView.OwnerActorNr);
@@ -232,6 +249,20 @@ public class SkyPlayerHealth : Unit
             GetComponent<SkyPlayerAnimation>().ChangeAnimationState(SkyPlayerAnimation.PLAYER_IDLE);
         }
         photonView.gameObject.transform.position = new Vector3(photonView.gameObject.transform.position.x, photonView.gameObject.transform.position.y + 1, photonView.gameObject.transform.position.z);
+        gameObject.GetComponent<Rigidbody>().useGravity = true;
+
+    }
+
+    [PunRPC]
+    public void OnVoidedRPC()
+    {
+        OnVoided();
+    }
+
+    public void OnVoided()
+    {
+        player.SetChildrenMeshRenderersEnabled(false);
+        gameObject.GetComponent<Rigidbody>().useGravity = false;
     }
 
 
@@ -239,6 +270,17 @@ public class SkyPlayerHealth : Unit
     public void OnDeathRPC()
     {
         OnDeath();
+    }
+
+    [PunRPC]
+    public void TeleportToPosition(Vector3 pos)
+    {
+        TPToPos(pos);
+    }
+
+    private void TPToPos(Vector3 pos)
+    {
+        transform.position = pos; 
     }
 
     [PunRPC]

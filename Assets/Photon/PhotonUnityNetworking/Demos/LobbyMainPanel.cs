@@ -14,7 +14,7 @@ namespace Photon.Pun.Demo.Asteroids
         [Header("Login Panel")]
         public GameObject LoginPanel;
 
-        public InputField PlayerNameInput;
+        //public InputField PlayerNameInput;
 
         [Header("Selection Panel")]
         public GameObject SelectionPanel;
@@ -40,6 +40,8 @@ namespace Photon.Pun.Demo.Asteroids
         public Button StartGameButton;
         public GameObject PlayerListEntryPrefab;
 
+        public AudioClip clickSFX;
+
         private Dictionary<string, RoomInfo> cachedRoomList;
         private Dictionary<string, GameObject> roomListEntries;
         private Dictionary<int, GameObject> playerListEntries;
@@ -53,7 +55,7 @@ namespace Photon.Pun.Demo.Asteroids
             cachedRoomList = new Dictionary<string, RoomInfo>();
             roomListEntries = new Dictionary<string, GameObject>();
             
-            PlayerNameInput.text = "Player " + Random.Range(1000, 10000);
+            //PlayerNameInput.text = "Player " + Random.Range(1000, 10000);
         }
 
         #endregion
@@ -245,20 +247,20 @@ namespace Photon.Pun.Demo.Asteroids
             PhotonNetwork.LeaveRoom();
         }
 
-        public void OnLoginButtonClicked()
-        {
-            string playerName = PlayerNameInput.text;
+        //public void OnLoginButtonClicked()
+        //{
+        //    string playerName = PlayerNameInput.text;
 
-            if (!playerName.Equals(""))
-            {
-                PhotonNetwork.LocalPlayer.NickName = playerName;
-                PhotonNetwork.ConnectUsingSettings();
-            }
-            else
-            {
-                Debug.LogError("Player Name is invalid.");
-            }
-        }
+        //    if (!playerName.Equals(""))
+        //    {
+        //        PhotonNetwork.LocalPlayer.NickName = playerName;
+        //        PhotonNetwork.ConnectUsingSettings();
+        //    }
+        //    else
+        //    {
+        //        Debug.LogError("Player Name is invalid.");
+        //    }
+        //}
 
         public void OnRoomListButtonClicked()
         {

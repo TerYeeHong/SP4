@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
+using TMPro;
 
 public class SkyPlayerHealth : Unit
 {
@@ -10,6 +13,7 @@ public class SkyPlayerHealth : Unit
     public float revivalRadius = 5f;
     [SerializeField] public Canvas playerHPCanvas;
     [SerializeField] public Image playerHPBar;
+    [SerializeField] public TextMeshProUGUI playerHPText;
     [SerializeField] private float reviveTime = 5f;
 
     public Color gizmoColor = Color.yellow;
@@ -20,6 +24,17 @@ public class SkyPlayerHealth : Unit
     {
         photonView = GetComponent<PhotonView>();
         player = GetComponent<SkyPlayerController>();
+        if (photonView.IsMine)
+        {
+            string dataSent = $"3$@" +
+               $"{PhotonNetwork.LocalPlayer.NickName}" +
+               // $"$@{team}" +
+               $"$@{"blud is join"}";
+
+            // You would have to set the Receivers to ALL in order to receive this event on the local client as well
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            PhotonNetwork.RaiseEvent(RaiseEvents.CHATNOTICE, dataSent, raiseEventOptions, SendOptions.SendReliable);
+        }
     }
 
     public override void OnDeath()
@@ -28,7 +43,16 @@ public class SkyPlayerHealth : Unit
         if (photonView.IsMine)
             player.SetChildrenMeshRenderersEnabled(true);
         GetComponent<SkyPlayerAnimation>().ChangeAnimationState("Falling Back Death");
-       // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
+
+        string dataSent = $"1$@" +
+               $"{PhotonNetwork.LocalPlayer.NickName}" +
+               // $"$@{team}" +
+               $"$@{"blud is dead"}";
+
+        // You would have to set the Receivers to ALL in order to receive this event on the local client as well
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(RaiseEvents.CHATNOTICE, dataSent, raiseEventOptions, SendOptions.SendReliable);
+        // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
     }
 
     public override bool TakeDamage(int damage)
@@ -55,6 +79,7 @@ public class SkyPlayerHealth : Unit
             health_unit = 0;
             collide_with_attacks = false;
             photonView.RPC("OnDeathRPC", RpcTarget.All);
+            HandleHealthBar();
             return true;
         }
         return false;
@@ -85,6 +110,8 @@ public class SkyPlayerHealth : Unit
             health_unit = 0;
             collide_with_attacks = false;
             photonView.RPC("OnDeathRPC", RpcTarget.All);
+            //data: chat msg (0, sendername, team, msg)
+           
             return true;
         }
         return false;
@@ -94,6 +121,8 @@ public class SkyPlayerHealth : Unit
     public void HandleHealthBar()
     {
         playerHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
+        playerHPText.text = "HP " + health_unit;
+
     }
 
     public void InputHandler()

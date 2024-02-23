@@ -71,16 +71,25 @@ public class LizardEnemyController : EnemyUnit
     public void FindNearestPlayer()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
+        //Assume first player is nearest
+        distance = Vector3.Distance(enemyTransform.position, players[0].transform.position);
+        nearestDistance = distance;
+        targetPlayer = players[0];
+
+        //Check all other players
+        for (int i = 1; i < players.Length; i++)
         {
             distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
             if (distance < nearestDistance)
             {
-                movePositionTransform = players[i].transform;
+                nearestDistance = distance;
                 targetPlayer = players[i];
             }
         }
+
+        movePositionTransform = targetPlayer.transform;
     }
+
 
 
     public override void Init()
@@ -166,11 +175,12 @@ public class LizardEnemyController : EnemyUnit
 
         if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
         {
-
+         
             if (range_unit < 2.5)
             {
 
                 CURRENT_STATE = STATES.ATTACK;
+                
                 ChangeAnimationState(STATES.ATTACK);
             }
 
@@ -199,6 +209,8 @@ public class LizardEnemyController : EnemyUnit
             else if (CURRENT_STATE == STATES.ATTACK)
             {
                 animator.SetTrigger("IsAttacking");
+                Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, 0, targetPlayer.transform.position.z);
+                gameObject.transform.LookAt(lookAt);
                 isInvisible = false;
 
             }

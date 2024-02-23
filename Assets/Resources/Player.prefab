@@ -1390,6 +1390,7 @@ MonoBehaviour:
   revivalRadius: 2
   playerHPCanvas: {fileID: 7019409581837623351}
   playerHPBar: {fileID: 4557260798658768530}
+  playerHPText: {fileID: 8287117987133314726}
   reviveTime: 5
   gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &-7693879859838931682

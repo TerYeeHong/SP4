@@ -63,7 +63,7 @@ public class HealPillerController : EnemyUnit
 
             }
 
-            // You can perform additional actions here, such as dealing damage to the player or triggering events.
+          
         }
     }
 
@@ -112,14 +112,16 @@ public class HealPillerController : EnemyUnit
         // animator.SetBool("IsDead", true);
 
         CURRENT_STATE = STATES.DEAD;
-        if (photonView.IsMine)
-        {
-            Debug.Log("photonView.ViewID" + photonView.ViewID);
-            string sentData = "" + photonView.ViewID;
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
-            PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYDIEEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
-        }
+        //if (photonView.IsMine)
+        //{
+        //    Debug.Log("photonView.ViewID" + photonView.ViewID);
+        //    string sentData = "" + photonView.ViewID;
+        //    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+        //    PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYDIEEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
+        //}
 
+        if(PhotonNetwork.IsMasterClient)
+        PhotonNetwork.Destroy(gameObject);
 
         // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
         //Destroy(gameObject, 1.0f);

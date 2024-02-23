@@ -97,6 +97,14 @@ public class JLGameManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         PhotonNetwork.Disconnect();
+        string dataSent = $"4$@" +
+              $"{PhotonNetwork.LocalPlayer.NickName}" +
+              // $"$@{team}" +
+              $"$@{"blud is leaving"}";
+
+        // You would have to set the Receivers to ALL in order to receive this event on the local client as well
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(RaiseEvents.CHATNOTICE, dataSent, raiseEventOptions, SendOptions.SendReliable);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)

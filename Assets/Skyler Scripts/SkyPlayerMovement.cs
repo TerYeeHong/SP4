@@ -104,25 +104,33 @@ public class SkyPlayerMovement : MonoBehaviour
     }
     public void HandleInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        bool typing = FindObjectOfType<MultiplayerMessages>().typing;
+        if (!typing)
+        {
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
+        }
     }
     public void HandleMovement()
     {
-        Vector3 movementDirection = transform.right * horizontalInput + transform.forward * verticalInput;
-        float currentSpeed = speed;
-
-        // Check for running
-        isRunning = Input.GetKey(KeyCode.LeftShift);
-        if (isRunning && currentStamina > 0)
+        bool typing = FindObjectOfType<MultiplayerMessages>().typing;
+        if (!typing)
         {
-            currentStamina -= staminaDepletionRate * Time.deltaTime;
-            UpdateStaminaBar();
-        }
+            Vector3 movementDirection = transform.right * horizontalInput + transform.forward * verticalInput;
+            float currentSpeed = speed;
 
-        Vector3 force = movementDirection.normalized * currentSpeed;
-        force.y = 0;
-        rb.AddForce(force, ForceMode.Force);
+            // Check for running
+            isRunning = Input.GetKey(KeyCode.LeftShift);
+            if (isRunning && currentStamina > 0)
+            {
+                currentStamina -= staminaDepletionRate * Time.deltaTime;
+                UpdateStaminaBar();
+            }
+
+            Vector3 force = movementDirection.normalized * currentSpeed;
+            force.y = 0;
+            rb.AddForce(force, ForceMode.Force);
+        }
     }
 
     public void HandleStaminaRegen()

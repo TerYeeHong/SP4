@@ -139,7 +139,7 @@ public class SkyPlayerHealth : Unit
         UIManager.Instance.SetActiveAndChangeName(false, "");
         collide_with_attacks = true;
         Health = MaxHealth;
-        GetComponent<SkyPlayerController>().SetChildrenMeshRenderersEnabled(true);
+        player.SetChildrenMeshRenderersEnabled(true);
         if (photonView.IsMine)
         {
             SkyCameraManager.Instance.SwitchCamera(photonView.OwnerActorNr);
@@ -159,7 +159,7 @@ public class SkyPlayerHealth : Unit
 
     public void OnVoided()
     {
-        GetComponent<SkyPlayerController>().SetChildrenMeshRenderersEnabled(false);
+        player.SetChildrenMeshRenderersEnabled(false);
         gameObject.GetComponent<Rigidbody>().useGravity = false;
     }
 

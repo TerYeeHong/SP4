@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
+using UnityEngine.Rendering.UI;
 
 public class SpawnMonument : MonoBehaviour
 {
     private List<Grid> island_grids = new(); // Assuming this is populated with the islands where enemies can spawn
     private int spawnAmount;
-    private bool isFinal;
+    public bool isFinal;
     private bool isInteractable = true;
     private List<EnemyUnit> spawnedEnemies = new List<EnemyUnit>();
+    private Island currIsland;
 
     private void Start()
     {
@@ -30,6 +32,7 @@ public class SpawnMonument : MonoBehaviour
         island_grids.Clear();
         print("Init monument at  : " + islandNum);   
         island_grids = LevelGenerator.m_instance.islands_list[islandNum].island_grid;
+        currIsland = LevelGenerator.m_instance.islands_list[islandNum];
         spawnAmount = islandNum + Random.Range(3, 10 + islandNum);
         isFinal = LevelGenerator.m_instance.islands_list[islandNum].Equals(LevelGenerator.m_instance.islands_list[LevelGenerator.m_instance.islands_list.Count - 1]);
     }
@@ -39,9 +42,7 @@ public class SpawnMonument : MonoBehaviour
         if (isFinal)
         {
             // Spawn a boss
-            Vector3 bossPosition = ChooseRandomIslandPosition();
-            SpawnWolf(bossPosition);
-            Invoke(nameof(MakeMonumentDisappear), 1.0f);
+            StartCoroutine(StartSpawningWolf(1, 1.0f));
         }
         else
         {
@@ -66,7 +67,21 @@ public class SpawnMonument : MonoBehaviour
         MakeMonumentDisappear();
     }
 
+    IEnumerator StartSpawningWolf(int amount, float delay)
+    {
+        WaitForSeconds delayTime = new WaitForSeconds(delay);
 
+        for (int i = 0; i < amount; i++)
+        {
+            Vector3 position = ChooseRandomIslandPosition();
+            GameObject wolf = SpawnWolf(position);
+
+            yield return delayTime;
+        }
+
+        // After spawning all fish, make the monument disappear
+        MakeMonumentDisappear();
+    }
     Vector3 ChooseRandomIslandPosition()
     {
         // Assuming Grid class has a method or properties to get a position
@@ -112,7 +127,7 @@ public class SpawnMonument : MonoBehaviour
         {
             gameObject.SetActive(false);
             // All enemies are dead, proceed to next level or trigger victory
-            ProceedToNextLevel();
+            ProceedToNextIsland();
         }
     }
 
@@ -121,10 +136,17 @@ public class SpawnMonument : MonoBehaviour
         CheckForLevelCompletion();
     }
 
-    private void ProceedToNextLevel()
+    private void ProceedToNextIsland()
     {
-        SkyGlobalStuffs.currentIsland++;
-        Debug.Log("All enemies defeated. Proceed to the next level.");
+        if (LevelGenerator.m_instance.islands_list[LevelGenerator.m_instance.islands_list.Count - 1] != currIsland)
+        {
+            SkyGlobalStuffs.currentIsland++;
+            Debug.Log("All enemies defeated. Proceed to the next island.");
+        }
+        else
+        {
+            SkyWinManager.instance.SpawnPedestalsOnIsland(currIsland);
+        }
     }
 
     void MakeMonumentDisappear()

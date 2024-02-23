@@ -1070,6 +1070,7 @@ GameObject:
   - component: {fileID: -6357412559734486261}
   - component: {fileID: -7693879859838931682}
   - component: {fileID: -6078496037436778383}
+  - component: {fileID: 6178650847339116246}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1434,6 +1435,20 @@ MonoBehaviour:
   isXRayActive: 0
   originalMat: {fileID: 2100000, guid: 14830531b59d3b443885c8aaacb7e16e, type: 2}
   xrayMat: {fileID: 2100000, guid: aa9e114196bd6ab468bed92609f85cf0, type: 2}
+--- !u!114 &6178650847339116246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3787938341435706200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e520b5e0e22b741438f84e03f3086a4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameTextPrefab: {fileID: 8674136171930682078, guid: dd58f0d783ac9cf47a7c8198a22bf30c,
+    type: 3}
 --- !u!1 &3787938341617956075
 GameObject:
   m_ObjectHideFlags: 0

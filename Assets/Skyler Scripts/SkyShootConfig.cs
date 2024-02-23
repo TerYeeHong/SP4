@@ -6,5 +6,6 @@ public class SkyShootConfig : ScriptableObject
 {
     public LayerMask HitMask;
     public Vector3 Spread = new Vector3(0.1f, 0.1f, 0.1f);
+    public Vector3 ADSSpread;
     public float FireRate = 0.25f;
 }

@@ -17,6 +17,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] GameObject platform_default_prefab;
     [SerializeField] GameObject platform_connector_prefab;
     [SerializeField] GameObject spawn_monument_prefab;
+    [SerializeField] GameObject revive_monument_prefab;
+    [SerializeField][Range(0, 100)] int reviveMonumentSpawnChance = 20;
     [SerializeField] List<IslandObject> island_prefabs;
 
     [Header("Island Generation details")]
@@ -203,6 +205,9 @@ public class LevelGenerator : MonoBehaviour
             monument.InitMonument(index);
             index++;
         }
+
+        SkyWinManager.instance.startCam.gameObject.SetActive(false);
+        SkyWinManager.instance.TPToSpawn();
     }
 
     void UpdateClientLoadedMap()
@@ -480,6 +485,27 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
+        bool isFirstIsland = islands_list.IndexOf(island) == 0;
+
+        if (isFirstIsland || Random.Range(0, 100) < reviveMonumentSpawnChance)
+        {
+            // Select a random grid from the island's grid list for monument placement
+            if (island.island_grid.Count > 0)
+            {
+                int randomIndex = Random.Range(0, island.island_grid.Count);
+                Grid selectedGrid = island.island_grid[randomIndex];
+
+                // Calculate position based on the selected grid
+                Vector3 monumentPosition = new Vector3(selectedGrid.x * x_length + selectedGrid.x * gap, 0, selectedGrid.y * z_length + selectedGrid.y * gap); // Adjust Y position as needed
+
+                Quaternion monumentRotation = Quaternion.identity; // Adjust rotation as needed
+
+                // Instantiate the revive monument prefab at the selected grid position
+                var reviveMonument = Instantiate(revive_monument_prefab, monumentPosition, monumentRotation);
+
+
+            }
+        }
         //Generate a spawn monument
         GameObject monumentGO = Instantiate(spawn_monument_prefab, new Vector3(island.center.x, 2, island.center.y + 3), Quaternion.identity);
         SpawnMonument monument = monumentGO.GetComponent<SpawnMonument>();

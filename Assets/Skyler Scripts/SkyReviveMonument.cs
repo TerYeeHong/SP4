@@ -72,11 +72,23 @@ public class SkyReviveMonument : MonoBehaviour
         {
             if (player.playerHealth.isDead)
             {
-                Vector2 randomPoint = Random.insideUnitCircle * revivalRadius;
-                Vector3 revivePosition = transform.position + new Vector3(randomPoint.x, 0, randomPoint.y);
+                // Generate a random point within a donut shape around the monument
+                float minRadius = 1f; // Minimum distance from the monument center to start spawning
+                float maxRadius = revivalRadius; // Maximum distance from the monument center to spawn
+                float angle = Random.Range(0, 2 * Mathf.PI); // Random angle
+
+                // Ensure the spawn point is at least minRadius away from the monument
+                float radius = Random.Range(minRadius, maxRadius);
+                Vector2 randomPoint = new Vector2(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+
+                // Convert the 2D point to a 3D position using the monument's position as a base
+                Vector3 revivePosition = transform.position + new Vector3(randomPoint.x, 2, randomPoint.y);
+
+                // Revive the player at the calculated position
                 player.GetPhotonView.RPC("OnReviveRPC", RpcTarget.All);
                 player.GetPhotonView.RPC("TeleportToPosition", RpcTarget.All, revivePosition);
             }
         }
     }
+
 }

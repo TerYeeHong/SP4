@@ -1952,7 +1952,7 @@ MonoBehaviour:
   isDead: 1
   photonView: {fileID: 0}
   enemy_type: {fileID: 0}
-  enemy_race_unit: 1
+  enemy_race_unit: 2
   range_unit: 5
   rarity_unit: 4
   navMeshAgent: {fileID: 1961082384}

@@ -219,6 +219,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1483966094}
+        m_TargetAssemblyTypeName: LobbySFX, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &23826405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,6 +541,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1483966094}
+        m_TargetAssemblyTypeName: LobbySFX, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &89271102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -675,6 +699,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1483966094}
+        m_TargetAssemblyTypeName: LobbySFX, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &147599469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,6 +836,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1483966091}
         m_TargetAssemblyTypeName: PFUserMgt, Assembly-CSharp
         m_MethodName: OnButtonRegUser
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1483966094}
+        m_TargetAssemblyTypeName: LobbySFX, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3624,6 +3672,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1483966094}
+        m_TargetAssemblyTypeName: LobbySFX, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1483966091}
         m_TargetAssemblyTypeName: PFUserMgt, Assembly-CSharp
         m_MethodName: ShowCanvas
@@ -4839,6 +4899,9 @@ GameObject:
   - component: {fileID: 1483966091}
   - component: {fileID: 1483966092}
   - component: {fileID: 1483966093}
+  - component: {fileID: 1483966094}
+  - component: {fileID: 1483966096}
+  - component: {fileID: 1483966095}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -4910,6 +4973,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f10a7d630092d864cab8551b74599622, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1483966094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483966088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69c1cbcbc5da58e4b9433933da62ea6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSFX: {fileID: 8300000, guid: fb139870439dc0b469f83622f2d60a2a, type: 3}
+--- !u!114 &1483966095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483966088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2b65e98886e8d54a8bf1de18ed3b5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player_layermask:
+    serializedVersion: 2
+    m_Bits: 0
+  enemy_layermask:
+    serializedVersion: 2
+    m_Bits: 0
+  all_layermask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &1483966096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483966088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321f91cf0c085c14085325ffed9cc945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listener_transform: {fileID: 0}
+  audio_source_init_amount: 10
+  distance_per_fade_ratio: 2
+  distance_start_fade: 2
+  reverb_filter_parent: {fileID: 0}
+  reverb_filter_prefab: {fileID: 0}
 --- !u!1 &1485012866 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 888797555421311639, guid: e795bb82ecceee54eb20dad602cd5326,

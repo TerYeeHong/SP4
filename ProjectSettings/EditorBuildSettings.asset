@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DemoAsteroids-LobbyScene.unity
     guid: c8a9d1312a49dc8488a9b32d83d659c7
+  - enabled: 1
+    path: Assets/Scenes/Skyler Level ENDGAME.unity
+    guid: ffea30bfdad5f88488898c2567c5bfac
   - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: c7fa9fa4b73440d4bb0a76cc31cd717a
@@ -26,7 +29,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Ethan/Skylar + Ethan.unity
     guid: 1faae15a7137b95428a23e59df51c2b0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/YeeHongLevel.unity
     guid: 2c6650b2f6d4f894ba3a40e744b97752
   m_configObjects: {}

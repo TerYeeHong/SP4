@@ -2,12 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+
+    public static UIManager Instance;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     [SerializeField] GameObject crosshair_main;
     [SerializeField] TextMeshProUGUI replay_status_tmp;
     [SerializeField] GameObject main_start_spawn_object;
+    [SerializeField] private Slider actionProgressSlider; 
 
     private void OnEnable()
     {
@@ -23,6 +40,27 @@ public class UIManager : MonoBehaviour
 
 
     }
+    public void ShowActionProgress(bool show)
+    {
+        if (actionProgressSlider != null)
+        {
+            actionProgressSlider.gameObject.SetActive(show);
+            if (!show)
+            {
+                SetActionProgress(0);
+            }
+        }
+    }
+
+    public void SetActionProgress(float progress)
+    {
+        if (actionProgressSlider != null && actionProgressSlider.gameObject.activeSelf)
+        {
+            actionProgressSlider.value = progress;
+        }
+    }
+
+
     void OnUpdateCanStartSpawnEnable(bool enable)
     {
         main_start_spawn_object.SetActive(enable);

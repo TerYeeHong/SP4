@@ -123,10 +123,7 @@ public class SpawnMonument : MonoBehaviour
 
     private void ProceedToNextLevel()
     {
-        // Example: Load the next level scene
-        // SceneManager.LoadScene("NextLevelSceneName");
-
-        // Or simply inform the player and unlock the next level
+        SkyGlobalStuffs.currentIsland++;
         Debug.Log("All enemies defeated. Proceed to the next level.");
     }
 

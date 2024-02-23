@@ -149,7 +149,7 @@ public class SkyPlayerMovement : MonoBehaviour
 
        if (isGrounded)
         {
-            if ((horizontalInput < -0.2 || horizontalInput > 0.2)  || (verticalInput < -0.2 || verticalInput > 0.2) )
+            if ((horizontalInput < -0.1 || horizontalInput > 0.1)  || (verticalInput < -0.1 || verticalInput > 0.1))
             {
                 rb.drag = groundDrag;
             }
@@ -233,6 +233,7 @@ public class SkyPlayerMovement : MonoBehaviour
                 else if (rb.velocity.y < 0)
                 {
                     playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_FALL);
+                    GetComponent<SkyPlayerController>().playerHealth.CheckForOffMap();
                 }
             }
         }

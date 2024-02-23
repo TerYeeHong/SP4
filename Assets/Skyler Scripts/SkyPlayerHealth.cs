@@ -136,6 +136,7 @@ public class SkyPlayerHealth : Unit
     public void OnRevive()
     {
         isDead = false;
+        UIManager.Instance.SetActiveAndChangeName(false, "");
         collide_with_attacks = true;
         Health = MaxHealth;
         GetComponent<SkyPlayerController>().SetChildrenMeshRenderersEnabled(true);
@@ -147,6 +148,7 @@ public class SkyPlayerHealth : Unit
         }
         photonView.gameObject.transform.position = new Vector3(photonView.gameObject.transform.position.x, photonView.gameObject.transform.position.y + 1, photonView.gameObject.transform.position.z);
         gameObject.GetComponent<Rigidbody>().useGravity = true;
+
     }
 
     [PunRPC]

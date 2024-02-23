@@ -24,7 +24,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject crosshair_main;
     [SerializeField] TextMeshProUGUI replay_status_tmp;
     [SerializeField] GameObject main_start_spawn_object;
-    [SerializeField] private Slider actionProgressSlider; 
+    [SerializeField] private Slider actionProgressSlider;
+    [SerializeField] private TMP_Text spectatingText;
 
     private void OnEnable()
     {
@@ -40,6 +41,19 @@ public class UIManager : MonoBehaviour
 
 
     }
+
+    public void SetActiveAndChangeName(bool active, string name)
+    {
+        print("setting active");
+        spectatingText.gameObject.SetActive(active);
+
+        if (active)
+        {
+            spectatingText.text = "Spectating : " + name;
+        }
+    }
+
+
     public void ShowActionProgress(bool show)
     {
         if (actionProgressSlider != null)

@@ -22,6 +22,8 @@ public class SkyCameraSwitch : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
                 int targetPlayerID = PhotonNetwork.PlayerList[i].ActorNumber;
+                string playerName = PhotonNetwork.PlayerList[i].NickName;
+                UIManager.Instance.SetActiveAndChangeName(true, playerName);
                 SkyCameraManager.Instance.SwitchCamera(targetPlayerID);
                 break;
             }

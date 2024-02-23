@@ -7,10 +7,16 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class SkyPlayerGunSelector : MonoBehaviour
 {
+    [Header("References for Status Checks")]
+    [SerializeField] Status weapon_master;
+    int weapon_master_count;
+
     [SerializeField]
     private Transform gunParent;
     [SerializeField]
     private List<GameObject> gunPrefabs; // Store gun prefabs here
+    [SerializeField]
+    private List<GameObject> gunPrefabsList; // Store gun prefabs here
     public GameObject sniperScope;
 
     [Space]
@@ -21,6 +27,17 @@ public class SkyPlayerGunSelector : MonoBehaviour
     {
         // Initialize with the first gun as the default active gun
         SwitchGunByIndex(0);
+
+        StatusCheckAll();
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.m_instance.onStatusChange.AddListener(StatusCheckAll);
+    }
+    private void OnDisable()
+    {
+        GameEvents.m_instance.onStatusChange.RemoveListener(StatusCheckAll);
     }
 
     public void Update()
@@ -29,6 +46,18 @@ public class SkyPlayerGunSelector : MonoBehaviour
         {
             SwitchGun();
         }
+    }
+
+    public void StatusCheckAll()
+    {
+        weapon_master_count = PFGlobalData.GetBlessingCount(weapon_master.Name_status) + 1;
+
+        gunPrefabs.Clear();
+        for (int i = 0; i < weapon_master_count; ++i)
+        {
+            gunPrefabs.Add(gunPrefabsList[i]);
+        }
+
     }
 
     public void SwitchGun()

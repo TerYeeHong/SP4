@@ -4,6 +4,71 @@ using UnityEngine.UI;
 
 public class SkyPlayerMovement : MonoBehaviour
 {
+    [Header("References for Status Checks")]
+    [SerializeField] Status speed_divine;
+    [SerializeField] Status speed_moderate;
+    [SerializeField] Status speed_mini;
+    [SerializeField] Status jump;
+    [SerializeField] Status sprint;
+    [SerializeField] Status sliding;
+    [SerializeField] Status stamina;
+
+    protected int speed_divine_count;
+    protected int speed_moderate_count;
+    protected int speed_mini_count;
+    protected int jump_count;
+    protected int sprint_count;
+    protected int sliding_count;
+    protected int stamina_count;
+
+    private void OnEnable()
+    {
+        GameEvents.m_instance.onStatusChange.AddListener(StatusCheckAll);
+    }
+    private void OnDisable()
+    {
+        GameEvents.m_instance.onStatusChange.RemoveListener(StatusCheckAll);
+    }
+
+    public void StatusCheckAll()
+    {
+        speed_divine_count = PFGlobalData.GetBlessingCount(speed_divine.Name_status);
+        speed_moderate_count = PFGlobalData.GetBlessingCount(speed_moderate.Name_status);
+        speed_mini_count = PFGlobalData.GetBlessingCount(speed_mini.Name_status);
+        jump_count = PFGlobalData.GetBlessingCount(jump.Name_status);
+        sprint_count = PFGlobalData.GetBlessingCount(sprint.Name_status);
+        sliding_count = PFGlobalData.GetBlessingCount(sliding.Name_status);
+        stamina_count = PFGlobalData.GetBlessingCount(stamina.Name_status);
+
+        //Set stats
+        speed = 4.0f 
+            + 1.0f * speed_mini_count 
+            + 2.0f * speed_moderate_count 
+            + 4.0f * speed_divine_count;
+
+        //Sprinting
+        staminaDepletionRate = 10.0f + 5.0f * sprint_count;
+        runMultiplier = 1.5f + 0.2f * sprint_count;
+
+        //stamina
+        maxStamina = 100.0f + stamina_count * 30.0f;
+        currentStamina = maxStamina;
+
+        //jump
+        jumpStaminaCost = 30.0f;
+        maxJumps = jump_count;
+
+        //Stamina is done inside the code
+
+
+        //Disable and enable stamina bar
+        if (jump_count > 0 || sprint_count > 0)
+            staminaBar.enabled = true;
+        else
+            staminaBar.enabled = false;
+    }
+
+
     private Rigidbody rb;
     public float speed = 10f;
     public float deceleration = 5f;
@@ -45,6 +110,8 @@ public class SkyPlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         currentStamina = maxStamina;
+
+        StatusCheckAll();
     }
 
     void Update()
@@ -87,10 +154,16 @@ public class SkyPlayerMovement : MonoBehaviour
     }
     private void StartSlide()
     {
+        if (sliding_count == 0)
+            return;
+
         isSliding = true;
         transform.localScale = new Vector3(transform.localScale.x, slideYScale, transform.localScale.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // Optional, for enhanced sliding effect
         slideTimer = maxSlideTime;
+
+        currentStamina += (3 + 2.0f * sliding_count) * Time.deltaTime;
+        UpdateStaminaBar();
     }
 
     private void StopSlide()
@@ -113,12 +186,15 @@ public class SkyPlayerMovement : MonoBehaviour
         float currentSpeed = speed;
 
         // Check for running
-        isRunning = Input.GetKey(KeyCode.LeftShift);
-        if (isRunning && currentStamina > 0)
+        if (sprint_count > 0)
         {
-            currentSpeed *= runMultiplier;
-            currentStamina -= staminaDepletionRate * Time.deltaTime;
-            UpdateStaminaBar();
+            isRunning = Input.GetKey(KeyCode.LeftShift);
+            if (isRunning && currentStamina > 0)
+            {
+                currentSpeed *= runMultiplier;
+                currentStamina -= staminaDepletionRate * Time.deltaTime;
+                UpdateStaminaBar();
+            }
         }
 
         Vector3 force = movementDirection.normalized * currentSpeed;
@@ -187,7 +263,7 @@ public class SkyPlayerMovement : MonoBehaviour
     }
     public void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps - 1) && currentStamina >= jumpStaminaCost)
+        if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps) && currentStamina >= jumpStaminaCost)
         {
             currentStamina -= jumpStaminaCost;
             UpdateStaminaBar();

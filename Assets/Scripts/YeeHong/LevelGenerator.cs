@@ -1019,6 +1019,9 @@ public class Island
 
     public List<Grid> island_bridge_grid;
 
+    public List<GameObject> island_game_objects;
+
+
     public Island(int size_x, int size_z)
     {
         island_grid = new();

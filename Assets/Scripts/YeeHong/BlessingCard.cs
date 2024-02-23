@@ -50,19 +50,18 @@ public class BlessingCard : MonoBehaviour
 
     public void AddBlessing()
     {
-        //GameEvents.m_instance.blessings.Add(status);
-        PFGlobalData.blessings.Add(status);
-        string statuses = "";
-        foreach (Status status in PFGlobalData.blessings)
+        Unit player_unit = null;
+        GameObject[] all_players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in all_players)
         {
-            statuses += status.Name_status + "/";
+            if (player.GetComponent<SkyPlayerController>().GetPhotonView.IsMine)
+                player_unit = player.GetComponent<Unit>();
         }
-        Debug.LogWarning($"Status:{statuses}");
+
+        PFGlobalData.AddBlessing(status, player_unit);
 
 
-
-
-        status.OnEquip(GameObject.FindWithTag("Player").GetComponent<Unit>());
+        //status.OnEquip(GameObject.FindWithTag("Player").GetComponent<Unit>());
     }
 
     public void SetRarity()

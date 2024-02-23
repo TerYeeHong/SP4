@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WeaponBuff
   m_EditorClassIdentifier: 
   icon: {fileID: 1786770234, guid: 7d7a0aba59194c44580bfce8bdd959dc, type: 3}
-  m_name_status: WeaponBuff
+  m_name_status: Weapon Master
   m_have_duration: 0
   m_active_duration: 0
   m_rarity: 2

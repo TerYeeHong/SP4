@@ -39,6 +39,10 @@ public class LizardEnemyController : EnemyUnit
     public SkinnedMeshRenderer enemyRenderer;
     public Material originalMat, xrayMat;
 
+    private float dissolveSpeed = 2.5f;
+    public float dissolveAmt;
+    private bool isDissolveInEffectPlaying = false;
+
     STATES CURRENT_STATE = STATES.IDLE;
     public enum STATES
     {
@@ -63,7 +67,7 @@ public class LizardEnemyController : EnemyUnit
 
     public void InvisibleEND()
     {
-        isInvisible = true;
+        StartCoroutine(DissolveOutEffect());
         CURRENT_STATE = STATES.WALKING;
         ChangeAnimationState(STATES.WALKING);
     }
@@ -164,6 +168,9 @@ public class LizardEnemyController : EnemyUnit
         Debug.Log("invis timer: " + invisTimer);
 
 
+        if (CURRENT_STATE != STATES.ATTACK)
+            isDissolveInEffectPlaying = false;
+
         if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
         {
 
@@ -198,9 +205,12 @@ public class LizardEnemyController : EnemyUnit
 
             else if (CURRENT_STATE == STATES.ATTACK)
             {
+                if (!isDissolveInEffectPlaying)
+                {
+                    StartCoroutine(PlayDissolveInEffect());
+                }
                 animator.SetTrigger("IsAttacking");
                 isInvisible = false;
-
             }
             else if (CURRENT_STATE == STATES.IDLE)
             {
@@ -237,10 +247,6 @@ public class LizardEnemyController : EnemyUnit
                 navMeshAgent.speed = speed_unit;
                 navMeshAgent.destination = movePositionTransform.position;
             }
-            //if (abilityXRay.isXRayActive == true)
-            //{
-
-            //}
             
             if (isInvisible && abilityXRay.isXRayActive == false)
             {
@@ -299,15 +305,9 @@ public class LizardEnemyController : EnemyUnit
 
     public override bool TakeDamage(int damage)
     {
-        //health_unit -= damage;
-        Debug.Log("GETTING MY ASS HIT");
-
-        Debug.Log("damage" + damage);
         //Damage pop up
         if (damage > 0)
         {
-            Debug.Log("OUCHH");
-
             // rigidbody.AddForce(transform.forward * m_Thrust);
             CURRENT_STATE = STATES.HIT;
             animator.SetTrigger("IsHit");
@@ -327,24 +327,51 @@ public class LizardEnemyController : EnemyUnit
 
     void SetDissolveAmt(float amt)
     {
-        enemyRenderer.material.SetFloat("_Dissolve", amt);
+        enemyRenderer.material.SetFloat("_DissolveAmt", amt);
     }
+
+    IEnumerator DissolveInEffect()
+    {
+        dissolveAmt = 1.2f;
+        while (dissolveAmt > -1.1f)
+        {
+            dissolveAmt -= Time.deltaTime * dissolveSpeed;
+            SetDissolveAmt(dissolveAmt);
+            yield return null;
+        }
+    }
+
+    IEnumerator DissolveOutEffect()
+    {
+        dissolveAmt = -1.1f;
+        while (dissolveAmt < 1.2f)
+        {
+            dissolveAmt += Time.deltaTime * dissolveSpeed;
+            SetDissolveAmt(dissolveAmt);
+            yield return null;
+        }
+        isInvisible = true;
+    }
+
+    IEnumerator PlayDissolveInEffect()
+    {
+        isDissolveInEffectPlaying = true;
+        StartCoroutine(DissolveInEffect());
+        yield return new WaitForSeconds(dissolveSpeed);
+    }
+
     public void Inactive(string data)
     {
-        Debug.Log("INACTIE CALLLED");
         if ("" + data == "" + photonView.ViewID)
         {
-            Debug.Log("setINactuve");
             gameObject.SetActive(false);
         }
     }
 
     public void Active(string data)
     {
-        Debug.Log("ACTIVEEEEEE CALLLED");
         if ("" + data == "" + photonView.ViewID)
         {
-            Debug.Log("setactuve");
             gameObject.SetActive(true);
         }
     }

@@ -57,19 +57,6 @@ public class EnemyController : EnemyUnit
 
     }
 
-    public void FindNearestPlayer()
-    {
-        players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
-        {
-            distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
-            if (distance < nearestDistance)
-            {
-                movePositionTransform = players[i].transform;
-            }
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         // Check if the collider belongs to an object tagged as "Player"
@@ -115,15 +102,22 @@ public class EnemyController : EnemyUnit
     public void FindNearestPlayer()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
+        //Assume first player is nearest
+        nearestDistance = Vector3.Distance(enemyTransform.position, players[0].transform.position);
+        targetPlayer = players[0];
+
+        //Check all other players
+        for (int i = 1; i < players.Length; i++)
         {
             distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
             if (distance < nearestDistance)
             {
-                movePositionTransform = players[i].transform;
+                nearestDistance = distance;
                 targetPlayer = players[i];
             }
         }
+
+        movePositionTransform = targetPlayer.transform;
     }
 
 

@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8278051bc79cbae4e999472a0e367bce, type: 3}
-  m_Name: PowerDivine
+  m_Script: {fileID: 11500000, guid: d72d4bea3f1c86442a58e1a62f9c0f38, type: 3}
+  m_Name: Sliding
   m_EditorClassIdentifier: 
-  icon: {fileID: -1787702903, guid: 7d7a0aba59194c44580bfce8bdd959dc, type: 3}
-  m_name_status: Power Divine
+  icon: {fileID: -519567683, guid: 7d7a0aba59194c44580bfce8bdd959dc, type: 3}
+  m_name_status: Sliding
   m_have_duration: 0
   m_active_duration: 0
-  m_rarity: 2
-  m_description: Max Power increase by 20
-  health_buff: 0
-  power_buff: 20
-  speed_buff: 0
+  m_rarity: 1
+  m_description: Sliding ability recharges your Stamina Bar

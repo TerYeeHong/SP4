@@ -31,6 +31,7 @@ public class GameEvents : MonoBehaviour
     [NonSerialized] public UnityEvent<string, Vector3, Color> createTextPopup;
 
     [NonSerialized] public UnityEvent<string> unitDied;
+    [NonSerialized] public UnityEvent onStatusChange;
 
     //Post process/Shaders
     [NonSerialized] public UnityEvent<bool> UnderwaterPostProcessEnable;
@@ -65,6 +66,7 @@ public class GameEvents : MonoBehaviour
         updatePlayerOnWater = new UnityEvent<bool>();
         createTextPopup = new UnityEvent<string, Vector3, Color>();
 
+        onStatusChange = new UnityEvent();
         unitDied = new UnityEvent<string>();
 
         onLockInput = new UnityEvent<bool>();

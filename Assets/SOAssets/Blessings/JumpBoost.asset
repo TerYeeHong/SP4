@@ -17,4 +17,4 @@ MonoBehaviour:
   m_have_duration: 0
   m_active_duration: 0
   m_rarity: 0
-  m_description: Receive a extra jump count
+  m_description: Receive a extra jump count but uses more stamina

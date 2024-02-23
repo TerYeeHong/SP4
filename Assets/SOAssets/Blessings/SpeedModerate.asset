@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpeedModerate
   m_EditorClassIdentifier: 
   icon: {fileID: 1619112203, guid: 7d7a0aba59194c44580bfce8bdd959dc, type: 3}
-  m_name_status: SpeedModerate
+  m_name_status: Speed Moderate
   m_have_duration: 0
   m_active_duration: 0
   m_rarity: 1

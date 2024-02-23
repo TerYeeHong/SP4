@@ -1221,6 +1221,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc8b2866e80dcc4685757a59d5e1886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed_divine: {fileID: 11400000, guid: 3ca7ddb4bda7136468e3ce1265b72a50, type: 2}
+  speed_moderate: {fileID: 11400000, guid: 5caa44cb8e5ce6244bf2e059cb7adb17, type: 2}
+  speed_mini: {fileID: 11400000, guid: 3ca7ddb4bda7136468e3ce1265b72a50, type: 2}
+  jump: {fileID: 11400000, guid: bbb09eda262e4994d8bd9912cb84e838, type: 2}
+  sprint: {fileID: 0}
+  sliding: {fileID: 0}
+  stamina: {fileID: 0}
   speed: 30
   deceleration: 5
   jumpForce: 5
@@ -1238,7 +1245,7 @@ MonoBehaviour:
   groundDrag: 5
   airResistance: 2
   stopDrag: 30
-  maxSpeed: 15
+  maxSpeed: 25
   maxStamina: 100
   staminaDepletionRate: 10
   jumpStaminaCost: 20
@@ -1323,12 +1330,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1b7e7dcffbd9a5439b4838aa2e2b16c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon_master: {fileID: 0}
   gunParent: {fileID: 3787938341306619101}
   gunPrefabs:
   - {fileID: 8016613405039040811, guid: dc68e5099ff22494eba21e7288540796, type: 3}
   - {fileID: 8430349403613037704, guid: 10e78af00035bd3419b4951f83653c74, type: 3}
   - {fileID: 7544868920150713748, guid: 9e0236efc611a234f9f223f4262705df, type: 3}
   - {fileID: 7795165988186626559, guid: 1e90cb04ac7caa043a6fc565ac38ff2b, type: 3}
+  gunPrefabsList: []
   sniperScope: {fileID: 8797600751033449989}
   activeGunGameObject: {fileID: 0}
   activeGun: {fileID: 0}
@@ -1392,6 +1401,8 @@ MonoBehaviour:
   movement_locked: 0
   isDead: 0
   revivalRadius: 2
+  playerHPCanvas: {fileID: 0}
+  playerHPBar: {fileID: 0}
   reviveTime: 5
   gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &-7693879859838931682

@@ -12,6 +12,36 @@ public static class PFGlobalData
 
     public static List<Status> blessings = new();
 
+
+    public static void AddBlessing(Status status, Unit player)
+    {
+        blessings.Add(status);
+        //status.OnEquip(player);
+
+        GameEvents.m_instance.onStatusChange.Invoke();
+
+    }
+    public static bool ContainBlessingName(string name)
+    {
+        foreach (Status status in blessings)
+        {
+            if (status.Name_status == name)
+                return true;
+        }
+        return false;
+    }
+    public static int GetBlessingCount(string name)
+    {
+        int amt = 0;
+        foreach (Status status in blessings)
+        {
+            if (status.Name_status == name)
+                ++amt;
+        }
+        return amt;
+    }
+
+
     public static void AddXP(int value)
     {
         //dont allow negative
@@ -28,7 +58,6 @@ public static class PFGlobalData
             level++;
         }
     }
-
     public static void AddEPG(int value)
     {
         //dont allow negative

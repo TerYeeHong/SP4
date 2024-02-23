@@ -1,4 +1,4 @@
-Library: C:\Users\User\OneDrive\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
+Library: C:\Users\Admin\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --platform=Windows
 --backend=burst-llvm-14
 --target=AVX2
@@ -143,10 +143,11 @@ Library: C:\Users\User\OneDrive\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugi
 --compilation-defines=VFX_HAS_UI
 --compilation-defines=VFX_HAS_PHYSICS
 --compilation-defines=VFX_HAS_AUDIO
+--compilation-defines=NMC_CAN_ACCESS_TERRAIN
 --linker-options=PdbAltPath="HeavenlyAscend_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=C:\Users\User\OneDrive\Documents\GitHub\SP4\Temp\Burst
---output=C:\Users\User\OneDrive\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
+--temp-folder=C:\Users\Admin\Documents\GitHub\SP4\Temp\Burst
+--output=C:\Users\Admin\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 --pdb-search-paths=Temp/ManagedSymbols/
 
@@ -320,10 +321,11 @@ Library: C:\Users\User\OneDrive\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugi
 --compilation-defines=VFX_HAS_UI
 --compilation-defines=VFX_HAS_PHYSICS
 --compilation-defines=VFX_HAS_AUDIO
+--compilation-defines=NMC_CAN_ACCESS_TERRAIN
 --linker-options=PdbAltPath="HeavenlyAscend_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
---temp-folder=C:\Users\User\OneDrive\Documents\GitHub\SP4\Temp\Burst
---output=C:\Users\User\OneDrive\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
+--temp-folder=C:\Users\Admin\Documents\GitHub\SP4\Temp\Burst
+--output=C:\Users\Admin\Documents\GitHub\SP4\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 --pdb-search-paths=Temp/ManagedSymbols/
 

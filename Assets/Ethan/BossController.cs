@@ -17,20 +17,24 @@ public class BossController : EnemyUnit
     [SerializeField] private Transform movePositionTransform;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] players;   
-    [SerializeField] private GameObject[] cameras;
-    [SerializeField] private GameObject[] camerasOriginalPos;
+    [SerializeField] private Camera[] cameras;
+    [SerializeField] private Vector3[] camerasOriginalPos;
+    [SerializeField] private Quaternion[] camerasOriginalRot;
     [SerializeField] public Canvas BossHPCanvas;
     [SerializeField] public Image BossHPBar;
     [SerializeField] public CapsuleCollider BossCollider;
     [SerializeField] public BoxCollider HitboxCollider;
     [SerializeField] private GameObject targetPlayer;
+
+    public GameObject pillarPrefab; 
+    public float spawnRadius = 15f; // pillar radius
     Vector3 StartBossCollider;
     //[SerializeField] private PhotonView photonView;
     //[SerializeField] private PhotonView photonView;
     //SerializeField] private Rigidbody rigidbody;
     [SerializeField] public float AttackCD;
-    [SerializeField] public float Skill1CD;
-    [SerializeField] public float Skill2CD;
+    [SerializeField] public float Skill1CD = 25;
+    [SerializeField] public float Skill2CD = 16;
 
     public float circleRadius = 5f; // Radius of the circular motion
     public float circleSpeed = 1f; // Speed of the circular motion
@@ -41,11 +45,14 @@ public class BossController : EnemyUnit
     float distance;
     float nearestDistance = 1000;
 
-    bool dashAttack = false;  
+    float cameraY = 6;
+    bool storedCameraPos = false;
+    bool dashAttack = false;   
+    bool knockup = false;  
     bool swipeAttack = false;
 
-    STATES CURRENT_STATE = STATES.IDLE;
-    enum STATES
+    STATES CURRENT_STATE;
+    public enum STATES
     {
         INTRO,
         IDLE,
@@ -53,6 +60,8 @@ public class BossController : EnemyUnit
         RUNNING,
         DEAD,
         HIT,
+        SKILL1,
+        SKILL2,
         ATTACK
         
     }
@@ -69,6 +78,13 @@ public class BossController : EnemyUnit
                 if (other.GetComponent<SkyPlayerHealth>().Health > 0)
                 {
                     other.GetComponent<SkyPlayerHealth>().TakeDamage(20);
+                    Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
+                    if (playerRigidbody != null)
+                    {
+
+                        float knockbackForce = 4f;
+                        playerRigidbody.AddForce(Vector3.forward * knockbackForce, ForceMode.Impulse);
+                    }
                 }
 
             }
@@ -80,9 +96,61 @@ public class BossController : EnemyUnit
                     other.GetComponent<SkyPlayerHealth>().TakeDamage(35);
                 }
             }
+            if (knockup)
+            {
+                Debug.Log("BOSS KNOCKUP PLAYER");
+                if (other.GetComponent<SkyPlayerHealth>().Health > 0)
+                {
+                    other.GetComponent<SkyPlayerHealth>().TakeDamage(12);
+                    Rigidbody playerRigidbody = other.GetComponent<Rigidbody>();
+                    if (playerRigidbody != null)
+                    {
+                        
+                        float knockupForce = 20f;
+                        playerRigidbody.AddForce(Vector3.up * knockupForce, ForceMode.Impulse);
+                    }
+                }
+            }
 
             // You can perform additional actions here, such as dealing damage to the player or triggering events.
         }
+    }
+
+    void SpawnPillar(float angle)
+    {
+        // spawn postion based on ground level
+        Vector3 spawnPosition = enemyTransform.position + Quaternion.Euler(0f, angle, 0f) * (Vector3.forward * spawnRadius);
+        spawnPosition.y = -7.7f; // spawn underground
+
+        // spawn the pillar at the ground level
+        GameObject pillar = Instantiate(pillarPrefab, spawnPosition, Quaternion.identity);
+
+       //pillar.transform.parent = enemyTransform;
+
+       
+        StartCoroutine(RisePillar(pillar));
+    }
+
+    IEnumerator RisePillar(GameObject pillar)
+    {
+        float elapsedTime = 0f;
+        float duration = 4f; 
+        Vector3 startPosition = pillar.transform.position;
+        Vector3 targetPosition = startPosition + Vector3.up * 8.2f; 
+
+        while (elapsedTime < duration)
+        {
+            // lerp to new position
+            Vector3 newPos = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            pillar.transform.position = newPos;
+
+          
+            elapsedTime += Time.deltaTime;
+            yield return null; 
+        }
+
+
+        pillar.transform.position = targetPosition;
     }
 
     public void DashAttackSTART()
@@ -103,8 +171,30 @@ public class BossController : EnemyUnit
     public void SwipeAttackEND()
     {
         swipeAttack = false;
+    } 
+    public void SpawnPillarSTART()
+    {
+        SpawnPillar(0f);
+        SpawnPillar(90f);
+        SpawnPillar(180f);
+        SpawnPillar(270f);
+ 
+    }
+    public void SpawnPillarEND()
+    {
+     
+       // CURRENT_STATE = STATES.IDLE;
     }
 
+    public void KnockupSTART()
+    {
+        knockup = true;
+    }
+
+    public void KnockupEND()
+    {
+        knockup = false;
+    }
 
     public void FindNearestPlayer()
     {
@@ -144,9 +234,25 @@ public class BossController : EnemyUnit
     {
         base.Init();
         FindNearestPlayer();
-
+      // CURRENT_STATE = STATES.INTRO;
+       // ChangeAnimationState(STATES.INTRO);
     }
 
+    public void Awake()
+    {
+        cameras = FindObjectsOfType<Camera>();
+
+        // Store the original positions of the cameras
+        camerasOriginalPos = new Vector3[cameras.Length];
+        camerasOriginalRot = new Quaternion[cameras.Length];
+        Debug.Log("Original position of the GameObject: " + camerasOriginalPos);
+        for (int i = 0; i < cameras.Length; i++)
+        {
+            camerasOriginalPos[i] = cameras[i].gameObject.transform.position;
+            camerasOriginalRot[i] = cameras[i].gameObject.transform.rotation;
+        }
+
+    }
 
     private void OnEnable()
     {
@@ -167,6 +273,7 @@ public class BossController : EnemyUnit
         // animator.SetBool("IsDead", true);
        
         CURRENT_STATE = STATES.DEAD;
+        ChangeAnimationState(STATES.DEAD);
         if (photonView.IsMine)
         {
             Debug.Log("photonView.ViewID" + photonView.ViewID);
@@ -185,6 +292,7 @@ public class BossController : EnemyUnit
 
     private void Update()
     {
+       
        // Debug.Log(health_unit + " / " + max_health_unit);
         BossHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
@@ -192,67 +300,120 @@ public class BossController : EnemyUnit
         // Debug.Log("current state: " + CURRENT_STATE);
 
         FindNearestPlayer();
-
-        angle += circleSpeed * Time.deltaTime;
+        Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
+        // angle += circleSpeed * Time.deltaTime;
 
         if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
         {
+           
             if (CURRENT_STATE == STATES.INTRO)
             {
-                cameras = GameObject.FindGameObjectsWithTag("MainCamera");
-                for (int i = 0; i < cameras.Length; i++)
+               
+
+                timer += 1  * Time.deltaTime;
+
+                angle += circleSpeed * Time.deltaTime;
+
+                if (timer < 7)
                 {
-
-                 
-                    camerasOriginalPos = GameObject.FindGameObjectsWithTag("MainCamera");
-                    for (int j = 0; j < camerasOriginalPos.Length; j++)
+                    // Loop through all the cameras
+                    for (int i = 0; i < cameras.Length; i++)
                     {
-                        timer++;
-                        //camerasOriginalPos[j].transform.position = cameras[i].transform.position;
-
-
-                        Vector3 offset = new Vector3(Mathf.Cos(angle) * circleRadius, 8, Mathf.Sin(angle) * circleRadius);
+                        cameraY += 2 * Time.deltaTime;
+                        // circular motiona round enemy
+                        Vector3 offset = new Vector3(Mathf.Cos(angle) * circleRadius + 5, cameraY, Mathf.Sin(angle) * circleRadius+ 10);
                         Vector3 cameraCirclePos = enemyTransform.position + offset;
 
-                        animator.SetTrigger("IsIntro");
-
-
+                        // Set the position of the camera
                         cameras[i].transform.position = cameraCirclePos;
 
+                        // Make the camera look at the enemy
                         cameras[i].transform.LookAt(enemyTransform);
+                    }
 
-                        if (timer > 20)
-                        {
-                            CURRENT_STATE = STATES.IDLE;
-                            cameras[i].transform.position = camerasOriginalPos[j].transform.position;
-                            timer = 0;
-                            break;
-
-                        }
+                }
+                else
+                {
+                  
+                    for (int i = 0; i < cameras.Length; i++)
+                    {
+                        timer = 0;
+                        //Vector3 currentPosition = new Vector3(0, 0, 0);
+                        cameras[i].transform.position = camerasOriginalPos[i];
+                        cameras[i].transform.rotation = camerasOriginalRot[i];
+                        //cameras[i].transform.rotation = currentPosition;
+                        CURRENT_STATE = STATES.IDLE;
+                        //ChangeAnimationState(STATES.IDLE);
                     }
                 }
 
-
-            
+          
             }
+            
+            
+          
 
-            if( range_unit < 6)
+            else if (range_unit < 6)
             {
                 CURRENT_STATE = STATES.ATTACK;
+                ChangeAnimationState(STATES.ATTACK);
             }
-          
+
+            else if (CURRENT_STATE == STATES.SKILL1)
+            {
+                Debug.LogWarning("SKILL1 SKILL1SKILL1");
+                Skill1CD = 25;
+                //timer += 1 * Time.deltaTime;
+                animator.SetTrigger("IsPillar");
+                speed_unit = 0;
+                navMeshAgent.speed = speed_unit;
+                 CURRENT_STATE = STATES.IDLE;
+               // ChangeAnimationState(STATES.IDLE);
+
+
+
+            }
+            else if (CURRENT_STATE == STATES.SKILL2)
+            {
+             
+                Skill2CD = 16;
+                //timer += 1 * Time.deltaTime;
+                animator.SetTrigger("IsKnockup");
+                speed_unit = 0;
+                navMeshAgent.speed = speed_unit;
+                CURRENT_STATE = STATES.IDLE;
+
+               // ChangeAnimationState(STATES.IDLE);
+
+
+            }
+
+            else if (Skill1CD <= 0 /*&& CURRENT_STATE != STATES.SKILL1)*/)
+            {
+                CURRENT_STATE = STATES.SKILL1;
+                ChangeAnimationState(STATES.SKILL1);
+            }
+            else if (Skill2CD <= 0 /*&& CURRENT_STATE != STATES.SKILL1)*/)
+            {
+                CURRENT_STATE = STATES.SKILL2;
+                ChangeAnimationState(STATES.SKILL2);
+            }
+
             else if (range_unit < 35)
             {
 
                 CURRENT_STATE = STATES.WALKING;
+                ChangeAnimationState(STATES.WALKING);
             }
             else if (movePositionTransform.position == navMeshAgent.destination)
             {
 
                 CURRENT_STATE = STATES.IDLE;
+                ChangeAnimationState(STATES.IDLE);
                 //animator.SetBool("IsHit", false);
             }
 
+          
 
             if (CURRENT_STATE == STATES.ATTACK)
             {
@@ -287,10 +448,13 @@ public class BossController : EnemyUnit
             else if (CURRENT_STATE == STATES.IDLE)
             {
                 animator.SetBool("IsMoving", false);
+               
             }
             else if (CURRENT_STATE == STATES.WALKING)
             {
-
+                Skill1CD -= 1 * Time.deltaTime;
+                Skill2CD -= 1 * Time.deltaTime;
+                navMeshAgent.speed = unit_type.SpeedDefault;
                 animator.SetBool("IsMoving", true);
                 navMeshAgent.destination = movePositionTransform.position;
             }
@@ -306,6 +470,25 @@ public class BossController : EnemyUnit
 
         //Debug.LogWarning("CURRENT_STATE " + CURRENT_STATE);
         //animator.SetTrigger("IsHit");
+    }
+
+
+    public void ChangeAnimationState(STATES newState, float transitionDuration = 0.1f)
+    {
+        if (CURRENT_STATE == newState) return;
+
+        // gameObject.transform.localPosition = gameObject.bodyPos;
+
+        animator.CrossFade(newState.ToString(), transitionDuration);
+        CURRENT_STATE = newState;
+
+        // Network synchronization code remains the same
+        if (photonView.IsMine)
+        {
+            object[] content = new object[] { GetComponent<PhotonView>().ViewID, newState };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            PhotonNetwork.RaiseEvent(RaiseEvents.PLAYER_ANIMATION_CHANGE, content, raiseEventOptions, SendOptions.SendReliable);
+        }
     }
 
 
@@ -339,6 +522,8 @@ public class BossController : EnemyUnit
         }
         return false;
     }
+
+
     public override bool TakeDamage(int damage)
     {
         //health_unit -= damage;

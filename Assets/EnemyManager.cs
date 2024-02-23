@@ -84,11 +84,11 @@ public class EnemyManager : MonoBehaviour
     {
         //FetchEnemies();
 
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             //FetchEnemies();
             Vector3 spawnPos = new Vector3(0, 0, 0);
-            GameObject obj = PhotonNetwork.InstantiateRoomObject("CatfishA", spawnPos, Quaternion.identity);
+            GameObject obj = PhotonNetwork.InstantiateRoomObject("Lizard_skin", spawnPos, Quaternion.identity);
             int fishViewID = obj.GetComponent<PhotonView>().ViewID;
 
             string sentData = "" + fishViewID;
@@ -102,7 +102,7 @@ public class EnemyManager : MonoBehaviour
             // photonView.RPC("InstantiateEnemy", RpcTarget.All, "Fish");
            // photonView.RPC("SetGameobjectInactive", RpcTarget.All, sentData);
         }
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.O))
         {
             //FetchEnemies();
             Vector3 spawnPos = new Vector3(0, 0, 0);
@@ -114,19 +114,13 @@ public class EnemyManager : MonoBehaviour
             Debug.Log("fishViewID" + fishViewID);
  
         }
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            FetchEnemy("Fish");
-            //  Vector3 spawnPos = new Vector3(0, 0, 0);
+            //FetchEnemies();
+            Vector3 spawnPos = new Vector3(0, 0, 0);
+            GameObject obj = PhotonNetwork.InstantiateRoomObject("CatfishA", spawnPos, Quaternion.identity);
+            int fishViewID = obj.GetComponent<PhotonView>().ViewID;
 
-            //SpawnFromPool("Fish", spawnPos, Quaternion.identity);
-            // InstantiateEnemy("Fish");
-            //string sentData = "" + tag;
-            //RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-            //PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYSPAWNEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
-
-
-            // photonView.RPC("SpawnFromPool", RpcTarget.All, "Fish", spawnPos, Quaternion.identity);
         }
     }
 

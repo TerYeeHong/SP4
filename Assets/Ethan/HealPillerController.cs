@@ -130,6 +130,7 @@ public class HealPillerController : EnemyUnit
 
     private void Update()
     {
+       // Debug.Log("huh.");
         //OnTrigger();
         //SphereCollider other = sphereCollider;
         //OnTrigger(other);

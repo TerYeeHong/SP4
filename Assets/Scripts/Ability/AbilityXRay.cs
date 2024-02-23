@@ -32,8 +32,11 @@ public class AbilityXRay : MonoBehaviour
         dissolveAmt = 1.2f;
         isXRayActive = false;
 
-        cooldownText = FindObjectOfType<TMP_Text>();
-    //cooldownText.gameObject.SetActive(false);
+        //cooldownText = FindObjectOfType<TMP_Text>();
+        GameObject cooldownObject = GameObject.FindGameObjectWithTag("Cooldown timer");
+        cooldownText = cooldownObject.GetComponent<TMP_Text>();
+
+        //cooldownText.gameObject.SetActive(false);
     }
 
     void Update()

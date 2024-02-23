@@ -48,6 +48,12 @@ public class SkyPlayerMovement : MonoBehaviour
     [SerializeField] AudioClip jumpSFX;
     [SerializeField] AudioClip landingSFX;
     [SerializeField] AudioClip dashSFX;
+    float runAudioTimer;
+    float runAudioCooldown = 0.3f;
+    float walkAudioTimer;
+    float walkAudioCooldown = 0.7f;
+    float walkingTimer;
+
 
     void Start()
     {
@@ -226,14 +232,31 @@ public class SkyPlayerMovement : MonoBehaviour
                     {
                         // Transition to running animation if moving and Left Control is pressed
                         playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_RUN);
-                        GameEvents.m_instance.playNewAudioClip.Invoke(runningSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
-
+                        if (runAudioTimer <= 0f)
+                        {
+                            // Play running audio
+                            GameEvents.m_instance.playNewAudioClip.Invoke(runningSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+                            runAudioTimer = runAudioCooldown; // Reset timer
+                        }
+                        else
+                        {
+                            runAudioTimer -= Time.deltaTime;
+                        }
                     }
                     else
                     {
                         // Walking animation
                         playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_WALK);
-                        GameEvents.m_instance.playNewAudioClip.Invoke(walkSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+                        if (walkAudioTimer <= 0f)
+                        {
+                            // Play running audio
+                            GameEvents.m_instance.playNewAudioClip.Invoke(runningSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+                            walkAudioTimer = walkAudioCooldown; // Reset timer
+                        }
+                        else
+                        {
+                            walkAudioTimer -= Time.deltaTime;
+                        }
                     }
                 }
                 else

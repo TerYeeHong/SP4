@@ -46,11 +46,13 @@ public class AudioSfxManager : MonoBehaviour
     {
         GameEvents.m_instance.playNewAudioClip.AddListener(OnPlayNewAudioClip);
         GameEvents.m_instance.playNewAudioClip3D.AddListener(OnPlayNewAudioClip3D);
+        GameEvents.m_instance.playNewAudioClipDelayed.AddListener(OnPlayAudioWithDelay);
     }
     private void OnDisable()
     {
         GameEvents.m_instance.playNewAudioClip.RemoveListener(OnPlayNewAudioClip);
         GameEvents.m_instance.playNewAudioClip3D.RemoveListener(OnPlayNewAudioClip3D);
+        GameEvents.m_instance.playNewAudioClipDelayed.RemoveListener(OnPlayAudioWithDelay);
     }
 
     public enum SFX_TYPE
@@ -185,5 +187,23 @@ public class AudioSfxManager : MonoBehaviour
         }
         return null;
     }
-    
+    public void OnPlayAudioWithDelay(AudioClip audio_clip, AUDIO_EFFECT effect, float delay)
+    {
+        sfx_type_current = SFX_TYPE._2D;
+        PlayAudioWithDelay(audio_clip, effect, delay);
+    }
+
+    // Method to play audio with a specified delay
+    public void PlayAudioWithDelay(AudioClip audio_clip, AUDIO_EFFECT effect, float delay)
+    {
+        StartCoroutine(PlayAudioDelayed(audio_clip, effect, delay));
+    }
+    IEnumerator PlayAudioDelayed(AudioClip audio_clip, AUDIO_EFFECT effect, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Use the existing method to play the audio clip
+        SearchAndPlayAudioClip(audio_clip, effect);
+    }
+
 }

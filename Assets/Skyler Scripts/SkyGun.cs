@@ -38,6 +38,7 @@ public class SkyGun : MonoBehaviour
     public float projectileSpeed = 1000f; // Speed of the projectile
     public float projectileLifetime = 5f; // How long the projectile exists before being automatically destroyed
 
+    [SerializeField] private AudioClip shootSFX;
     void Awake()
     {
         playerCamera = GetComponentInParent<Camera>();
@@ -76,6 +77,7 @@ public class SkyGun : MonoBehaviour
 
             if (Physics.Raycast(playerCamera.transform.position, shootDirection, out RaycastHit hit, float.MaxValue, ShootConfig.HitMask))
             {
+                GameEvents.m_instance.playNewAudioClip.Invoke(shootSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
                 StartCoroutine(PlayTrail(ShootPoint.position, hit.point, hit));
                 RaisePlayerShootEvent(ShootPoint.position, hit.point, photonView);
 

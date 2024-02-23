@@ -1246,6 +1246,12 @@ MonoBehaviour:
   staminaRegenerationRate: 20
   staminaBar: {fileID: 2792398060727983895}
   staminaSlider: {fileID: 2220726189759104359}
+  slidingSFX: {fileID: 8300000, guid: f32ae1eaae5404a4db4fa25b7207bdd7, type: 3}
+  walkSFX: {fileID: 8300000, guid: 799414ce748b20a489deb2616e96c13b, type: 3}
+  runningSFX: {fileID: 8300000, guid: 799414ce748b20a489deb2616e96c13b, type: 3}
+  jumpSFX: {fileID: 8300000, guid: aee461d66e456874bba9c18aa43965c6, type: 3}
+  landingSFX: {fileID: 8300000, guid: 9c03ebea84622dc418cf89a79ea3e74e, type: 3}
+  dashSFX: {fileID: 0}
 --- !u!114 &3787938341435706193
 MonoBehaviour:
   m_ObjectHideFlags: 0

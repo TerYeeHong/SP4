@@ -13,6 +13,7 @@ public class SkyPlayerHealth : Unit
     public Color gizmoColor = Color.yellow;
     private PhotonView photonView;
     private SkyPlayerController player;
+    private AudioClip deathSFX;
 
     void Awake()
     {
@@ -26,6 +27,7 @@ public class SkyPlayerHealth : Unit
         if (photonView.IsMine)
             player.SetChildrenMeshRenderersEnabled(true);
         GetComponent<SkyPlayerAnimation>().ChangeAnimationState("Falling Back Death");
+        GameEvents.m_instance.playNewAudioClip.Invoke(deathSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
         SkyWinManager.instance.CheckLose();
         //GameEvents.m_instance.unitDied.Invoke(unit_type.name);
     }

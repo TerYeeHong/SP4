@@ -41,6 +41,14 @@ public class SkyPlayerMovement : MonoBehaviour
     public float staminaRegenerationRate = 5f; // Per second
     public UnityEngine.UI.Image staminaBar; 
     public Slider staminaSlider;
+
+    [SerializeField] AudioClip slidingSFX;
+    [SerializeField] AudioClip walkSFX;
+    [SerializeField] AudioClip runningSFX;
+    [SerializeField] AudioClip jumpSFX;
+    [SerializeField] AudioClip landingSFX;
+    [SerializeField] AudioClip dashSFX;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -70,6 +78,8 @@ public class SkyPlayerMovement : MonoBehaviour
             }
             else
             {
+                GameEvents.m_instance.playNewAudioClip.Invoke(slidingSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+
                 StopSlide();
             }
         }
@@ -119,11 +129,13 @@ public class SkyPlayerMovement : MonoBehaviour
             currentSpeed *= runMultiplier;
             currentStamina -= staminaDepletionRate * Time.deltaTime;
             UpdateStaminaBar();
+
         }
 
         Vector3 force = movementDirection.normalized * currentSpeed;
         force.y = 0;
         rb.AddForce(force, ForceMode.Force);
+
     }
 
     public void HandleStaminaRegen()
@@ -174,6 +186,7 @@ public class SkyPlayerMovement : MonoBehaviour
                 rb.AddForce(dashDirection.normalized * dashForce, ForceMode.VelocityChange);
                 isDashing = true;
                 playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_DASH); // Trigger dash animation
+                GameEvents.m_instance.playNewAudioClip.Invoke(dashSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
                 Invoke("ResetDash", 0.5f); // Cooldown before next dash
             }
         }
@@ -187,6 +200,7 @@ public class SkyPlayerMovement : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && (isGrounded || jumpCount < maxJumps - 1) && currentStamina >= jumpStaminaCost)
         {
+            GameEvents.m_instance.playNewAudioClip.Invoke(jumpSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
             currentStamina -= jumpStaminaCost;
             UpdateStaminaBar();
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -203,6 +217,7 @@ public class SkyPlayerMovement : MonoBehaviour
                 if (jumpCount > 0)
                 {
                     playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_LANDING);
+                    GameEvents.m_instance.playNewAudioClip.Invoke(landingSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
                     jumpCount = 0;
                 }
                 else if (rb.velocity.magnitude > 0.1f && (Mathf.Abs(rb.velocity.x) > 0.1f || Mathf.Abs(rb.velocity.z) > 0.1f))
@@ -211,11 +226,14 @@ public class SkyPlayerMovement : MonoBehaviour
                     {
                         // Transition to running animation if moving and Left Control is pressed
                         playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_RUN);
+                        GameEvents.m_instance.playNewAudioClip.Invoke(runningSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
+
                     }
                     else
                     {
                         // Walking animation
                         playerAnimation.ChangeAnimationState(SkyPlayerAnimation.PLAYER_WALK);
+                        GameEvents.m_instance.playNewAudioClip.Invoke(walkSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
                     }
                 }
                 else

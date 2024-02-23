@@ -8,7 +8,7 @@ using UnityEngine.Rendering.UI;
 public class SpawnMonument : MonoBehaviour
 {
     private List<Grid> island_grids = new(); // Assuming this is populated with the islands where enemies can spawn
-    private int spawnAmount;
+    [SerializeField] private int spawnAmount;
     public bool isFinal;
     private bool isInteractable = true;
     private List<EnemyUnit> spawnedEnemies = new List<EnemyUnit>();
@@ -50,15 +50,15 @@ public class SpawnMonument : MonoBehaviour
             {
                 int odds = Random.Range(0, 100); //0-99
                 //Chance to spawn lizards
-                if (odds < 0)
+                if (odds < 100)
                 {
                     // Spawn wolves equal to spawnAmount on a random island
-                    StartCoroutine(StartSpawningLizard(spawnAmount, 1.0f));
+                    StartCoroutine(StartSpawningLizard(1, 1.0f));
                 }
                 else
                 {
                     // Spawn wolves equal to spawnAmount on a random island
-                    StartCoroutine(StartSpawningFish(spawnAmount, 1.0f));
+                    StartCoroutine(StartSpawningFish(1, 1.0f));
                 }
             }
 

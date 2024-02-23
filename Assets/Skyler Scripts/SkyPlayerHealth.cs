@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using TMPro;
-using UnityEngine.UIElements;
 
 public class SkyPlayerHealth : Unit
 {
@@ -35,8 +34,8 @@ public class SkyPlayerHealth : Unit
         health_moderate_count = PFGlobalData.GetBlessingCount(health_moderate.Name_status);
         health_mini_count = PFGlobalData.GetBlessingCount(health_mini.Name_status);
 
-        max_health_unit = 200 + health_divine_count * 100 + health_moderate_count * 40 + health_mini_count * 20;
-
+        max_health_unit = unit_type.HealthDefault + health_divine_count * 100 + health_moderate_count * 40 + health_mini_count * 20;
+        health_unit = max_health_unit;
     }
 
 
@@ -54,6 +53,10 @@ public class SkyPlayerHealth : Unit
 
     void Awake()
     {
+        SetDefaultStat();
+        StatusCheckAll();
+
+
         photonView = GetComponent<PhotonView>();
         player = GetComponent<SkyPlayerController>();
         if (photonView.IsMine)

@@ -539,15 +539,9 @@ public class BossController : EnemyUnit
 
     public override bool TakeDamage(int damage)
     {
-        //health_unit -= damage;
-        Debug.Log("GETTING MY ASS HIT");
-       
-        Debug.Log("damage" + damage);
         //Damage pop up
         if (damage > 0)
         {
-            Debug.Log("OUCHH");
-
            // rigidbody.AddForce(transform.forward * m_Thrust);
             CURRENT_STATE = STATES.HIT;
             animator.SetTrigger("IsHit");

@@ -100,7 +100,6 @@ public class SkyGun : MonoBehaviour
 
             shootDirection.Normalize();
 
-            Debug.Log("Photon view shooting : " + photonView);
             Debug.Log(ShootPoint.position);
 
             if (Physics.Raycast(playerCamera.transform.position, shootDirection, out RaycastHit hit, float.MaxValue, ShootConfig.HitMask))
@@ -108,15 +107,17 @@ public class SkyGun : MonoBehaviour
                 StartCoroutine(PlayTrail(ShootPoint.position, hit.point, hit));
                 RaisePlayerShootEvent(ShootPoint.position, hit.point, photonView);
 
-                Unit unit = hit.collider.GetComponent<Unit>();
-                Unit playerUnit = photonView.GetComponent<Unit>();
-
-                if (unit != null && playerUnit != null)
-                    RaiseUnitHitEvent(unit, damage + playerUnit.Power + extra_power);
-
-                if (unit.TryGetComponent(out BlessingMonument blessingMonument))
+                if (hit.collider.TryGetComponent(out Unit unit))
                 {
-                    unit.TakeDamage(playerUnit.Power + damage + extra_power);
+                    Unit playerUnit = photonView.GetComponent<Unit>();
+
+                    if (unit != null && playerUnit != null)
+                        RaiseUnitHitEvent(unit, damage + playerUnit.Power + extra_power);
+
+                    if (unit.TryGetComponent(out BlessingMonument blessingMonument))
+                    {
+                        unit.TakeDamage(playerUnit.Power + damage + extra_power);
+                    }
                 }
             }
             else

@@ -95,12 +95,30 @@ public class LizardEnemyController : EnemyUnit
     }
 
 
+    public virtual void StartChase()
+    {
+        //GetComponent<NavMeshAgent>().enabled = true;
+        //navMeshAgent.enabled = true;
+        GetComponent<NavMeshAgent>().enabled = true;
 
+        //moving = true;
+        speed_unit = enemy_type.SpeedDefault;
+        navMeshAgent.speed = speed_unit;
+        navMeshAgent.destination = movePositionTransform.position;
+    }
+
+    private void Awake()
+    {
+        Init();
+    }
     public override void Init()
     {
 
         base.Init();
+        navMeshAgent.speed = speed_unit;
+
         FindNearestPlayer();
+        StartChase();
 
 
     }
@@ -167,14 +185,16 @@ public class LizardEnemyController : EnemyUnit
 
     private void Update()
     {
+        GetComponent<NavMeshAgent>().enabled = true;
+
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
         FindNearestPlayer();
         abilityXRay = FindAnyObjectByType<AbilityXRay>();
 
 
-        //Debug.Log("ability active: "+ abilityXRay.xrayActive);
-        Debug.Log("current state: " + CURRENT_STATE);
-        Debug.Log("invis timer: " + invisTimer);
+        ////Debug.Log("ability active: "+ abilityXRay.xrayActive);
+        //Debug.Log("current state: " + CURRENT_STATE);
+        //Debug.Log("invis timer: " + invisTimer);
 
 
         if (CURRENT_STATE != STATES.ATTACK)
@@ -185,7 +205,7 @@ public class LizardEnemyController : EnemyUnit
          
             if (range_unit < 2.5)
             {
-
+                StartChase();
                 CURRENT_STATE = STATES.ATTACK;
                 
                 ChangeAnimationState(STATES.ATTACK);
@@ -236,8 +256,7 @@ public class LizardEnemyController : EnemyUnit
                // SetDissolveAmt(1.1f);
                 invisTimer = 0;
                 animator.SetTrigger("IsInvis");
-                speed_unit = 0;
-                navMeshAgent.speed = speed_unit;
+                navMeshAgent.speed = 0;
 
 
 
@@ -245,6 +264,8 @@ public class LizardEnemyController : EnemyUnit
             }
             else if (CURRENT_STATE == STATES.WALKING)
             {
+                
+
                 invisTimer++;
                 if( invisTimer >= 10 && isInvisible == false)
                 {
@@ -255,7 +276,6 @@ public class LizardEnemyController : EnemyUnit
                 }
                 animator.SetBool("IsMoving", true);
                 //moving = true;
-                speed_unit = 2;
                 navMeshAgent.speed = speed_unit;
                 navMeshAgent.destination = movePositionTransform.position;
             }
@@ -276,8 +296,7 @@ public class LizardEnemyController : EnemyUnit
         }
         else if (CURRENT_STATE == STATES.DEAD)
         {
-            speed_unit = 0;
-            navMeshAgent.speed = speed_unit;
+            navMeshAgent.speed = 0;
             Debug.LogWarning("HDIAHDIA");
             animator.SetBool("IsDead", true);
             enabled = false;
@@ -288,7 +307,6 @@ public class LizardEnemyController : EnemyUnit
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
         {
-            speed_unit = 0;
             navMeshAgent.speed = speed_unit;
         }
 
@@ -324,8 +342,8 @@ public class LizardEnemyController : EnemyUnit
             CURRENT_STATE = STATES.HIT;
             animator.SetTrigger("IsHit");
 
-
-
+            FindNearestPlayer();
+            StartChase();
         }
 
         //if (health_unit <= 0)

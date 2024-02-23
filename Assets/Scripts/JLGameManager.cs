@@ -18,6 +18,8 @@ using TMPro;
 
 public class JLGameManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] GameObject starting_camera;
+
     public static JLGameManager Instance = null;
     public Text InfoText;
     public TextMeshProUGUI health_tmp;
@@ -260,7 +262,8 @@ public class JLGameManager : MonoBehaviourPunCallbacks
         //if im the real dude :)
         if (player.GetComponent<PhotonView>().IsMine)
         {
-            GameObject.Find("StartingCamera").SetActive(false); //disable the starting camera
+            starting_camera.SetActive(false);
+            //GameObject.Find("StartingCamera").SetActive(false); //disable the starting camera
             //virtualCam.Follow = player.transform;
         }
         else

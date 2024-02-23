@@ -17,7 +17,7 @@ MonoBehaviour:
   m_have_duration: 0
   m_active_duration: 0
   m_rarity: 1
-  m_description: Max Health increase by 50
-  health_buff: 50
+  m_description: Max Health increase by 40
+  health_buff: 40
   power_buff: 0
   speed_buff: 0

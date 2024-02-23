@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team_unit: 0
   name_unit: Furina
-  health_unit: 1000
-  power_unit: 100
+  health_unit: 200
+  power_unit: 5
   speed_unit: 2

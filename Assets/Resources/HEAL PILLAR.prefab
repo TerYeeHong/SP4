@@ -148,6 +148,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   floating_item_prefab: {fileID: 0}
+  isDead: 1
   photonView: {fileID: 0}
   enemy_type: {fileID: 0}
   enemy_race_unit: 3

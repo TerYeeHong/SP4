@@ -1955,8 +1955,8 @@ MonoBehaviour:
     m_Bits: 0
   floating_item_prefab: {fileID: 0}
   isDead: 1
-  photonView: {fileID: 0}
-  enemy_type: {fileID: 0}
+  photonView: {fileID: 1961082381}
+  enemy_type: {fileID: 11400000, guid: 9460006cc69891b408cc02638d7e1f4b, type: 2}
   enemy_race_unit: 2
   range_unit: 5
   rarity_unit: 4
@@ -1989,7 +1989,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8914286996971816111}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 10

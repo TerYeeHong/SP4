@@ -149,6 +149,18 @@ public class LevelGenerator : MonoBehaviour
         {
             Destroy(island);
         }
+        foreach (Island island in islands_list)
+        {
+            foreach (GameObject obj in island.island_game_objects)
+            {
+                Destroy(obj);
+            }
+        }
+        foreach (SpawnMonument obj in spawn_monuments)
+        {
+            Destroy(obj.gameObject);
+        }
+        
         island_objects.Clear();
         islands_list.Clear();
         spawn_points.Clear();
@@ -424,6 +436,9 @@ public class LevelGenerator : MonoBehaviour
 
     void InstantiateIsland(Island island)
     {
+        island.island_game_objects.Clear();
+
+
         foreach (Grid grid in island.island_grid)
         {
             GameObject island_go = Instantiate(platform_default_prefab,
@@ -482,6 +497,9 @@ public class LevelGenerator : MonoBehaviour
                 //island.PointInIsland(x_position, z_position);
                 GameObject obj = Instantiate(islandObject.object_prefab, pos, Quaternion.identity);
                 island_objects.Add(obj);
+
+                //To destroy ltr
+                island.island_game_objects.Add(obj);
             }
         }
 
@@ -501,8 +519,8 @@ public class LevelGenerator : MonoBehaviour
                 Quaternion monumentRotation = Quaternion.identity; // Adjust rotation as needed
 
                 // Instantiate the revive monument prefab at the selected grid position
-                var reviveMonument = Instantiate(revive_monument_prefab, monumentPosition, monumentRotation);
-
+                GameObject reviveMonument = Instantiate(revive_monument_prefab, monumentPosition, monumentRotation);
+                island.island_game_objects.Add(reviveMonument);
 
             }
         }
@@ -1054,6 +1072,8 @@ public class Island
         island_grid_outline = new();
         island_connectors = new();
         island_bridge_grid = new();
+        island_game_objects = new();
+
         this.size_x = size_x;
         this.size_z = size_z;
     }

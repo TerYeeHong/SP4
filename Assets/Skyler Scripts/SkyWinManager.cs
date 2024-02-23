@@ -17,7 +17,8 @@ public class SkyWinManager : MonoBehaviour
     [SerializeField] private GameObject pedestalPrefab; // Assign in the inspector
     [SerializeField] private int numberOfPedestalsToSpawn;
 
-
+    [SerializeField] private AudioClip winSFX;
+    [SerializeField] private AudioClip loseSFX;
 
     private void Awake()
     {
@@ -86,6 +87,7 @@ public class SkyWinManager : MonoBehaviour
     {
         if (CheckAllPlayersDead())
         {
+            GameEvents.m_instance.playNewAudioClip.Invoke(loseSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
             ActivateLoseScreen();
         }
     }
@@ -133,6 +135,7 @@ public class SkyWinManager : MonoBehaviour
 
     public void OnWin()
     {
+        GameEvents.m_instance.playNewAudioClip.Invoke(winSFX, AudioSfxManager.AUDIO_EFFECT.DEFAULT);
         ActivateWinScreen();
     }
 

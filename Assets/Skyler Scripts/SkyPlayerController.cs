@@ -74,7 +74,6 @@ public class SkyPlayerController : MonoBehaviour
             playerMovement.UpdateAnimationState();
             playerMovement.SpeedControl();
             playerMovement.HandleStaminaRegen();
-
             playerShooting.ShootGun(photonView, gunSelector.activeGun);
 
             gunSelector.ADSActiveGun();

@@ -33,7 +33,7 @@ public class GameEvents : MonoBehaviour
     [NonSerialized] public UnityEvent<string> unitDied;
     [NonSerialized] public UnityEvent onStatusChange;
 
-    //Post process/Shaders
+    //Post process/Shadersd
     [NonSerialized] public UnityEvent<bool> UnderwaterPostProcessEnable;
 
     //UI 
@@ -42,6 +42,7 @@ public class GameEvents : MonoBehaviour
     //Audio
     [NonSerialized] public UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT> playNewAudioClip;
     [NonSerialized] public UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT, Vector3> playNewAudioClip3D;
+    [NonSerialized] public UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT, float> playNewAudioClipDelayed;
     //[NonSerialized] public UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT> playNewAudioClipEffect;
 
 
@@ -77,6 +78,7 @@ public class GameEvents : MonoBehaviour
 
         playNewAudioClip = new UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT>();
         playNewAudioClip3D = new UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT, Vector3>();
+        playNewAudioClipDelayed = new UnityEvent<AudioClip, AudioSfxManager.AUDIO_EFFECT, float>();
 
         playerStance = new UnityEvent<PlayerController.STANCE>();
         useNewAbility = new UnityEvent<Ability, PlayerController.PLAYER_ABILITY>();

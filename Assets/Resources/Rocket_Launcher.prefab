@@ -4934,6 +4934,7 @@ MonoBehaviour:
     type: 3}
   projectileSpeed: 100
   projectileLifetime: 5
+  shootSFX: {fileID: 8300000, guid: 4e73dcb7d5c24434996c442def211678, type: 3}
 --- !u!1001 &3957376991273124688
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -3607,7 +3607,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1070844450
 Transform:
   m_ObjectHideFlags: 0
@@ -4096,6 +4096,8 @@ MonoBehaviour:
   pedestalPrefab: {fileID: 218864835831678556, guid: 95e3e9e88d3a9a741abfff3e9edf7cfa,
     type: 3}
   numberOfPedestalsToSpawn: 5
+  winSFX: {fileID: 0}
+  loseSFX: {fileID: 0}
 --- !u!4 &1211242656 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6897787868990026261, guid: b0816a80cb2d9264990cc8bdbad2bcc7,

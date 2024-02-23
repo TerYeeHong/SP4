@@ -4929,7 +4929,7 @@ MonoBehaviour:
   isHitScan: 0
   projectilePrefab: {fileID: 9048548247087989263, guid: bbe998f598446ef4d9b03364b8dec353,
     type: 3}
-  projectileSpeed: 10
+  projectileSpeed: 100
   projectileLifetime: 5
 --- !u!1001 &3957376991273124688
 PrefabInstance:
@@ -4998,7 +4998,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rocket_Launcher_Missile
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -841733878677493962, guid: bbe998f598446ef4d9b03364b8dec353, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bbe998f598446ef4d9b03364b8dec353, type: 3}
 --- !u!4 &1748630292598580716 stripped
 Transform:

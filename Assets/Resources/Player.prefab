@@ -1206,6 +1206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6dfe3bd9ffc47744a6f99a45a90bec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHealth: {fileID: 0}
   body: {fileID: 4057774100833102990}
   bodyPos: {x: 0, y: -0.9, z: 0}
 --- !u!114 &3787938341435706192

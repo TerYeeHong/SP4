@@ -110,6 +110,7 @@ public class SpawnMonument : MonoBehaviour
         // Check if all enemies in the list are dead
         if (spawnedEnemies.Count > 0 && spawnedEnemies.All(enemy => enemy.isDead))
         {
+            gameObject.SetActive(false);
             // All enemies are dead, proceed to next level or trigger victory
             ProceedToNextLevel();
         }
@@ -131,10 +132,6 @@ public class SpawnMonument : MonoBehaviour
 
     void MakeMonumentDisappear()
     {
-        // Option 1: Deactivate the GameObject (can be reactivated later)
-        gameObject.SetActive(false);
-
-        // Option 2: Destroy the GameObject (permanent)
-        // Destroy(gameObject);
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
     }
 }

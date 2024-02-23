@@ -47,6 +47,8 @@ public class SkyPlayerController : MonoBehaviour
         playerCameraSwitch = GetComponent<SkyCameraSwitch>();
         playerHealth = GetComponent<SkyPlayerHealth>();
 
+
+
         if (photonView.IsMine)
         {
             SetChildrenMeshRenderersEnabled(false);

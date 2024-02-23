@@ -177,31 +177,39 @@ public class SkyPlayerMovement : MonoBehaviour
     }
     public void HandleInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        bool typing = FindObjectOfType<MultiplayerMessages>().typing;
+        if (!typing)
+        {
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
+        }
     }
     public void HandleMovement()
     {
-        Vector3 movementDirection = transform.right * horizontalInput + transform.forward * verticalInput;
-        float currentSpeed = speed;
-
-        // Check for running
-        if (sprint_count > 0)
+        bool typing = FindObjectOfType<MultiplayerMessages>().typing;
+        if (!typing)
         {
-            isRunning = Input.GetKey(KeyCode.LeftShift);
-            if (isRunning && currentStamina > 0)
+
+            Vector3 movementDirection = transform.right * horizontalInput + transform.forward * verticalInput;
+            float currentSpeed = speed;
+
+            // Check for running
+            if (sprint_count > 0)
             {
-                currentSpeed *= runMultiplier;
-                currentStamina -= staminaDepletionRate * Time.deltaTime;
-                UpdateStaminaBar();
+                isRunning = Input.GetKey(KeyCode.LeftShift);
+                if (isRunning && currentStamina > 0)
+                {
+                    currentSpeed *= runMultiplier;
+                    currentStamina -= staminaDepletionRate * Time.deltaTime;
+                    UpdateStaminaBar();
+                }
             }
+
+
+            Vector3 force = movementDirection.normalized * currentSpeed;
+            force.y = 0;
+            rb.velocity = new Vector3(force.x, rb.velocity.y, force.z);
         }
-
-
-        Vector3 force = movementDirection.normalized * currentSpeed;
-        force.y = 0;
-        rb.velocity = new Vector3(force.x, rb.velocity.y, force.z);
-        //rb.AddForce(force, ForceMode.Force);
     }
 
     public void HandleStaminaRegen()

@@ -123,11 +123,12 @@ public class BossController : EnemyUnit
         spawnPosition.y = -7.7f; // spawn underground
 
         // spawn the pillar at the ground level
-        GameObject pillar = Instantiate(pillarPrefab, spawnPosition, Quaternion.identity);
-
-       //pillar.transform.parent = enemyTransform;
-
        
+        GameObject pillar = PhotonNetwork.InstantiateRoomObject("HEAL PILLAR", spawnPosition, Quaternion.identity);
+
+        //pillar.transform.parent = enemyTransform;
+
+
         StartCoroutine(RisePillar(pillar));
     }
 
@@ -199,16 +200,25 @@ public class BossController : EnemyUnit
     public void FindNearestPlayer()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
-        for (int i = 0; i < players.Length; i++)
+        //Assume first player is nearest
+        distance = Vector3.Distance(enemyTransform.position, players[0].transform.position);
+        nearestDistance = distance;
+        targetPlayer = players[0];
+
+        //Check all other players
+        for (int i = 1; i < players.Length; i++)
         {
             distance = Vector3.Distance(enemyTransform.position, players[i].transform.position);
             if (distance < nearestDistance)
             {
-                movePositionTransform = players[i].transform;
+                nearestDistance = distance;
                 targetPlayer = players[i];
             }
         }
+
+        movePositionTransform = targetPlayer.transform;
     }
+
 
     //public void HitCollideEvent(string moveName)
     //{
@@ -274,13 +284,13 @@ public class BossController : EnemyUnit
        
         CURRENT_STATE = STATES.DEAD;
         ChangeAnimationState(STATES.DEAD);
-        if (photonView.IsMine)
-        {
-            Debug.Log("photonView.ViewID" + photonView.ViewID);
-            string sentData = "" + photonView.ViewID;
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
-            PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYDIEEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
-        }
+        //if (photonView.IsMine)
+        //{
+        //    Debug.Log("photonView.ViewID" + photonView.ViewID);
+        //    string sentData = "" + photonView.ViewID;
+        //    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+        //    PhotonNetwork.RaiseEvent(RaiseEvents.ENEMYDIEEVENT, sentData, raiseEventOptions, SendOptions.SendReliable);
+        //}
         navMeshAgent.speed = 0;
 
         // GameEvents.m_instance.unitDied.Invoke(unit_type.name);
@@ -292,7 +302,6 @@ public class BossController : EnemyUnit
 
     private void Update()
     {
-       
        // Debug.Log(health_unit + " / " + max_health_unit);
         BossHPBar.fillAmount = (float)health_unit / (float)max_health_unit;
         range_unit = Vector3.Distance(enemyTransform.position, movePositionTransform.position);
@@ -305,7 +314,9 @@ public class BossController : EnemyUnit
 
         if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
         {
-           
+
+         
+
             if (CURRENT_STATE == STATES.INTRO)
             {
                
@@ -353,9 +364,11 @@ public class BossController : EnemyUnit
             
           
 
-            else if (range_unit < 6)
+            else if (range_unit < 9)
             {
                 CURRENT_STATE = STATES.ATTACK;
+                Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, 0, targetPlayer.transform.position.z);
+                gameObject.transform.LookAt(lookAt);
                 ChangeAnimationState(STATES.ATTACK);
             }
 
@@ -365,10 +378,12 @@ public class BossController : EnemyUnit
                 Skill1CD = 25;
                 //timer += 1 * Time.deltaTime;
                 animator.SetTrigger("IsPillar");
-                speed_unit = 0;
-                navMeshAgent.speed = speed_unit;
+                //speed_unit = 0;
+                navMeshAgent.speed = 0;
                  CURRENT_STATE = STATES.IDLE;
-               // ChangeAnimationState(STATES.IDLE);
+                Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, 0, targetPlayer.transform.position.z);
+                gameObject.transform.LookAt(lookAt);
+                // ChangeAnimationState(STATES.IDLE);
 
 
 
@@ -379,11 +394,13 @@ public class BossController : EnemyUnit
                 Skill2CD = 16;
                 //timer += 1 * Time.deltaTime;
                 animator.SetTrigger("IsKnockup");
-                speed_unit = 0;
-                navMeshAgent.speed = speed_unit;
+                //speed_unit = 0;
+                navMeshAgent.speed = 0;
                 CURRENT_STATE = STATES.IDLE;
+                Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, 0, targetPlayer.transform.position.z);
+                gameObject.transform.LookAt(lookAt);
 
-               // ChangeAnimationState(STATES.IDLE);
+                // ChangeAnimationState(STATES.IDLE);
 
 
             }
@@ -424,14 +441,9 @@ public class BossController : EnemyUnit
                 
                 animator.SetTrigger("IsAttacking");
 
-                if(animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
-                {
-                    //BossCollider.center = hitBox;
-                    BossCollider.center = Vector3.Lerp(BossCollider.center, hitBox, 1.5f * Time.deltaTime);
-                    //if(HitboxCollider)
-                }
-                //animator.SetBool("IsHit", true);
-                //CURRENT_STATE = STATES.IDLE;
+
+                Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, 0, targetPlayer.transform.position.z);
+                gameObject.transform.LookAt(lookAt);
             }
             else
             {
@@ -454,7 +466,8 @@ public class BossController : EnemyUnit
             {
                 Skill1CD -= 1 * Time.deltaTime;
                 Skill2CD -= 1 * Time.deltaTime;
-                navMeshAgent.speed = unit_type.SpeedDefault;
+                navMeshAgent.speed = speed_unit;
+                //navMeshAgent.speed = unit_type.SpeedDefault;
                 animator.SetBool("IsMoving", true);
                 navMeshAgent.destination = movePositionTransform.position;
             }
@@ -506,7 +519,7 @@ public class BossController : EnemyUnit
 
 
         if (heal > 0)
-            GameEvents.m_instance.createTextPopup.Invoke(heal.ToString(), transform.position, Color.white);
+            GameEvents.m_instance.createTextPopup.Invoke(heal.ToString(), transform.position, Color.green);
 
         if (team_unit == UnitType.UNIT_TEAM.PLAYER)
         {

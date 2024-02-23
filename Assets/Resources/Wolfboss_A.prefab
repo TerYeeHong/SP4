@@ -1857,10 +1857,10 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8914286996971816111}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1.83
-  m_Height: 7.05
+  m_Radius: 2.14
+  m_Height: 7.91
   m_Direction: 2
   m_Center: {x: 0, y: 1.7, z: 0.55}
 --- !u!65 &4597104813959704533
@@ -1940,7 +1940,7 @@ MonoBehaviour:
   name_unit: 
   max_health_unit: 2000
   power_unit: 100
-  speed_unit: 0.2
+  speed_unit: 3
   health_unit: 2000
   godmode: 0
   movement_locked: 0
@@ -1992,7 +1992,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 0.5
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

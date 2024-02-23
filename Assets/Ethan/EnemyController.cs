@@ -103,7 +103,8 @@ public class EnemyController : EnemyUnit
     {
         players = GameObject.FindGameObjectsWithTag("Player");
         //Assume first player is nearest
-        nearestDistance = Vector3.Distance(enemyTransform.position, players[0].transform.position);
+        distance = Vector3.Distance(enemyTransform.position, players[0].transform.position);
+        nearestDistance = distance;
         targetPlayer = players[0];
 
         //Check all other players
@@ -184,12 +185,14 @@ public class EnemyController : EnemyUnit
             //Debug.Log("current state: " + CURRENT_STATE);
 
         if (CURRENT_STATE != STATES.DEAD && !targetPlayer.GetComponent<SkyPlayerHealth>().isDead)
-            {
-
-                if (range_unit < 3)
+        {
+         
+                if (range_unit < 4)
                 {
 
                     CURRENT_STATE = STATES.ATTACK;
+                    Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, targetPlayer.transform.position.y, targetPlayer.transform.position.z);
+                    gameObject.transform.LookAt(lookAt);
                     ChangeAnimationState(STATES.ATTACK);
                 }
                 else if (range_unit < 20)
@@ -216,7 +219,9 @@ public class EnemyController : EnemyUnit
                 else if (CURRENT_STATE == STATES.ATTACK)
                 {
                     animator.SetTrigger("IsAttacking");
-                    
+                    Vector3 lookAt = new Vector3(targetPlayer.transform.position.x, 0, targetPlayer.transform.position.z);
+                    gameObject.transform.LookAt(lookAt);
+                    navMeshAgent.speed = 0;
 
                 }
                 else if (CURRENT_STATE == STATES.IDLE)
@@ -253,8 +258,8 @@ public class EnemyController : EnemyUnit
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack1"))
             {
-                speed_unit = 0;
-                navMeshAgent.speed = speed_unit;
+               
+                navMeshAgent.speed = 0;
             }
         
         //animator.SetTrigger("IsHit");
